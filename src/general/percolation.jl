@@ -30,7 +30,7 @@ function percolation(N::Int64, M::Int64, p::Float64; fig=true, water=true)
 		PercolationPlot(N, M, p, lattice, config, hit, waterplot=water)
 	end
 
-	return hit;
+	return hit, lattice, config;
 end
 
 
@@ -67,7 +67,7 @@ function percolation(N::Int64, p::Float64; fig=true, water=true)
 		PercolationPlot(N, M, p, lattice, config, hit, waterplot=water)
 	end
 
-	return hit;    
+	return hit, lattice, config;    
 end
 
 
@@ -104,7 +104,7 @@ function percolation(SiteSize::simplenn, p::Float64; fig=true, water=true)
 		PercolationPlot(SiteSize, p, lattice, config, hit, waterplot=water)
 	end
 
-	return hit;
+	return hit, lattice, config;
 end
 
 
@@ -140,5 +140,5 @@ function percolation(SiteSize::simplennn, p::Float64; fig=true, water=true)
 		PercolationPlot(SiteSize, p, lattice, config, hit, waterplot=water)
 	end
 
-	return hit;
+	return hit, lattice, config;
 end
