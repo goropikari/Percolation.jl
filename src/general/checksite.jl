@@ -1,4 +1,16 @@
 # WEB: water, empty, block
+function checkallsite(WEB::Array{String})
+    (N, M) = size(WEB)
+    for i in 1:N, j in 1:M
+        if WEB[i,j] == "water"
+        WEB = checksite(i, j, WEB)
+        end
+    end
+    
+    return WEB
+end
+
+
 function checksite(i::Int64, j::Int64, WEB::Array{String})
 	(n, m) = size(WEB)
 	if j < m && WEB[i, j+1] == "block"; WEB[i, j+1] = "water"; end # WEB[i, j+1] == "block" && j < m とすると動かないので注意

@@ -1,6 +1,6 @@
 module Percolation
 export simplenn, simplennn
-export checksite, MakeSimpleLattice, PercolationPlot, verticalPercolation, percolation
+export checksite, MakeSimpleLattice, PercolationPlot, verticalPercolation, percolation, percolationgif
     
     using PyPlot
 
@@ -10,5 +10,6 @@ export checksite, MakeSimpleLattice, PercolationPlot, verticalPercolation, perco
     include("general/PercolationPlot.jl")
     include("general/verticalPercolation.jl")
     include("general/percolation.jl")
+    include("general/percolationgif.jl")
 
 end
