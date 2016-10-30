@@ -11,6 +11,4 @@ export checksite, MakeSimpleLattice, PercolationPlot, verticalPercolation, perco
     include("general/verticalPercolation.jl")
     include("general/percolation.jl")
 
-
-
 end
