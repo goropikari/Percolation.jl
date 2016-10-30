@@ -4,18 +4,7 @@ export checksite, MakeSimpleLattice, PercolationPlot, verticalPercolation, perco
     
     using PyPlot
 
-    # nearest neighbor
-    type simplenn
-        N::Int64
-        M::Int64
-    end
-
-    # next nearest neighbor
-    type simplennn
-        N::Int64
-        M::Int64
-    end
-    
+    include("general/latticetype.jl")
     include("general/checksite.jl")
     include("general/lattice.jl")
     include("general/PercolationPlot.jl")
