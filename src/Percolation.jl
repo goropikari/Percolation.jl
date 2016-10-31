@@ -1,5 +1,5 @@
 module Percolation
-export simplenn, simplennn
+export simplenn, simplennn, testnn
 export checksite, MakeSimpleLattice, PercolationPlot, verticalPercolation, percolation, percolationgif
     
     using PyPlot

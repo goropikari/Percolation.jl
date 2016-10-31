@@ -45,3 +45,12 @@ function checksite(i::Int64, j::Int64, WEB::Array{String}, site::simplennn)
     
 	return WEB
 end
+
+function checksite(i::Int64, j::Int64, SiteSize::testnn)
+	if j < SiteSize.M && SiteSize.config[i, j+1] == "block"; SiteSize.config[i, j+1] = "water"; end
+	if 1 < j && SiteSize.config[i, j-1] == "block"; SiteSize.config[i, j-1] = "water"; end
+	if i < SiteSize.N && SiteSize.config[i+1, j] == "block"; SiteSize.config[i+1, j] = "water"; end
+	if 1 < i && SiteSize.config[i-1, j] == "block"; SiteSize.config[i-1, j] = "water"; end
+
+	return SiteSize.config
+end
