@@ -13,3 +13,7 @@ function MakeSimpleLattice(N::Int64, M::Int64, p::Float64)
     
     return lattice, config
 end
+
+function MakeSimpleLattice(SimpleLattice::simplennn)
+    MakeSimpleLattice(SimpleLattice.N, SimpleLattice.M, SimpleLattice.p)
+end
