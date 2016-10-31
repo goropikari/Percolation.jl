@@ -1,5 +1,5 @@
 # Simple lattice: nearest neighbor, next nearest neighbor
-function percolation(SimpleLattice; fig=true, water=true)
+function percolation(SimpleLattice::SimpleLattice; fig=true, water=true, color="brg_r", colorbar=true)
     # test whether vertical percolation or not.
     (row, column) = size(SimpleLattice.lattice)
 
@@ -12,7 +12,7 @@ function percolation(SimpleLattice; fig=true, water=true)
 	if "water" ∈ SimpleLattice.config[row,:]; hit = 1; else; hit = 0; end
 
 	if fig
-		PercolationPlot(SimpleLattice, hit, water)
+		PercolationPlot(SimpleLattice, hit, water, color, colorbar)
 	end
 
 	return hit, SimpleLattice.lattice, SimpleLattice.config;

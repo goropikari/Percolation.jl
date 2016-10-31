@@ -15,10 +15,6 @@ function EasyPercolationTest(lattice::Array{Int64})
     return hit
 end
 
-function EasyPercolationTest(SimpleLattice::simplenn)
-    EasyPercolationTest(SimpleLattice.lattice::Array{Int64})
-end
-
-function EasyPercolationTest(SimpleLattice::simplennn)
+function EasyPercolationTest(SimpleLattice::SimpleLattice)
     EasyPercolationTest(SimpleLattice.lattice::Array{Int64})
 end

@@ -1,5 +1,8 @@
+abstract SimpleLattice
+
 # nearest neighbor
-type simplenn
+
+type simplenn <: SimpleLattice
 	N::Int64
 	M::Int64
     p::Float64
@@ -14,7 +17,7 @@ end
 
 
 # next nearest neighbor
-type simplennn
+type simplennn <: SimpleLattice
 	N::Int64
 	M::Int64
     p::Float64

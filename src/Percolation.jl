@@ -2,7 +2,8 @@ module Percolation
 export simplenn, simplennn
 export checksite, checkallsite, MakeSimpleLattice, PercolationPlot, percolation, percolationgif
     
-    using PyPlot
+    import PyPlot
+    using LaTeXStrings
 
     include("general/latticetype.jl")
     include("general/checksite.jl")

@@ -31,7 +31,7 @@ function checksite(i::Int64, j::Int64, SimpleLattice::simplennn)
 end
 
 
-function checkallsite(SimpleLattice)
+function checkallsite(SimpleLattice::SimpleLattice)
     (row, column) = size(SimpleLattice.config)
     for i in 1:row, j in 1:column
         if SimpleLattice.config[i,j] == "water"
