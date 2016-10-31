@@ -14,15 +14,15 @@ function verticalPercolation(lattice::Array{Int64})
     return hit
 end
 
-function verticalPercolation(SiteSize::testnn)
-    test = ones(Int64, SiteSize.M)
+function verticalPercolation(SimpleLattice::simplenn)
+    test = ones(Int64, SimpleLattice.M)
 	hit = 1
-	for i in 1:SiteSize.N-1
-		( findn(SiteSize.lattice[i, :]) ∩ findn(SiteSize.lattice[i+1, :]) ) == [] && break
+	for i in 1:SimpleLattice.N-1
+		( findn(SimpleLattice.lattice[i, :]) ∩ findn(SimpleLattice.lattice[i+1, :]) ) == [] && break
 		hit += 1
 	end
 
-	if hit < SiteSize.N
+	if hit < SimpleLattice.N
 		return 0
 	end
     

@@ -28,9 +28,34 @@ function PercolationPlot(N::Int64, p::Float64, lattice::Array{Int64}, config::Ar
 end
 
 
+function PercolationPlot(SimpleLattice::simplenn, hit::Int64, waterplot::Bool)
+	x = Int64[]; y = Int64[]
 
-function PercolationPlot(SiteSize::simplenn, p::Float64, lattice::Array{Int64}, config::Array{String}, hit::Int64; waterplot=true)
-    (N, M) = (SiteSize.N, SiteSize.M)
+	if waterplot
+        # 行列で書くと(1,1)は左上になるけど、グラフで(1,1)は左下になるのでflipdimを使って上下を反転させる。
+        # findnで 0 以外の数値が入っているインデックスを返す。
+		ymizu, xmizu = findn( flipdim( (SimpleLattice.config .== "water") * 1 , 1) )
+		x = vcat(x,xmizu); y = vcat(y,ymizu)
+	end
+
+    
+	yl, xl = findn(flipdim(SimpleLattice.lattice, 1))
+	x = vcat(x,xl); y = vcat(y,yl)
+
+
+	plt[:hist2d](x, y, bins=[SimpleLattice.N, SimpleLattice.M] );
+	colorbar()
+	set_cmap("brg_r") # http://matplotlib.org/examples/color/colormaps_reference.html
+	axis("equal")
+	axis("off")
+	if hit > 0; title(latexstring("Percolation !, \$p\$ = $(SimpleLattice.p)")); end
+	if hit == 0; title(latexstring("Not Percolation, \$p\$ = $(SimpleLattice.p)")); end
+	show()
+end
+
+
+function PercolationPlot(SimpleLattice::simplennn, p::Float64, lattice::Array{Int64}, config::Array{String}, hit::Int64; waterplot=true)
+    (N, M) = (SimpleLattice.N, SimpleLattice.M)
 	x = Int64[]; y = Int64[]
 
 	if waterplot
@@ -57,57 +82,6 @@ end
 
 
 
-function PercolationPlot(SiteSize::simplennn, p::Float64, lattice::Array{Int64}, config::Array{String}, hit::Int64; waterplot=true)
-    (N, M) = (SiteSize.N, SiteSize.M)
-	x = Int64[]; y = Int64[]
-
-	if waterplot
-        # 行列で書くと(1,1)は左上になるけど、グラフで(1,1)は左下になるのでflipdimを使って上下を反転させる。
-        # findnで 0 以外の数値が入っているインデックスを返す。
-		ymizu, xmizu = findn( flipdim( (config .== "water") * 1 , 1) )
-		x = vcat(x,xmizu); y = vcat(y,ymizu)
-	end
-
-    
-	yl, xl = findn(flipdim(lattice, 1))
-	x = vcat(x,xl); y = vcat(y,yl)
-
-
-	plt[:hist2d](x, y, bins=[N, M] );
-	colorbar()
-	set_cmap("brg_r") # http://matplotlib.org/examples/color/colormaps_reference.html
-	axis("equal")
-	axis("off")
-	if hit > 0; title(latexstring("Percolation !, \$p\$ = $p")); end
-	if hit == 0; title(latexstring("Not Percolation, \$p\$ = $p")); end
-	show()
-end
-
-
-function PercolationPlot(SiteSize::testnn, hit::Int64, waterplot::Bool)
-	x = Int64[]; y = Int64[]
-
-	if waterplot
-        # 行列で書くと(1,1)は左上になるけど、グラフで(1,1)は左下になるのでflipdimを使って上下を反転させる。
-        # findnで 0 以外の数値が入っているインデックスを返す。
-		ymizu, xmizu = findn( flipdim( (SiteSize.config .== "water") * 1 , 1) )
-		x = vcat(x,xmizu); y = vcat(y,ymizu)
-	end
-
-    
-	yl, xl = findn(flipdim(SiteSize.lattice, 1))
-	x = vcat(x,xl); y = vcat(y,yl)
-
-
-	plt[:hist2d](x, y, bins=[SiteSize.N, SiteSize.M] );
-	colorbar()
-	set_cmap("brg_r") # http://matplotlib.org/examples/color/colormaps_reference.html
-	axis("equal")
-	axis("off")
-	if hit > 0; title(latexstring("Percolation !, \$p\$ = $(SiteSize.p)")); end
-	if hit == 0; title(latexstring("Not Percolation, \$p\$ = $(SiteSize.p)")); end
-	show()
-end
 
 
 # for GIF animation

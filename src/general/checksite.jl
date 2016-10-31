@@ -21,15 +21,17 @@ function checksite(i::Int64, j::Int64, WEB::Array{String})
 	return WEB
 end
 
-function checksite(i::Int64, j::Int64, WEB::Array{String}, site::simplenn)
-    (n, m) = (site.N, site.M)
-	if j < m && WEB[i, j+1] == "block"; WEB[i, j+1] = "water"; end
-	if 1 < j && WEB[i, j-1] == "block"; WEB[i, j-1] = "water"; end
-	if i < n && WEB[i+1, j] == "block"; WEB[i+1, j] = "water"; end
-	if 1 < i && WEB[i-1, j] == "block"; WEB[i-1, j] = "water"; end
 
-	return WEB
+function checksite(i::Int64, j::Int64, SimpleLattice::simplenn)
+	if j < SimpleLattice.M && SimpleLattice.config[i, j+1] == "block"; SimpleLattice.config[i, j+1] = "water"; end
+	if 1 < j && SimpleLattice.config[i, j-1] == "block"; SimpleLattice.config[i, j-1] = "water"; end
+	if i < SimpleLattice.N && SimpleLattice.config[i+1, j] == "block"; SimpleLattice.config[i+1, j] = "water"; end
+	if 1 < i && SimpleLattice.config[i-1, j] == "block"; SimpleLattice.config[i-1, j] = "water"; end
+
+	return SimpleLattice.config
 end
+
+
 
 function checksite(i::Int64, j::Int64, WEB::Array{String}, site::simplennn)
     (n, m) = (site.N, site.M)
@@ -46,11 +48,3 @@ function checksite(i::Int64, j::Int64, WEB::Array{String}, site::simplennn)
 	return WEB
 end
 
-function checksite(i::Int64, j::Int64, SiteSize::testnn)
-	if j < SiteSize.M && SiteSize.config[i, j+1] == "block"; SiteSize.config[i, j+1] = "water"; end
-	if 1 < j && SiteSize.config[i, j-1] == "block"; SiteSize.config[i, j-1] = "water"; end
-	if i < SiteSize.N && SiteSize.config[i+1, j] == "block"; SiteSize.config[i+1, j] = "water"; end
-	if 1 < i && SiteSize.config[i-1, j] == "block"; SiteSize.config[i-1, j] = "water"; end
-
-	return SiteSize.config
-end
