@@ -26,21 +26,17 @@ end
 
 function PercolationPlot(Lattice::TriangularLattice, hit::Int64, waterplot::Bool, color::String, colorbar::Bool)
 
-	if waterplot
-        # 行列で書くと(1,1)は左上になるけど、グラフで(1,1)は左下になるのでflipdimを使って上下を反転させる。
-        # findnで 0 以外の数値が入っているインデックスを返す。
-		ywater, xwater = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
-	end
-
-    
-	yempty, xempty = findn( flipdim( (Lattice.lattice .== 1)* 1 , 1) )
-	yblock, xblock = findn( flipdim( (Lattice.lattice .== 0)* 1 , 1) )
+    # 行列で書くと(1,1)は左上になるけど、グラフで(1,1)は左下になるのでflipdimを使って上下を反転させる。
+    # findnで 0 以外の数値が入っているインデックスを返す。
+    ywater, xwater = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
+	yempty, xempty = findn( flipdim( (Lattice.lattice .== 1) * 1 , 1) )
+	yblock, xblock = findn( flipdim( (Lattice.lattice .== 0) * 1 , 1) )
 	
 
     PyPlot.figure()
-    PyPlot.plot(xwater, ywater, "bo")
-    PyPlot.plot(xempty, yempty, "o", color="white")
-    PyPlot.plot(xblock, yblock, "o", color="black")
+    if waterplot; PyPlot.plot(xwater, ywater, "b."); else; PyPlot.plot(xwater, ywater, "o", color="white"); end
+    PyPlot.plot(xempty, yempty, ".", color="white")
+    PyPlot.plot(xblock, yblock, ".", color="black")
 	PyPlot.axis("equal")
 #	PyPlot.axis("off")
 	if hit > 0; PyPlot.title(latexstring("Percolation !, \$p\$ = $(Lattice.p)")); end
