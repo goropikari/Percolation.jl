@@ -1,3 +1,5 @@
 # Percolation
 
-simple lattice percolation.
+Following type of lattice percolation simulation.
+
+square lattice, triangular lattice
