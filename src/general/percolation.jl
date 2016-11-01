@@ -1,19 +1,19 @@
 # Simple lattice: nearest neighbor, next nearest neighbor
-function percolation(SimpleLattice::SimpleLattice; fig=true, water=true, color="brg_r", colorbar=true)
+function percolation(Lattice::Lattice; fig=true, water=true, color="brg_r", colorbar=true)
     # test whether vertical percolation or not.
-    (row, column) = size(SimpleLattice.lattice)
+    (row, column) = size(Lattice.lattice)
 
-	exconfig = fill!(Array{String}(row, column), "tempolaryString")
-	while SimpleLattice.config != exconfig
-		exconfig = SimpleLattice.config[:,:]
-        SimpleLattice.config = checkallsite(SimpleLattice)
+	templattice = ones(Int64, row, column)
+	while Lattice.lattice != templattice
+		templattice = Lattice.lattice[:,:]
+        Lattice.lattice = checkallsite(Lattice)
 	end
 
-	if "water" ∈ SimpleLattice.config[row,:]; hit = 1; else; hit = 0; end
+	if 2 ∈ Lattice.lattice[row,:]; hit = 1; else; hit = 0; end
 
 	if fig
-		PercolationPlot(SimpleLattice, hit, water, color, colorbar)
+		PercolationPlot(Lattice, hit, water, color, colorbar)
 	end
 
-	return hit, SimpleLattice.lattice, SimpleLattice.config;
+	return hit, Lattice.lattice;
 end

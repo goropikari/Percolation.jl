@@ -1,4 +1,7 @@
-abstract SimpleLattice
+
+abstract Lattice
+abstract SimpleLattice <: Lattice
+abstract TriangularLattice <: Lattice
 
 # nearest neighbor
 
@@ -7,11 +10,10 @@ type simplenn <: SimpleLattice
 	M::Int64
     p::Float64
     lattice::Array{Int64}
-    config::Array{String}
     
     function simplenn(N, M, p)
-        lattice, config = MakeSimpleLattice(M, N, p)
-        new(N, M, p, lattice, config)
+        lattice = MakeSimpleLattice(M, N, p)
+        new(N, M, p, lattice)
     end
 end
 
@@ -22,11 +24,10 @@ type simplennn <: SimpleLattice
 	M::Int64
     p::Float64
     lattice::Array{Int64}
-    config::Array{String}
     
     function simplennn(N, M, p)
-        lattice, config = MakeSimpleLattice(M, N, p)
-        new(N, M, p, lattice, config)
+        lattice = MakeSimpleLattice(M, N, p)
+        new(N, M, p, lattice)
     end
 end
 

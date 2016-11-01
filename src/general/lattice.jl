@@ -1,15 +1,12 @@
+# water: 2
+# empty: 1
+# block: 0
 function MakeSimpleLattice(N::Int64, M::Int64, p::Float64)
-    lattice = ( rand(N,M) .< p ) * 1
-	config = Array{String}(N, M)
+    lattice = ( rand(Float64, N,M) .< p ) * 1
+
 	for i in 1:N, j in 1:M
-		if i == 1 && lattice[i,j] == 1
-			config[i,j] = "water"
-		elseif lattice[i,j] == 1
-			config[i,j] = "block"
-		else
-			config[i,j] = "empty"
-		end
-	end
+		if i == 1 && lattice[i,j] == 1; lattice[i,j] = 2; end
+    end
     
-    return lattice, config
+    return lattice
 end

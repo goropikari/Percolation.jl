@@ -1,46 +1,69 @@
-function checksitenn(i::Int64, j::Int64, config::Array{String})
-	(row,  column) = size(config)
-	if j < column && config[i, j+1] == "block"; config[i, j+1] = "water"; end # config[i, j+1] == "block" && j < m とすると動かないので注意
-	if 1 < j && config[i, j-1] == "block"; config[i, j-1] = "water"; end
-	if i < row && config[i+1, j] == "block"; config[i+1, j] = "water"; end
-	if 1 < i && config[i-1, j] == "block"; config[i-1, j] = "water"; end
+################
+#
+# For simple lattice
+#
+################
 
-	return config
+function checksitenn(i::Int64, j::Int64, lattice::Array{Int64})
+	(row,  column) = size(lattice)
+	if j < column && lattice[i, j+1] == 1; lattice[i, j+1] = 2; end # lattice[i, j+1] == 1 && j < m とすると動かないので注意
+	if 1 < j && lattice[i, j-1] == 1; lattice[i, j-1] = 2; end
+	if i < row && lattice[i+1, j] == 1; lattice[i+1, j] = 2; end
+	if 1 < i && lattice[i-1, j] == 1; lattice[i-1, j] = 2; end
+
+	return lattice
 end
 
-function checksitennn(i::Int64, j::Int64, config::Array{String})
-    (row,  column) = size(config)
-    config = checksitenn(i, j, config)
+function checksitennn(i::Int64, j::Int64, lattice::Array{Int64})
+    (row,  column) = size(lattice)
+    lattice = checksitenn(i, j, lattice)
     
-	if j < column && i < row && config[i+1, j+1] == "block"; config[i+1, j+1] = "water"; end
-	if 1 < j && i < row && config[i+1, j-1] == "block"; config[i+1, j-1] = "water"; end
-	if 1 < i && j < column && config[i-1, j+1] == "block"; config[i-1, j+1] = "water"; end
-	if 1 < i && 1 < j && config[i-1, j-1] == "block"; config[i-1, j-1] = "water"; end
+	if j < column && i < row && lattice[i+1, j+1] == 1; lattice[i+1, j+1] = 2; end
+	if 1 < j && i < row && lattice[i+1, j-1] == 1; lattice[i+1, j-1] = 2; end
+	if 1 < i && j < column && lattice[i-1, j+1] == 1; lattice[i-1, j+1] = 2; end
+	if 1 < i && 1 < j && lattice[i-1, j-1] == 1; lattice[i-1, j-1] = 2; end
     
-	return config
+	return lattice
 end
 
 # simple lattice nearest neighbor
-function checksite(i::Int64, j::Int64, SimpleLattice::simplenn)
-    checksitenn(i::Int64, j::Int64, SimpleLattice.config::Array{String})
+function checksite(i::Int64, j::Int64, Lattice::simplenn)
+    checksitenn(i::Int64, j::Int64, Lattice.lattice::Array{Int64})
 end
 
 # simple lattice next nearest neighbor
-function checksite(i::Int64, j::Int64, SimpleLattice::simplennn)
-    checksitennn(i::Int64, j::Int64, SimpleLattice.config::Array{String})
+function checksite(i::Int64, j::Int64, Lattice::simplennn)
+    checksitennn(i::Int64, j::Int64, Lattice.lattice::Array{Int64})
 end
 
 
-function checkallsite(SimpleLattice::SimpleLattice)
-    (row, column) = size(SimpleLattice.config)
+######################
+#
+# For triangle lattice
+#
+######################
+function checksitetrinn(i::Int64, j::Int64, lattice::Array{Int64})
+	(row,  column) = size(lattice)
+	if 1 < j && lattice[i, j-1] == 1; lattice[i, j-1] = 2; end
+	if j < column && lattice[i, j+1] == 1; lattice[i, j+1] = 2; end # lattice[i, j+1] == 1 && j < m とすると動かないので注意
+	if 1 < i && lattice[i-1, j] == 1; lattice[i-1, j] = 2; end
+	if i < row && lattice[i+1, j] == 1; lattice[i+1, j] = 2; end
+
+	return lattice
+end
+
+
+function checkallsite(Lattice::Lattice)
+    (row, column) = size(Lattice.lattice)
     for i in 1:row, j in 1:column
-        if SimpleLattice.config[i,j] == "water"
-            SimpleLattice.config = checksite(i, j, SimpleLattice)
+        if Lattice.lattice[i,j] == 2
+            Lattice.lattice = checksite(i, j, Lattice)
         end
     end
     
-    return SimpleLattice.config
+    return Lattice.lattice
 end
+
 
 
 
