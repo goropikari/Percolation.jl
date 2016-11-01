@@ -1,5 +1,9 @@
 # Percolation
 
-Following type of lattice percolation simulation.
+Following type of lattice site percolation simulation.
 
-square lattice, triangular lattice
+**** Square lattice
+    ** nearest neighbor and next nearest neighbor
+* Triangular lattice
+    ** nearest neighbor
+
