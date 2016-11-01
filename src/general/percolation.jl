@@ -1,4 +1,4 @@
-# Simple lattice: nearest neighbor, next nearest neighbor
+# Square lattice: nearest neighbor, next nearest neighbor
 function percolation(Lattice::Lattice; fig=true, water=true, color="brg_r", colorbar=true)
     # test whether vertical percolation or not.
     (row, column) = size(Lattice.lattice)

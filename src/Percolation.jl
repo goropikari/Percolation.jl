@@ -1,10 +1,10 @@
 module Percolation
 
 # type
-export simplenn, simplennn, trinn
+export squarenn, squarennn, trinn
 
 # function
-export checksite, checkallsite, MakeSimpleLattice, PercolationPlot, percolation, percolationgif
+export checksite, checkallsite, MakeSquareLattice, PercolationPlot, percolation, percolationgif
     
     import PyPlot
     using LaTeXStrings

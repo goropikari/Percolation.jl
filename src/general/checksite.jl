@@ -1,6 +1,6 @@
 ################
 #
-# For simple lattice
+# For square lattice
 #
 ################
 
@@ -26,13 +26,13 @@ function checksitennn(i::Int64, j::Int64, lattice::Array{Int64})
 	return lattice
 end
 
-# simple lattice nearest neighbor
-function checksite(i::Int64, j::Int64, Lattice::simplenn)
+# square lattice nearest neighbor
+function checksite(i::Int64, j::Int64, Lattice::squarenn)
     checksitenn(i::Int64, j::Int64, Lattice.lattice::Array{Int64})
 end
 
-# simple lattice next nearest neighbor
-function checksite(i::Int64, j::Int64, Lattice::simplennn)
+# square lattice next nearest neighbor
+function checksite(i::Int64, j::Int64, Lattice::squarennn)
     checksitennn(i::Int64, j::Int64, Lattice.lattice::Array{Int64})
 end
 
@@ -58,7 +58,7 @@ end
 
 ######################
 #
-# For simple, triangular lattice
+# For square, triangular lattice
 #
 ######################
 function checkallsite(Lattice::Lattice)

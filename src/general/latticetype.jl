@@ -1,35 +1,35 @@
 
 abstract Lattice
-abstract SimpleLattice <: Lattice
+abstract SquareLattice <: Lattice
 abstract TriangularLattice <: Lattice
 
 ##########################
-# Simple lattice
+# Square lattice
 ###########################
 
 # nearest neighbor
-type simplenn <: SimpleLattice
+type squarenn <: SquareLattice
 	N::Int64
 	M::Int64
     p::Float64
     lattice::Array{Int64}
     
-    function simplenn(N, M, p)
-        lattice = MakeSimpleLattice(M, N, p)
+    function squarenn(N, M, p)
+        lattice = MakeSquareLattice(M, N, p)
         new(N, M, p, lattice)
     end
 end
 
 
 # next nearest neighbor
-type simplennn <: SimpleLattice
+type squarennn <: SquareLattice
 	N::Int64
 	M::Int64
     p::Float64
     lattice::Array{Int64}
     
-    function simplennn(N, M, p)
-        lattice = MakeSimpleLattice(M, N, p)
+    function squarennn(N, M, p)
+        lattice = MakeSquareLattice(M, N, p)
         new(N, M, p, lattice)
     end
 end
@@ -45,7 +45,7 @@ type trinn <: TriangularLattice
     lattice::Array{Int64}
     
     function trinn(N, M, p)
-        lattice = MakeSimpleLattice(M, N, p)
+        lattice = MakeSquareLattice(M, N, p)
         new(N, M, p, lattice)
     end
 end

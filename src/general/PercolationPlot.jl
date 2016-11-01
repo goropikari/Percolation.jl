@@ -1,4 +1,4 @@
-function PercolationPlot(Lattice::SimpleLattice, hit::Int64, waterplot::Bool, color::String, colorbar::Bool)
+function PercolationPlot(Lattice::SquareLattice, hit::Int64, waterplot::Bool, color::String, colorbar::Bool)
 	x = Int64[]; y = Int64[]
 
 	if waterplot
@@ -46,7 +46,7 @@ end
 
 
 # for GIF animation
-function PercolationPlot(Lattice::SimpleLattice, hit::Int64, ind::Int64, output_dir::String, color::String, colorbar::Bool)
+function PercolationPlot(Lattice::SquareLattice, hit::Int64, ind::Int64, output_dir::String, color::String, colorbar::Bool)
 	x = Int64[]; y = Int64[]
 
     ymizu, xmizu = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
