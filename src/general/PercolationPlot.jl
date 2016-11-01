@@ -38,9 +38,9 @@ function PercolationPlot(Lattice::TriangularLattice, hit::Int64, waterplot::Bool
 	
 
     PyPlot.figure()
-    PyPlot.plot(xwater, ywater, "bo", markersize=50)
-    PyPlot.plot(xempty, yempty, "o", color="white", markersize=50)
-    PyPlot.plot(xblock, yblock, "o", color="black", markersize=50)
+    PyPlot.plot(xwater, ywater, "bo")
+    PyPlot.plot(xempty, yempty, "o", color="white")
+    PyPlot.plot(xblock, yblock, "o", color="black")
 	PyPlot.axis("equal")
 #	PyPlot.axis("off")
 	if hit > 0; PyPlot.title(latexstring("Percolation !, \$p\$ = $(Lattice.p)")); end
