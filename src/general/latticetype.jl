@@ -3,8 +3,11 @@ abstract Lattice
 abstract SimpleLattice <: Lattice
 abstract TriangularLattice <: Lattice
 
-# nearest neighbor
+##########################
+# Simple lattice
+###########################
 
+# nearest neighbor
 type simplenn <: SimpleLattice
 	N::Int64
 	M::Int64
@@ -32,3 +35,17 @@ type simplennn <: SimpleLattice
 end
 
 
+###########################
+# Triangular lattice
+###########################
+type trinn <: TriangularLattice
+	N::Int64
+	M::Int64
+    p::Float64
+    lattice::Array{Int64}
+    
+    function trinn(N, M, p)
+        lattice = MakeSimpleLattice(M, N, p)
+        new(N, M, p, lattice)
+    end
+end

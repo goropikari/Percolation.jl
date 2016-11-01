@@ -1,5 +1,9 @@
 module Percolation
-export simplenn, simplennn
+
+# type
+export simplenn, simplennn, trinn
+
+# function
 export checksite, checkallsite, MakeSimpleLattice, PercolationPlot, percolation, percolationgif
     
     import PyPlot
