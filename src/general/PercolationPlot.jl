@@ -25,7 +25,7 @@ end
 
 
 # for GIF animation
-function PercolationPlot(SimpleLattice::SimpleLattice, hit::Int64, ind::Int64, output_dir::String, color::String, colorbar::Bool)
+function PercolationPlot(SimpleLattice::SimpleLattice, hit::Int64, ind::Int64, output_dir::String, color::String, colorbar::Bool, fps::Real)
 	x = Int64[]; y = Int64[]
 
     ymizu, xmizu = findn( flipdim( (SimpleLattice.config .== "water") * 1 , 1) )
@@ -45,4 +45,5 @@ function PercolationPlot(SimpleLattice::SimpleLattice, hit::Int64, ind::Int64, o
     # save figure
     if ! ispath(output_dir); mkdir(output_dir); end
 	PyPlot.savefig(@sprintf("%s/%05d.png", output_dir, ind))
+    
 end
