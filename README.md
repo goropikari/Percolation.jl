@@ -2,8 +2,9 @@
 
 Following type of lattice site percolation simulation.
 
-**** Square lattice
+*Square lattice
     ** nearest neighbor and next nearest neighbor
-* Triangular lattice
+
+*Triangular lattice
     ** nearest neighbor
 
