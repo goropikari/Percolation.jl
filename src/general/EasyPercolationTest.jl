@@ -1,7 +1,7 @@
 # easy percolation test
-function EasyPercolationTest(lattice::Array{Int64})
+function EasyPercolationTest(lattice::Array{Int})
     (N,M) = size(lattice)
-    test = ones(Int64, M)
+    test = ones(Int, M)
 	hit = 1
 	for i in 1:N-1
 		( findn(lattice[i, :]) ∩ findn(lattice[i+1, :]) ) == [] && break
@@ -16,5 +16,5 @@ function EasyPercolationTest(lattice::Array{Int64})
 end
 
 function EasyPercolationTest(Lattice::SquareLattice)
-    EasyPercolationTest(Lattice.lattice::Array{Int64})
+    EasyPercolationTest(Lattice.lattice::Array{Int})
 end

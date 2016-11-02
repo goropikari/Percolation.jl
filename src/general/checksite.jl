@@ -4,7 +4,7 @@
 #
 ################
 
-function checksitenn(i::Int64, j::Int64, lattice::Array{Int64})
+function checksitenn(i::Int, j::Int, lattice::Array{Int})
 	(row,  column) = size(lattice)
 	if j < column && lattice[i, j+1] == 1; lattice[i, j+1] = 2; end # lattice[i, j+1] == 1 && j < m とすると動かないので注意
 	if 1 < j && lattice[i, j-1] == 1; lattice[i, j-1] = 2; end
@@ -14,7 +14,7 @@ function checksitenn(i::Int64, j::Int64, lattice::Array{Int64})
 	return lattice
 end
 
-function checksitennn(i::Int64, j::Int64, lattice::Array{Int64})
+function checksitennn(i::Int, j::Int, lattice::Array{Int})
     (row,  column) = size(lattice)
     lattice = checksitenn(i, j, lattice)
     
@@ -27,13 +27,13 @@ function checksitennn(i::Int64, j::Int64, lattice::Array{Int64})
 end
 
 # square lattice nearest neighbor
-function checksite(i::Int64, j::Int64, Lattice::squarenn)
-    checksitenn(i::Int64, j::Int64, Lattice.lattice::Array{Int64})
+function checksite(i::Int, j::Int, Lattice::squarenn)
+    checksitenn(i::Int, j::Int, Lattice.lattice::Array{Int})
 end
 
 # square lattice next nearest neighbor
-function checksite(i::Int64, j::Int64, Lattice::squarennn)
-    checksitennn(i::Int64, j::Int64, Lattice.lattice::Array{Int64})
+function checksite(i::Int, j::Int, Lattice::squarennn)
+    checksitennn(i::Int, j::Int, Lattice.lattice::Array{Int})
 end
 
 
@@ -42,7 +42,7 @@ end
 # For triangular lattice
 #
 ######################
-function checksitetrinn(i::Int64, j::Int64, lattice::Array{Int64})
+function checksitetrinn(i::Int, j::Int, lattice::Array{Int})
 	(row,  column) = size(lattice)
     lattice = checksitenn(i, j, lattice)
     if 1 < i && j < column && lattice[i-1, j+1] == 1; lattice[i-1, j+1] = 2; end
@@ -51,8 +51,8 @@ function checksitetrinn(i::Int64, j::Int64, lattice::Array{Int64})
 	return lattice
 end
 
-function checksite(i::Int64, j::Int64, Lattice::trinn)
-    checksitetrinn(i::Int64, j::Int64, Lattice.lattice::Array{Int64})
+function checksite(i::Int, j::Int, Lattice::trinn)
+    checksitetrinn(i::Int, j::Int, Lattice.lattice::Array{Int})
 end
 
 

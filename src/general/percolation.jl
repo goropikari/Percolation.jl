@@ -3,7 +3,7 @@ function percolation(Lattice::Lattice; fig=true, water=true, color="brg_r", colo
     # test whether vertical percolation or not.
     (row, column) = size(Lattice.lattice)
 
-	templattice = ones(Int64, row, column)
+	templattice = ones(Int, row, column)
 	while Lattice.lattice != templattice
 		templattice = Lattice.lattice[:,:]
         Lattice.lattice = checkallsite(Lattice)

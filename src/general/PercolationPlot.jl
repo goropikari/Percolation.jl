@@ -1,5 +1,5 @@
-function PercolationPlot(Lattice::SquareLattice, hit::Int64, waterplot::Bool, color::String, colorbar::Bool)
-	x = Int64[]; y = Int64[]
+function PercolationPlot(Lattice::SquareLattice, hit::Int, waterplot::Bool, color::String, colorbar::Bool)
+	x = Int[]; y = Int[]
 
 	if waterplot
         # 行列で書くと(1,1)は左上になるけど、グラフで(1,1)は左下になるのでflipdimを使って上下を反転させる。
@@ -24,7 +24,7 @@ function PercolationPlot(Lattice::SquareLattice, hit::Int64, waterplot::Bool, co
 end
 
 
-function PercolationPlot(Lattice::TriangularLattice, hit::Int64, waterplot::Bool, color::String, colorbar::Bool)
+function PercolationPlot(Lattice::TriangularLattice, hit::Int, waterplot::Bool, color::String, colorbar::Bool)
 
     # 行列で書くと(1,1)は左上になるけど、グラフで(1,1)は左下になるのでflipdimを使って上下を反転させる。
     # findnで 0 以外の数値が入っているインデックスを返す。
@@ -46,8 +46,8 @@ end
 
 
 # for GIF animation
-function PercolationPlot(Lattice::SquareLattice, hit::Int64, ind::Int64, output_dir::String, color::String, colorbar::Bool)
-	x = Int64[]; y = Int64[]
+function PercolationPlot(Lattice::SquareLattice, hit::Int, ind::Int, output_dir::String, color::String, colorbar::Bool)
+	x = Int[]; y = Int[]
 
     ymizu, xmizu = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
     x = vcat(x,xmizu); y = vcat(y,ymizu)

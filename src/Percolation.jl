@@ -1,7 +1,7 @@
 module Percolation
 
 # type
-export squarenn, squarennn, trinn
+export squarenn, squarennn, trinn, simplenn
 
 # function
 export checksite, checkallsite, MakeSquareLattice, PercolationPlot, percolation, percolationgif
@@ -11,7 +11,7 @@ export checksite, checkallsite, MakeSquareLattice, PercolationPlot, percolation,
 
     include("general/latticetype.jl")
     include("general/checksite.jl")
-    include("general/lattice.jl")
+    include("general/makelattice.jl")
     include("general/PercolationPlot.jl")
     include("general/EasyPercolationTest.jl")
     include("general/percolation.jl")

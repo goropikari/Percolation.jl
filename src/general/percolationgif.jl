@@ -4,7 +4,7 @@ function percolationgif(Lattice::SquareLattice; output_dir="./", color="brg_r", 
     if 2 ∈ Lattice.lattice[row, :]; hit = 1; else; hit = 0; end
     PercolationPlot(Lattice, hit, 0, output_tempolary_png, color, colorbar)
     PyPlot.clf()
-    previous_lattice = ones(Int64, row, column)
+    previous_lattice = ones(Int, row, column)
     
     PyPlot.ioff()
     indx = 1
