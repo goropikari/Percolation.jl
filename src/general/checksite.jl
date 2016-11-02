@@ -1,8 +1,8 @@
-################
+########################
 #
 # For square lattice
 #
-################
+########################
 
 function checksitenn(i::Int, j::Int, lattice::Array{Int})
 	(row,  column) = size(lattice)
@@ -37,11 +37,11 @@ function checksite(i::Int, j::Int, Lattice::squarennn)
 end
 
 
-######################
+##############################
 #
 # For triangular lattice
 #
-######################
+##############################
 function checksitetrinn(i::Int, j::Int, lattice::Array{Int})
 	(row,  column) = size(lattice)
     lattice = checksitenn(i, j, lattice)
@@ -56,12 +56,12 @@ function checksite(i::Int, j::Int, Lattice::trinn)
 end
 
 
-######################
+######################################
 #
 # For square, triangular lattice
 #
-######################
-function checkallsite(Lattice::Lattice)
+######################################
+function checkallsite(Lattice::TwoDLattice)
     (row, column) = size(Lattice.lattice)
     for i in 1:row, j in 1:column
         if Lattice.lattice[i,j] == 2
@@ -73,5 +73,29 @@ function checkallsite(Lattice::Lattice)
 end
 
 
+######################################
+#
+# For simple lattice
+#
+######################################
+function checksitesimple(ind::Int, Lattice::HighDimLattice)
+    present_place = ind2sub(Lattice.lattice, ind)
+    
+    for i in 1:length(Lattice.NearestNeighborList)
+        tempposition = ([present_place...] + Lattice.NearestNeighborList[i])
+        if 0 ∉ tempposition && Lattice.N + 1 ∉ tempposition
+            if Lattice.lattice[tempposition...] == 1; Lattice.lattice[tempposition...] = 2; end
+        end
+    end
+end
 
-
+function checkallsite(Lattice::HighDimLattice)
+    for i in 1:length(Lattice.lattice)
+        present_place = ind2sub(Lattice.lattice, i)
+        if Lattice.lattice[present_place...] == 2
+            checksitesimple(i, Lattice)
+        end
+    end
+    
+    return Lattice.lattice
+end

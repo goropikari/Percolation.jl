@@ -1,8 +1,9 @@
 
 abstract Lattice
-abstract SquareLattice <: Lattice
-abstract TriangularLattice <: Lattice
-abstract TwoDimLattice <: Lattice
+abstract TwoDLattice <: Lattice
+abstract SquareLattice <: TwoDLattice
+abstract TriangularLattice <: TwoDLattice
+abstract HighDimLattice <: Lattice
 
 ##########################
 # Square lattice
@@ -55,14 +56,15 @@ end
 ###########################
 # Z^d lattice
 ###########################
-type simplenn <: TwoDimLattice
+type simplenn <: HighDimLattice
 	N::Int
     dim::Int
     p::Float64
     lattice::Array{Int}
+    NearestNeighborList::Array{Array,1}
     
     function simplenn(N, dim, p)
-        lattice = MakeSimpleLattice(N, dim, p)
-        new(N, dim, p, lattice)
+        lattice, NearestNeighborList = MakeSimpleLattice(N, dim, p)
+        new(N, dim, p, lattice, NearestNeighborList)
     end
 end
