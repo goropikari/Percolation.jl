@@ -16,7 +16,7 @@ function percolation(Lattice::TwoDLattice; fig=true, water=true, color="brg_r", 
 		PercolationPlot(Lattice, hit, water, color, colorbar)
 	end
 
-	return hit, Lattice.lattice;
+	return hit
 end
 
 # Higher dimensional simple lattice: nearest neighbor
@@ -35,6 +35,6 @@ function percolation(Lattice::HighDimLattice; fig=false, water=false, color="brg
 		PercolationPlot(Lattice, hit, water, color, colorbar)
 	end
 
-	return hit, Lattice.lattice;
+	return hit
 end
 
