@@ -7,8 +7,9 @@
 # For 2D square and triangular lattice 
 #
 ###############################################
-function MakeSquareLattice(N::Int, M::Int, p::Float64)
-    lattice = ( rand(Float64, N,M) .< p ) * 1
+function MakeSquareLattice(N::Int, p::Float64)
+    M = N
+    lattice = ( rand(Float64, N, M) .< p ) * 1
 
 	for i in 1:N, j in 1:M
 		if i == 1 && lattice[i,j] == 1; lattice[i,j] = 2; end

@@ -1,7 +1,8 @@
 # Square lattice: nearest neighbor, next nearest neighbor
 function percolation(Lattice::TwoDLattice; fig=true, water=true, color="brg_r", colorbar=true)
     # test whether vertical percolation or not.
-    (row, column) = size(Lattice.lattice)
+    const row = Lattice.N
+    const column = Lattice.N
 
 	templattice = ones(Int, row, column)
 	while Lattice.lattice != templattice

@@ -1,6 +1,6 @@
 function percolationgif(Lattice::SquareLattice; output_dir="./", color="brg_r", colorbar=true, fps=4, filename="anime.gif")
     output_tempolary_png=tempdir()*"/Percolation_"*randstring()
-    (row, column) = (Lattice.N, Lattice.M)
+    (row, column) = (Lattice.N, Lattice.N)
     if 2 ∈ Lattice.lattice[row, :]; hit = 1; else; hit = 0; end
     PercolationPlot(Lattice, hit, 0, output_tempolary_png, color, colorbar)
     PyPlot.clf()

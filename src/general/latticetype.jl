@@ -12,13 +12,12 @@ abstract HighDimLattice <: Lattice
 # nearest neighbor
 type squarenn <: SquareLattice
 	N::Int
-	M::Int
     p::Float64
     lattice::Array{Int}
     
-    function squarenn(N, M, p)
-        lattice = MakeSquareLattice(M, N, p)
-        new(N, M, p, lattice)
+    function squarenn(N, p)
+        lattice = MakeSquareLattice(N, p)
+        new(N, p, lattice)
     end
 end
 
@@ -26,13 +25,12 @@ end
 # next nearest neighbor
 type squarennn <: SquareLattice
 	N::Int
-	M::Int
     p::Float64
     lattice::Array{Int}
     
-    function squarennn(N, M, p)
-        lattice = MakeSquareLattice(M, N, p)
-        new(N, M, p, lattice)
+    function squarennn(N, p)
+        lattice = MakeSquareLattice(N, p)
+        new(N, p, lattice)
     end
 end
 
@@ -42,13 +40,12 @@ end
 ###########################
 type trinn <: TriangularLattice
 	N::Int
-	M::Int
     p::Float64
     lattice::Array{Int}
     
-    function trinn(N, M, p)
-        lattice = MakeSquareLattice(M, N, p)
-        new(N, M, p, lattice)
+    function trinn(N, p)
+        lattice = MakeSquareLattice(N, p)
+        new(N, p, lattice)
     end
 end
 

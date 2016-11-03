@@ -13,7 +13,7 @@ function PercolationPlot(Lattice::SquareLattice, hit::Int, waterplot::Bool, colo
 	x = vcat(x,xl); y = vcat(y,yl)
 
     PyPlot.figure()
-	PyPlot.plt[:hist2d](x, y, bins=[Lattice.N, Lattice.M] );
+	PyPlot.plt[:hist2d](x, y, bins=[Lattice.N, Lattice.N] );
 	if colorbar; PyPlot.colorbar(); end
 	PyPlot.set_cmap(color) # http://matplotlib.org/examples/color/colormaps_reference.html
 	PyPlot.axis("equal")
@@ -88,7 +88,7 @@ function PercolationPlot(Lattice::SquareLattice, hit::Int, ind::Int, output_dir:
 
 	yl, xl = findn(flipdim(Lattice.lattice, 1))
 	x = vcat(x,xl); y = vcat(y,yl)
-	PyPlot.plt[:hist2d](x, y, bins=[Lattice.N, Lattice.M] );
+	PyPlot.plt[:hist2d](x, y, bins=[Lattice.N, Lattice.N] );
 	if colorbar; PyPlot.colorbar(); end
 	PyPlot.set_cmap(color) # http://matplotlib.org/examples/color/colormaps_reference.html
 	PyPlot.axis("equal")
