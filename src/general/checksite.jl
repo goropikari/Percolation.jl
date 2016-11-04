@@ -14,6 +14,7 @@ function checksitenn(i::Int, j::Int, lattice::Array{Int})
 	return lattice
 end
 
+
 function checksitennn(i::Int, j::Int, lattice::Array{Int})
     (row,  column) = size(lattice)
     lattice = checksitenn(i, j, lattice)
@@ -98,4 +99,37 @@ function checkallsite(Lattice::HighDimLattice)
     end
     
     return Lattice.lattice
+end
+
+
+######################################
+# recursive function
+######################################
+function checksitennrec(i::Int, j::Int, lattice::Array{Int}, visit::Array{Int})
+	(row,  column) = size(lattice)
+    if lattice[i,j] == 1 && visit[i,j] == 0
+        lattice[i,j] = 2
+        visit[i,j] = 1
+        if j < column; checksitennrec(i, j+1, lattice, visit); end
+        if 1 < j; checksitennrec(i, j-1, lattice, visit); end
+        if i < row; checksitennrec(i+1, j, lattice, visit); end
+        if 1 < i; checksitennrec(i-1, j, lattice, visit); end
+    end
+end
+
+function checksitesimplennrec(ind::Int, Lattice::simplennrec)
+    present_place = ind2sub(Lattice.lattice, ind)
+    
+    if Lattice.lattice[present_place...] == 1 && Lattice.visit[present_place...] == 0
+        Lattice.lattice[present_place...] = 2
+        Lattice.visit[present_place...] = 1
+        
+        for i in 1:length(Lattice.NearestNeighborList)
+            tempposition = ([present_place...] + Lattice.NearestNeighborList[i])
+            if 0 ∉ tempposition && Lattice.N + 1 ∉ tempposition
+                tmpind = sub2ind(Lattice.lattice, tempposition...)
+                checksitesimplennrec(tmpind, Lattice)
+            end
+        end
+    end
 end

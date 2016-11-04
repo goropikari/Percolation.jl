@@ -1,7 +1,7 @@
 module Percolation
 
 # type
-export squarenn, squarennn, trinn, simplenn
+export squarenn, squarennn, trinn, simplenn, squarennrec, simplennrec
 
 # function
 export checksite, checkallsite, MakeSquareLattice, PercolationPlot, percolation, percolationgif
