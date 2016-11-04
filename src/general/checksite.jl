@@ -133,3 +133,47 @@ function checksitesimplennrec(ind::Int, Lattice::simplennrec)
         end
     end
 end
+
+
+######################################
+# return near site position function
+######################################
+function checksitennpos(i::Int, j::Int, lattice::Array{Int}, visit::Array{Int}, checklist::Array{Array{Int64,1},1})
+	(row,  column) = size(lattice)
+    if lattice[i,j] == 1 && visit[i,j] == 0
+        lattice[i,j] = 2
+        visit[i,j] = 1
+        if j < column && lattice[i, j+1] == 1 
+            push!(checklist, [i, j+1])
+        end
+        
+        if 1 < j && lattice[i, j-1] == 1 
+            push!(checklist, [i, j-1])
+        end
+        
+        if i < row && lattice[i+1, j] == 1 
+            push!(checklist, [i+1, j])
+        end
+        
+        if 1 < i && lattice[i-1, j] == 1 
+            push!(checklist, [i-1, j])
+        end
+    end
+end
+
+function checksitesimplennpos(ind::Int, Lattice::simplennpos, checklist::Array{Int64,1})
+	present_place = ind2sub(Lattice.lattice, ind)
+    
+    if Lattice.lattice[present_place...] == 1 && Lattice.visit[present_place...] == 0
+        Lattice.lattice[present_place...] = 2
+        Lattice.visit[present_place...] = 1
+        
+        for i in 1:length(Lattice.NearestNeighborList)
+            tempposition = ([present_place...] + Lattice.NearestNeighborList[i])
+            if 0 ∉ tempposition && Lattice.N + 1 ∉ tempposition
+                tmpind = sub2ind(Lattice.lattice, tempposition...)
+                push!(checklist, tmpind)
+            end
+        end
+    end
+end
