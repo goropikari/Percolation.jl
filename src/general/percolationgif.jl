@@ -64,7 +64,7 @@ end
 
 ######################################
 #
-# For square, triangular lattice
+# For square lattice
 #
 ######################################
 function checkallsitegif(Lattice::TwoDLattice)
