@@ -1,8 +1,12 @@
-function percolationgif(Lattice::SquareLattice; output_dir="./", color="brg_r", colorbar=true, fps=4, filename="anime.gif")
+function percolationgif(Lattice::SquareLattice; output_dir="./", color="seismic_r", colorbar=false, fps=4, filename="anime.gif")
     output_tempolary_png=tempdir()*"/Percolation_"*randstring()
-    (row, column) = (Lattice.N, Lattice.N)
-    if 2 ∈ Lattice.lattice[row, :]; hit = 1; else; hit = 0; end
-    PercolationPlot(Lattice, hit, 0, output_tempolary_png, color, colorbar)
+    (row, column) = size(Lattice.lattice)
+    for j in 1:column
+        if Lattice.lattice[1, j] == 1; Lattice.lattice[1, j] = 2; end
+    end
+    
+    
+    PercolationPlot(Lattice, 0, 0, output_tempolary_png, color, colorbar)
     PyPlot.clf()
     previous_lattice = ones(Int, row, column)
     
@@ -10,7 +14,7 @@ function percolationgif(Lattice::SquareLattice; output_dir="./", color="brg_r", 
     indx = 1
     while Lattice.lattice != previous_lattice
         previous_lattice = Lattice.lattice[:,:]
-        Lattice.lattice = checkallsite(Lattice)
+        Lattice.lattice = checkallsitegif(Lattice)
         if 2 ∈ Lattice.lattice[row, :]; hit = 1; else; hit = 0; end
         PercolationPlot(Lattice, hit, indx, output_tempolary_png, color, colorbar)
         PyPlot.clf()
@@ -21,4 +25,55 @@ function percolationgif(Lattice::SquareLattice; output_dir="./", color="brg_r", 
     close()
     
     gc()
+end
+
+
+
+function checksitenn(i::Int, j::Int, lattice::Array{Int})
+	(row,  column) = size(lattice)
+	if j < column && lattice[i, j+1] == 1; lattice[i, j+1] = 2; end # lattice[i, j+1] == 1 && j < m とすると動かないので注意
+	if 1 < j && lattice[i, j-1] == 1; lattice[i, j-1] = 2; end
+	if i < row && lattice[i+1, j] == 1; lattice[i+1, j] = 2; end
+	if 1 < i && lattice[i-1, j] == 1; lattice[i-1, j] = 2; end
+
+	return lattice
+end
+
+
+function checksitennn(i::Int, j::Int, lattice::Array{Int})
+    (row,  column) = size(lattice)
+    lattice = checksitenn(i, j, lattice)
+    
+	if j < column && i < row && lattice[i+1, j+1] == 1; lattice[i+1, j+1] = 2; end
+	if 1 < j && i < row && lattice[i+1, j-1] == 1; lattice[i+1, j-1] = 2; end
+	if 1 < i && j < column && lattice[i-1, j+1] == 1; lattice[i-1, j+1] = 2; end
+	if 1 < i && 1 < j && lattice[i-1, j-1] == 1; lattice[i-1, j-1] = 2; end
+    
+	return lattice
+end
+
+# square lattice nearest neighbor
+function checksite(i::Int, j::Int, Lattice::squarenn)
+    checksitenn(i::Int, j::Int, Lattice.lattice::Array{Int})
+end
+
+# square lattice next nearest neighbor
+function checksite(i::Int, j::Int, Lattice::squarennn)
+    checksitennn(i::Int, j::Int, Lattice.lattice::Array{Int})
+end
+
+######################################
+#
+# For square, triangular lattice
+#
+######################################
+function checkallsitegif(Lattice::TwoDLattice)
+    (row, column) = size(Lattice.lattice)
+    for i in 1:row, j in 1:column
+        if Lattice.lattice[i,j] == 2
+            Lattice.lattice = checksite(i, j, Lattice)
+        end
+    end
+    
+    return Lattice.lattice
 end

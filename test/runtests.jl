@@ -10,8 +10,8 @@ percolation(site, water=false, colorbar=false)
 percolation(site, water=false, color="hot")
 percolation(site, water=false, fig=false)
 
-site = squarenn(10,0.5)
-percolationgif(site)
+#site = squarenn(10,0.5)
+#percolationgif(site)
 
 
 site = squarennn(10,0.5)
@@ -21,8 +21,8 @@ percolation(site, water=false, colorbar=false)
 percolation(site, water=false, color="hot")
 percolation(site, water=false, fig=false)
 
-site = squarennn(10,0.5)
-percolationgif(site)
+#site = squarennn(10,0.5)
+#percolationgif(site)
 
 site = trinn(10,0.5)
 percolation(site)

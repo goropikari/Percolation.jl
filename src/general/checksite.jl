@@ -1,179 +1,180 @@
-########################
-#
-# For square lattice
-#
-########################
+# water: 2
+# empty: 1
+# block: 0
 
-function checksitenn(i::Int, j::Int, lattice::Array{Int})
-	(row,  column) = size(lattice)
-	if j < column && lattice[i, j+1] == 1; lattice[i, j+1] = 2; end # lattice[i, j+1] == 1 && j < m とすると動かないので注意
-	if 1 < j && lattice[i, j-1] == 1; lattice[i, j-1] = 2; end
-	if i < row && lattice[i+1, j] == 1; lattice[i+1, j] = 2; end
-	if 1 < i && lattice[i-1, j] == 1; lattice[i-1, j] = 2; end
+#########################
+## For square lattice
+#########################
+    # nearest neighbor
+    function checksite(i::Int, j::Int, Lattice::squarenn, checklist::Array{Array{Int64,1},1})
+        (row,  column) = size(Lattice.lattice)
+        if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
+            Lattice.lattice[i,j] = 2
+            Lattice.visit[i,j] = 1
+            if j < column && Lattice.lattice[i, j+1] == 1; push!(checklist, [i, j+1]); end
+            if 1 < j && Lattice.lattice[i, j-1] == 1; push!(checklist, [i, j-1]); end
+            if i < row && Lattice.lattice[i+1, j] == 1; push!(checklist, [i+1, j]); end
+            if 1 < i && Lattice.lattice[i-1, j] == 1; push!(checklist, [i-1, j]); end
+        end
+    end
 
-	return lattice
-end
+    function checkallsite(Lattice::squarenn)
+        _N = Lattice.N
+        checklist = Array{Int64,1}[]
+        i = 1
+        for j in 1:_N
+            checksite(i, j, Lattice, checklist)
+        end
+        
+        while checklist != []
+            tmppos = pop!(checklist)
+            checksite(tmppos[1], tmppos[2], Lattice, checklist)
+        end
+    end
 
+    # next nearest neighbor
+    function checksite(i::Int, j::Int, Lattice::squarennn, checklist::Array{Array{Int64,1},1})
+        (row,  column) = size(Lattice.lattice)
+        if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
+            Lattice.lattice[i,j] = 2
+            Lattice.visit[i,j] = 1
+            if j < column && Lattice.lattice[i, j+1] == 1; push!(checklist, [i, j+1]); end
+            if 1 < j && Lattice.lattice[i, j-1] == 1; push!(checklist, [i, j-1]); end
+            if i < row && Lattice.lattice[i+1, j] == 1; push!(checklist, [i+1, j]); end
+            if 1 < i && Lattice.lattice[i-1, j] == 1; push!(checklist, [i-1, j]); end
+            if 1 < i && 1 < j && Lattice.lattice[i-1, j-1] == 1; push!(checklist, [i-1, j-1]); end
+            if 1 < i && j < column && Lattice.lattice[i-1, j+1] == 1; push!(checklist, [i-1, j+1]); end
+            if i < row && 1 < j && Lattice.lattice[i+1, j-1] == 1; push!(checklist, [i+1, j-1]); end
+            if i < row && j < column && Lattice.lattice[i+1, j+1] == 1; push!(checklist, [i+1, j+1]); end
+        end
+    end
 
-function checksitennn(i::Int, j::Int, lattice::Array{Int})
-    (row,  column) = size(lattice)
-    lattice = checksitenn(i, j, lattice)
-    
-	if j < column && i < row && lattice[i+1, j+1] == 1; lattice[i+1, j+1] = 2; end
-	if 1 < j && i < row && lattice[i+1, j-1] == 1; lattice[i+1, j-1] = 2; end
-	if 1 < i && j < column && lattice[i-1, j+1] == 1; lattice[i-1, j+1] = 2; end
-	if 1 < i && 1 < j && lattice[i-1, j-1] == 1; lattice[i-1, j-1] = 2; end
-    
-	return lattice
-end
+    function checkallsite(Lattice::squarennn)
+        _N = Lattice.N
+        checklist = Array{Int64,1}[]
+        i = 1
+        for j in 1:_N
+            checksite(i, j, Lattice, checklist)
+        end
+        
+        while checklist != []
+            tmppos = pop!(checklist)
+            checksite(tmppos[1], tmppos[2], Lattice, checklist)
+        end
+    end
 
-# square lattice nearest neighbor
-function checksite(i::Int, j::Int, Lattice::squarenn)
-    checksitenn(i::Int, j::Int, Lattice.lattice::Array{Int})
-end
+    ######################################
+    # recursive function
+    ######################################
+    function checksite(i::Int, j::Int, Lattice::squarennrec)
+        (row,  column) = size(Lattice.lattice)
+        if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
+            Lattice.lattice[i,j] = 2
+            Lattice.visit[i,j] = 1
+            if j < column; checksite(i, j+1, Lattice); end
+            if 1 < j; checksite(i, j-1, Lattice); end
+            if i < row; checksite(i+1, j, Lattice); end
+            if 1 < i; checksite(i-1, j, Lattice); end
+        end
+    end
 
-# square lattice next nearest neighbor
-function checksite(i::Int, j::Int, Lattice::squarennn)
-    checksitennn(i::Int, j::Int, Lattice.lattice::Array{Int})
-end
+    function checkallsite(Lattice::squarennrec)
+        i = 1
+        for j in 1:Lattice.N
+            checksite(i, j, Lattice)
+        end
+    end
 
 
 ##############################
-#
 # For triangular lattice
-#
 ##############################
-function checksitetrinn(i::Int, j::Int, lattice::Array{Int})
-	(row,  column) = size(lattice)
-    lattice = checksitenn(i, j, lattice)
-    if 1 < i && j < column && lattice[i-1, j+1] == 1; lattice[i-1, j+1] = 2; end
-    if 1 < j && i < row && lattice[i+1, j-1] == 1; lattice[i+1, j-1] = 2; end
-    
-	return lattice
-end
-
-function checksite(i::Int, j::Int, Lattice::trinn)
-    checksitetrinn(i::Int, j::Int, Lattice.lattice::Array{Int})
-end
-
-
-######################################
-#
-# For square, triangular lattice
-#
-######################################
-function checkallsite(Lattice::TwoDLattice)
-    (row, column) = size(Lattice.lattice)
-    for i in 1:row, j in 1:column
-        if Lattice.lattice[i,j] == 2
-            Lattice.lattice = checksite(i, j, Lattice)
+    function checksite(i::Int, j::Int, Lattice::trinn, checklist::Array{Array{Int64,1},1})
+        (row,  column) = size(Lattice.lattice)
+        if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
+            Lattice.lattice[i,j] = 2
+            Lattice.visit[i,j] = 1
+            if j < column && Lattice.lattice[i, j+1] == 1; push!(checklist, [i, j+1]); end
+            if 1 < j && Lattice.lattice[i, j-1] == 1; push!(checklist, [i, j-1]); end
+            if i < row && Lattice.lattice[i+1, j] == 1; push!(checklist, [i+1, j]); end
+            if 1 < i && Lattice.lattice[i-1, j] == 1; push!(checklist, [i-1, j]); end
+            if 1 < i && j < column; Lattice.lattice[i-1, j+1] == 1; push!(checklist, [i-1, j+1]); end
+            if 1 < j && i < row; Lattice.lattice[i+1, j-1] == 1; push!(checklist, [i+1, j-1]); end
         end
     end
-    
-    return Lattice.lattice
-end
 
-
-######################################
-#
-# For simple lattice
-#
-######################################
-function checksitesimple(ind::Int, Lattice::HighDimLattice)
-    present_place = ind2sub(Lattice.lattice, ind)
-    
-    for i in 1:length(Lattice.NearestNeighborList)
-        tempposition = ([present_place...] + Lattice.NearestNeighborList[i])
-        if 0 ∉ tempposition && Lattice.N + 1 ∉ tempposition
-            if Lattice.lattice[tempposition...] == 1; Lattice.lattice[tempposition...] = 2; end
+    function checkallsite(Lattice::trinn)
+        _N = Lattice.N
+        checklist = Array{Int64,1}[]
+        i = 1
+        for j in 1:_N
+            checksite(i, j, Lattice, checklist)
         end
-    end
-end
-
-function checkallsite(Lattice::HighDimLattice)
-    for i in 1:length(Lattice.lattice)
-        present_place = ind2sub(Lattice.lattice, i)
-        if Lattice.lattice[present_place...] == 2
-            checksitesimple(i, Lattice)
-        end
-    end
-    
-    return Lattice.lattice
-end
-
-
-######################################
-# recursive function
-######################################
-function checksitennrec(i::Int, j::Int, lattice::Array{Int}, visit::Array{Int})
-	(row,  column) = size(lattice)
-    if lattice[i,j] == 1 && visit[i,j] == 0
-        lattice[i,j] = 2
-        visit[i,j] = 1
-        if j < column; checksitennrec(i, j+1, lattice, visit); end
-        if 1 < j; checksitennrec(i, j-1, lattice, visit); end
-        if i < row; checksitennrec(i+1, j, lattice, visit); end
-        if 1 < i; checksitennrec(i-1, j, lattice, visit); end
-    end
-end
-
-function checksitesimplennrec(ind::Int, Lattice::simplennrec)
-    present_place = ind2sub(Lattice.lattice, ind)
-    
-    if Lattice.lattice[present_place...] == 1 && Lattice.visit[present_place...] == 0
-        Lattice.lattice[present_place...] = 2
-        Lattice.visit[present_place...] = 1
         
-        for i in 1:length(Lattice.NearestNeighborList)
-            tempposition = ([present_place...] + Lattice.NearestNeighborList[i])
-            if 0 ∉ tempposition && Lattice.N + 1 ∉ tempposition
-                tmpind = sub2ind(Lattice.lattice, tempposition...)
-                checksitesimplennrec(tmpind, Lattice)
+        while checklist != []
+            tmppos = pop!(checklist)
+            checksite(tmppos[1], tmppos[2], Lattice, checklist)
+        end
+    end
+    
+    ######################################
+    # recursive function
+    ######################################    
+    function checksite(i::Int, j::Int, Lattice::trinnrec)
+        (row,  column) = size(Lattice.lattice)
+        if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
+            Lattice.lattice[i,j] = 2
+            Lattice.visit[i,j] = 1
+            if j < column; checksite(i, j+1, Lattice); end
+            if 1 < j; checksite(i, j-1, Lattice); end
+            if i < row; checksite(i+1, j, Lattice); end
+            if 1 < i; checksite(i-1, j, Lattice); end
+            if 1 < i && j < column; checksite(i-1, j+1, Lattice); end
+            if 1 < j && i < row; checksite(i+1, j-1, Lattice); end
+        end
+    end
+
+    function checkallsite(Lattice::trinnrec)
+        i = 1
+        for j in 1:Lattice.N
+            checksite(i, j, Lattice)
+        end
+    end
+
+
+
+#######################################
+##
+## For simple lattice
+##
+#######################################
+    function checksite(ind::Int, Lattice::simplenn, checklist::Array{Int64,1})
+        present_place = ind2sub(Lattice.lattice, ind)
+        
+        if Lattice.lattice[present_place...] == 1 && Lattice.visit[present_place...] == 0
+            Lattice.lattice[present_place...] = 2
+            Lattice.visit[present_place...] = 1
+            
+            for i in 1:length(Lattice.NearestNeighborList)
+                tempposition = ([present_place...] + Lattice.NearestNeighborList[i])
+                if 0 ∉ tempposition && Lattice.N + 1 ∉ tempposition
+                    tmpind = sub2ind(Lattice.lattice, tempposition...)
+                    push!(checklist, tmpind)
+                end
             end
         end
     end
-end
 
+    function checkallsite(Lattice::simplenn)
+        _N, dim = Lattice.N, Lattice.dim
+        checklist = Array{Int64, 1}()
+        
+        for i in 1:_N^(dim-1)
+            checksite(i, Lattice, checklist)
+        end
 
-######################################
-# return near site position function
-######################################
-function checksitennpos(i::Int, j::Int, lattice::Array{Int}, visit::Array{Int}, checklist::Array{Array{Int64,1},1})
-	(row,  column) = size(lattice)
-    if lattice[i,j] == 1 && visit[i,j] == 0
-        lattice[i,j] = 2
-        visit[i,j] = 1
-        if j < column && lattice[i, j+1] == 1 
-            push!(checklist, [i, j+1])
-        end
-        
-        if 1 < j && lattice[i, j-1] == 1 
-            push!(checklist, [i, j-1])
-        end
-        
-        if i < row && lattice[i+1, j] == 1 
-            push!(checklist, [i+1, j])
-        end
-        
-        if 1 < i && lattice[i-1, j] == 1 
-            push!(checklist, [i-1, j])
+        while checklist != []
+            tmppos = pop!(checklist)
+            checksite(tmppos, Lattice, checklist)
         end
     end
-end
-
-function checksitesimplennpos(ind::Int, Lattice::simplennpos, checklist::Array{Int64,1})
-	present_place = ind2sub(Lattice.lattice, ind)
-    
-    if Lattice.lattice[present_place...] == 1 && Lattice.visit[present_place...] == 0
-        Lattice.lattice[present_place...] = 2
-        Lattice.visit[present_place...] = 1
-        
-        for i in 1:length(Lattice.NearestNeighborList)
-            tempposition = ([present_place...] + Lattice.NearestNeighborList[i])
-            if 0 ∉ tempposition && Lattice.N + 1 ∉ tempposition
-                tmpind = sub2ind(Lattice.lattice, tempposition...)
-                push!(checklist, tmpind)
-            end
-        end
-    end
-end

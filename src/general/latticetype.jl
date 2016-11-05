@@ -7,117 +7,92 @@ abstract HighDimLattice <: Lattice
 ##########################
 # Square lattice
 ###########################
-
-# nearest neighbor
-type squarenn <: SquareLattice
-	N::Int
-    p::Float64
-    lattice::Array{Int}
-    
-    function squarenn(N, p)
-        lattice = MakeSquareLattice(N, p)
-        new(N, p, lattice)
+    # nearest neighbor
+    type squarenn <: SquareLattice
+        N::Int
+        p::Float64
+        lattice::Array{Int}
+        visit::Array{Int}
+        
+        function squarenn(N, p)
+            lattice = MakeSquareLattice(N, p)
+            visit = zeros(Int, N, N)
+            new(N, p, lattice, visit)
+        end
     end
-end
 
-type squarennrec <: SquareLattice
-	N::Int
-    p::Float64
-    lattice::Array{Int}
-    visit::Array{Int}
-    
-    function squarennrec(N, p)
-        lattice = ( rand(N, N) .< p ) * 1
-        visit = zeros(Int, N, N)
-        new(N, p, lattice, visit)
+    type squarennrec <: SquareLattice
+        N::Int
+        p::Float64
+        lattice::Array{Int}
+        visit::Array{Int}
+        
+        function squarennrec(N, p)
+            lattice = MakeSquareLattice(N, p)
+            visit = zeros(Int, N, N)
+            new(N, p, lattice, visit)
+        end
     end
-end
 
-type squarennpos <: SquareLattice
-	N::Int
-    p::Float64
-    lattice::Array{Int}
-    visit::Array{Int}
-    
-    function squarennpos(N, p)
-        lattice = ( rand(N, N) .< p ) * 1
-        visit = zeros(Int, N, N)
-        new(N, p, lattice, visit)
-    end
-end
 
-# next nearest neighbor
-type squarennn <: SquareLattice
-	N::Int
-    p::Float64
-    lattice::Array{Int}
-    
-    function squarennn(N, p)
-        lattice = MakeSquareLattice(N, p)
-        new(N, p, lattice)
+    # next nearest neighbor
+    type squarennn <: SquareLattice
+        N::Int
+        p::Float64
+        lattice::Array{Int}
+        visit::Array{Int}
+        
+        function squarennn(N, p)
+            lattice = MakeSquareLattice(N, p)
+            visit = zeros(Int, N, N)
+            new(N, p, lattice, visit)
+        end
     end
-end
 
 
 ###########################
 # Triangular lattice
 ###########################
-type trinn <: TriangularLattice
-	N::Int
-    p::Float64
-    lattice::Array{Int}
-    
-    function trinn(N, p)
-        lattice = MakeSquareLattice(N, p)
-        new(N, p, lattice)
+    type trinn <: TriangularLattice
+        N::Int
+        p::Float64
+        lattice::Array{Int}
+        visit::Array{Int}
+        
+        function trinn(N, p)
+            lattice = MakeSquareLattice(N, p)
+            visit = zeros(Int, N, N)
+            new(N, p, lattice, visit)
+        end
     end
-end
 
+    type trinnrec <: TriangularLattice
+        N::Int
+        p::Float64
+        lattice::Array{Int}
+        visit::Array{Int}
+        
+        function trinnrec(N, p)
+            lattice = MakeSquareLattice(N, p)
+            visit = zeros(Int, N, N)
+            new(N, p, lattice, visit)
+        end
+    end
 
 ###########################
 # Z^d lattice
 ###########################
-type simplenn <: HighDimLattice
-	N::Int
-    dim::Int
-    p::Float64
-    lattice::Array{Int}
-    NearestNeighborList::Array{Array,1}
-    
-    function simplenn(N, dim, p)
-        lattice, NearestNeighborList = MakeSimpleLattice(N, dim, p)
-        new(N, dim, p, lattice, NearestNeighborList)
+    type simplenn <: HighDimLattice
+        N::Int
+        dim::Int
+        p::Float64
+        lattice::Array{Int}
+        visit::Array{Int}
+        NearestNeighborList::Array{Array,1}
+        
+        function simplenn(N, dim, p)
+            lattice, NearestNeighborList = MakeSimpleLattice(N, dim, p)
+            visit = zeros(Int, [N for i in 1:dim]...)
+            new(N, dim, p, lattice, visit, NearestNeighborList)
+        end
     end
-end
-
-type simplennrec <: HighDimLattice
-	N::Int
-    dim::Int
-    p::Float64
-    lattice::Array{Int}
-    visit::Array{Int}
-    NearestNeighborList::Array{Array,1}
-    
-    function simplennrec(N, dim, p)
-        lattice = ( rand([N for i in 1:dim]...) .< p ) * 1
-        visit = zeros(Int, [N for i in 1:dim]...)
-        NearestNeighborList = nearlist(dim)
-        new(N, dim, p, lattice, visit, NearestNeighborList)
-    end
-end
-
-type simplennpos <: HighDimLattice
-	N::Int
-    dim::Int
-    p::Float64
-    lattice::Array{Int}
-    visit::Array{Int}
-    NearestNeighborList::Array{Array,1}
-    
-    function simplennpos(N, dim, p)
-        lattice = ( rand([N for i in 1:dim]...) .< p ) * 1
-        visit = zeros(Int, [N for i in 1:dim]...)
-        NearestNeighborList = nearlist(dim)
-        new(N, dim, p, lattice, visit, NearestNeighborList)
-    end
-end
