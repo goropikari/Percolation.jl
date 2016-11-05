@@ -7,5 +7,7 @@ Following type of lattice site percolation simulation.
   - next nearest neighbor
  - Triangular lattice
   - nearest neighbor
- - N dimensional simple lattice
+ - d dimensional simple lattice
   - nearest neighbor
+
+To learn how to use this package, see example/percolation.ipynb.
