@@ -1,6 +1,15 @@
 #######################################################################################
 # Square and triangular lattice: nearest neighbor, next nearest neighbor
 #######################################################################################
+"""
+This package supports visualizing percolation for 2D lattice, but not for over 3D lattice.
+
+percolation(Lattice::TwoDLattice; fig=true, water=true, color=\"seismic_r\", colorbar=false)
+
+percolation(Lattice::simplenn)
+
+If you want to use other colormaps, see  http://matplotlib.org/examples/color/colormaps_reference.html
+"""
 function percolation(Lattice::TwoDLattice; fig=true, water=true, color="seismic_r", colorbar=false)
     _N = Lattice.N
     checkallsite(Lattice)

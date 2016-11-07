@@ -6,7 +6,6 @@ export trinn, trinnrec
 export simplenn
 
 # function
-#export checksite, checkallsite, MakeSquareLattice, PercolationPlot, percolation, percolationgif
 export percolation, percolationgif
     
     import PyPlot

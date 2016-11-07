@@ -1,3 +1,4 @@
+" percolationgif(Lattice::SquareLattice; output_dir=\"./\", color=\"seismic_r\", colorbar=false, fps=4, filename=\"anime.gif\") "
 function percolationgif(Lattice::SquareLattice; output_dir="./", color="seismic_r", colorbar=false, fps=4, filename="anime.gif")
     output_tempolary_png=tempdir()*"/Percolation_"*randstring()
     (row, column) = size(Lattice.lattice)

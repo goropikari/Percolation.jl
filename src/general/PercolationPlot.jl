@@ -8,6 +8,8 @@ function PercolationPlot(Lattice::SquareLattice, hit::Int, waterplot::Bool, colo
 	if waterplot
         # 行列で書くと(1,1)は左上になるけど、グラフで(1,1)は左下になるのでflipdimを使って上下を反転させる。
         # findnで 0 以外の数値が入っているインデックスを返す。
+        # Matrix (1, 1) element is located at top left, but if you plot the point (1, 1), it is 
+        # located at bottom left. 
 		ymizu, xmizu = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
 		x = vcat(x,xmizu); y = vcat(y,ymizu)
 	end
@@ -30,8 +32,6 @@ end
 # triangle
 function PercolationPlot(Lattice::TriangularLattice, hit::Int, waterplot::Bool, color::String, colorbar::Bool)
 
-    # 行列で書くと(1,1)は左上になるけど、グラフで(1,1)は左下になるのでflipdimを使って上下を反転させる。
-    # findnで 0 以外の数値が入っているインデックスを返す。
     ywater, xwater = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
 	yempty, xempty = findn( flipdim( (Lattice.lattice .== 1) * 1 , 1) )
 	yblock, xblock = findn( flipdim( (Lattice.lattice .== 0) * 1 , 1) )
@@ -61,7 +61,7 @@ function PercolationPlot(Lattice::SquareLattice, hit::Int, ind::Int, output_dir:
 	x = vcat(x,xl); y = vcat(y,yl)
 	PyPlot.plt[:hist2d](x, y, bins=[Lattice.N, Lattice.N] );
 	if colorbar; PyPlot.colorbar(); end
-	PyPlot.set_cmap(color) # http://matplotlib.org/examples/color/colormaps_reference.html
+	PyPlot.set_cmap(color)
 	PyPlot.axis("equal")
 	PyPlot.axis("off")
 	if hit > 0; PyPlot.title(latexstring("Percolation !, \$p\$ = $(Lattice.p)")); end
