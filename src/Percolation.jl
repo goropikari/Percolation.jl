@@ -1,12 +1,12 @@
 module Percolation
 
 # type
-export squarenn, squarennrec, squarennn
+export squarenn, squarennrec, squarennn, squarennnrec
 export trinn, trinnrec
 export simplenn
 
 # function
-export percolation, percolationgif
+export percolation, percolationgif, cluster, checkallcluster, clusterplot
     
     import PyPlot
     using LaTeXStrings
@@ -17,5 +17,7 @@ export percolation, percolationgif
     include("general/PercolationPlot.jl")
     include("general/percolation.jl")
     include("general/percolationgif.jl")
+    include("general/cluster.jl")
+    
 
 end

@@ -48,6 +48,19 @@ abstract HighDimLattice <: Lattice
             new(N, p, lattice, visit)
         end
     end
+    
+    type squarennnrec <: SquareLattice
+        N::Int
+        p::Float64
+        lattice::Array{Int}
+        visit::Array{Int}
+        
+        function squarennnrec(N, p)
+            lattice = MakeSquareLattice(N, p)
+            visit = zeros(Int, N, N)
+            new(N, p, lattice, visit)
+        end
+    end
 
 
 ###########################
