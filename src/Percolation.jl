@@ -6,7 +6,7 @@ export trinn, trinnrec
 export simplenn
 
 # function
-export percolation, percolationgif, cluster, checkallcluster, clusterplot
+export percolation, percolationgif, cluster, clusterplot
     
     import PyPlot
     using LaTeXStrings
