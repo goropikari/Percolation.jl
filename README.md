@@ -9,6 +9,10 @@ Following type of lattice site percolation simulation.
   - nearest neighbor
  - d dimensional simple lattice
   - nearest neighbor
+ - Honeycomb lattice
+  - nearest neighbor
+ - Kagome lattice
+  - nearest neighbor
 
 To learn how to use this package, see example/percolation.ipynb.
 
