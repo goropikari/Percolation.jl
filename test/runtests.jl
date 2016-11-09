@@ -29,3 +29,6 @@ percolation(site)
 
 site = simplenn(10,3,0.5)
 percolation(site)
+
+site = squarenn(10, 0.5)
+cluster(site)

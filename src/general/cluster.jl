@@ -194,12 +194,14 @@ end
 ####################################################################################################
 # cluster figure
 ####################################################################################################
-function clusterplot(Lattice::Lattice)
+" clusterplot(Lattice::Lattice; figsave=false, filename=\"cluster.png\") "
+function clusterplot(Lattice::Lattice; figsave=false, filename="cluster.png")
     MaxClusterLabelNum = maximum(Lattice.visit)
     for i in 1:MaxClusterLabelNum
         y, x = ind2sub(Lattice.visit, findin(Lattice.visit, i))
         PyPlot.plot(x,y, ".")
         PyPlot.axis("equal")
+        PyPlot.axis("off")
     end
     
     if sum(Lattice.visit[1,:] ∩ Lattice.visit[ size(Lattice.lattice)[1], :] ) != 0
@@ -208,5 +210,6 @@ function clusterplot(Lattice::Lattice)
         PyPlot.title("Not percolation ")
     end   
     
+    if figsave; PyPlot.savefig(filename); end
     
 end
