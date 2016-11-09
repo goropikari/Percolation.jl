@@ -3,6 +3,8 @@ module Percolation
 # type
 export squarenn, squarennrec, squarennn, squarennnrec
 export trinn, trinnrec
+export honeycomb
+export kagome
 export simplenn
 
 # function

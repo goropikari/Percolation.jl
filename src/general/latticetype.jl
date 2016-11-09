@@ -2,6 +2,8 @@ abstract Lattice
 abstract TwoDLattice <: Lattice
 abstract SquareLattice <: TwoDLattice
 abstract TriangularLattice <: TwoDLattice
+abstract HoneycombLattice <: TwoDLattice
+abstract KagomeLattice <: TwoDLattice
 abstract HighDimLattice <: Lattice
 
 ##########################
@@ -91,6 +93,48 @@ abstract HighDimLattice <: Lattice
             new(N, p, lattice, visit)
         end
     end
+
+
+###########################
+# Honeycomb lattice
+###########################
+    type honeycomb <: HoneycombLattice
+        N::Int
+        p::Float64
+        lattice::Array{Int}
+        visit::Array{Int}
+        
+        function honeycomb(N, p)
+            lattice = MakeSquareLattice(N, p)
+            visit = zeros(Int, N, N)
+            new(N, p, lattice, visit)
+        end
+    end
+    
+    
+###########################
+# Kagome lattice
+###########################
+    type kagome <: KagomeLattice
+        N::Int
+        p::Float64
+        lattice::Array{Int}
+        visit::Array{Int}
+        
+        function kagome(N, p)
+            lattice = MakeSquareLattice(N, p)
+            
+            for i in 2:2:N, j in 2:2:N
+                lattice[j,i] = 0
+            end
+            
+            visit = zeros(Int, N, N)
+            new(N, p, lattice, visit)
+        end
+    end
+
+
+
 
 ###########################
 # Z^d lattice
