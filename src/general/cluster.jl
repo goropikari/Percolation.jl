@@ -4,7 +4,6 @@ cluster(Lattice::Lattice)
 
 return percolation or not and each clustersize
 
-
 """
 function cluster(Lattice::TwoDLattice)
     checkallcluster(Lattice)
