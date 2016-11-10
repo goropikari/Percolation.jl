@@ -8,7 +8,7 @@ export kagome
 export simplenn
 
 # function
-export percolation, percolationgif, cluster, clusterplot
+export percolation, percolationplot, percolationgif, cluster, clusterplot
     
     import PyPlot
     using LaTeXStrings

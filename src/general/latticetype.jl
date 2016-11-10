@@ -17,7 +17,7 @@ abstract HighDimLattice <: Lattice
         visit::Array{Int}
         
         function squarenn(N, p)
-            lattice = MakeSquareLattice(N, p)
+            lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             new(N, p, lattice, visit)
         end
@@ -30,7 +30,7 @@ abstract HighDimLattice <: Lattice
         visit::Array{Int}
         
         function squarennrec(N, p)
-            lattice = MakeSquareLattice(N, p)
+            lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             new(N, p, lattice, visit)
         end
@@ -45,7 +45,7 @@ abstract HighDimLattice <: Lattice
         visit::Array{Int}
         
         function squarennn(N, p)
-            lattice = MakeSquareLattice(N, p)
+            lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             new(N, p, lattice, visit)
         end
@@ -58,7 +58,7 @@ abstract HighDimLattice <: Lattice
         visit::Array{Int}
         
         function squarennnrec(N, p)
-            lattice = MakeSquareLattice(N, p)
+            lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             new(N, p, lattice, visit)
         end
@@ -75,7 +75,7 @@ abstract HighDimLattice <: Lattice
         visit::Array{Int}
         
         function trinn(N, p)
-            lattice = MakeSquareLattice(N, p)
+            lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             new(N, p, lattice, visit)
         end
@@ -88,7 +88,7 @@ abstract HighDimLattice <: Lattice
         visit::Array{Int}
         
         function trinnrec(N, p)
-            lattice = MakeSquareLattice(N, p)
+            lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             new(N, p, lattice, visit)
         end
@@ -105,7 +105,7 @@ abstract HighDimLattice <: Lattice
         visit::Array{Int}
         
         function honeycomb(N, p)
-            lattice = MakeSquareLattice(N, p)
+            lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             new(N, p, lattice, visit)
         end
@@ -122,7 +122,7 @@ abstract HighDimLattice <: Lattice
         visit::Array{Int}
         
         function kagome(N, p)
-            lattice = MakeSquareLattice(N, p)
+            lattice = MakeLattice(N, p)
             
             for i in 2:2:N, j in 2:2:N
                 lattice[j,i] = 0

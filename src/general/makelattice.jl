@@ -3,7 +3,7 @@
 # For 2D square and triangular lattice 
 #
 ###############################################
-function MakeSquareLattice(_N::Int, probability::Float64)
+function MakeLattice(_N::Int, probability::Float64)
     lattice = ( rand(Float64, _N, _N) .< probability ) * 1
     return lattice
 end

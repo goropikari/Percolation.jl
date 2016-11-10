@@ -2,8 +2,20 @@
 # 2D  #
 #######
 # square
-function PercolationPlot(Lattice::SquareLattice, hit::Int, waterplot::Bool, color::String, colorbar::Bool)
-	x = Int[]; y = Int[]
+"""
+This package supports visualizing percolation for 2D lattice, but not for over 3D lattice.
+
+percolationplot(Lattice::TwoDLattice; waterplot=true, color=\"seismic_r\", colorbar=false)
+
+percolationplot(Lattice::simplenn)
+
+If you want to use other colormaps, see  http://matplotlib.org/examples/color/colormaps_reference.html
+"""
+function percolationplot(Lattice::SquareLattice; waterplot=true, color="seismic_r", colorbar=false)
+	# check percolation or not.
+    if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
+    
+    x = Int[]; y = Int[]
 
 	if waterplot
         # 行列で書くと(1,1)は左上になるけど、グラフで(1,1)は左下になるのでflipdimを使って上下を反転させる。
@@ -30,8 +42,52 @@ function PercolationPlot(Lattice::SquareLattice, hit::Int, waterplot::Bool, colo
 end
 
 # triangle
-function PercolationPlot(Lattice::TriangularLattice, hit::Int, waterplot::Bool, color::String, colorbar::Bool)
+function percolationplot(Lattice::TriangularLattice; waterplot=true)
+	# check percolation or not.
+    if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
+    
+    ywater, xwater = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
+	yempty, xempty = findn( flipdim( (Lattice.lattice .== 1) * 1 , 1) )
+	yblock, xblock = findn( flipdim( (Lattice.lattice .== 0) * 1 , 1) )
+	
 
+    PyPlot.figure()
+    if waterplot; PyPlot.plot(xwater, ywater, "b."); else; PyPlot.plot(xwater, ywater, "o", color="white"); end
+    PyPlot.plot(xempty, yempty, ".", color="white")
+    PyPlot.plot(xblock, yblock, ".", color="black")
+	PyPlot.axis("equal")
+#	PyPlot.axis("off")
+	if hit > 0; PyPlot.title(latexstring("Percolation !, \$p\$ = $(Lattice.p)")); end
+	if hit == 0; PyPlot.title(latexstring("Not Percolation, \$p\$ = $(Lattice.p)")); end
+	show()
+end
+
+# honeycomb
+function percolationplot(Lattice::HoneycombLattice; waterplot=true)
+	# check percolation or not.
+    if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
+    
+    ywater, xwater = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
+	yempty, xempty = findn( flipdim( (Lattice.lattice .== 1) * 1 , 1) )
+	yblock, xblock = findn( flipdim( (Lattice.lattice .== 0) * 1 , 1) )
+	
+
+    PyPlot.figure()
+    if waterplot; PyPlot.plot(xwater, ywater, "b."); else; PyPlot.plot(xwater, ywater, "o", color="white"); end
+    PyPlot.plot(xempty, yempty, ".", color="white")
+    PyPlot.plot(xblock, yblock, ".", color="black")
+	PyPlot.axis("equal")
+#	PyPlot.axis("off")
+	if hit > 0; PyPlot.title(latexstring("Percolation !, \$p\$ = $(Lattice.p)")); end
+	if hit == 0; PyPlot.title(latexstring("Not Percolation, \$p\$ = $(Lattice.p)")); end
+	show()
+end
+
+# kagome
+function percolationplot(Lattice::KagomeLattice; waterplot=true)
+	# check percolation or not.
+    if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
+    
     ywater, xwater = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
 	yempty, xempty = findn( flipdim( (Lattice.lattice .== 1) * 1 , 1) )
 	yblock, xblock = findn( flipdim( (Lattice.lattice .== 0) * 1 , 1) )
@@ -50,7 +106,7 @@ end
 
 
 # for GIF animation
-function PercolationPlot(Lattice::SquareLattice, hit::Int, ind::Int, output_dir::String, color::String, colorbar::Bool)
+function percolationplot(Lattice::SquareLattice, hit::Int, ind::Int, output_dir::String, color::String, colorbar::Bool)
 	x = Int[]; y = Int[]
 
     ymizu, xmizu = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )

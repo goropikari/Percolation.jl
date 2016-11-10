@@ -140,8 +140,90 @@
             checksite(i, j, Lattice)
         end
     end
+############################################################
+# honeycomb lattice nearest neighbor
+############################################################
+function checksite(i::Int, j::Int, Lattice::honeycomb)
+    (row, column) = size(Lattice.lattice)
+    searchlist = Array{Array{Int64, 1}, 1}()
+    
+    if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
+        Lattice.lattice[i,j] = 2
+        Lattice.visit[i,j] = 1
+        
+        if iseven(i+j)
+            if j < column && Lattice.lattice[i, j+1] == 1; push!(searchlist, [i, j+1]); end
+            if 1 < j && Lattice.lattice[i, j-1] == 1; push!(searchlist, [i, j-1]); end
+            if 1 < i && Lattice.lattice[i-1, j] == 1; push!(searchlist, [i-1, j]); end
+        else
+            if j < column && Lattice.lattice[i, j+1] == 1; push!(searchlist, [i, j+1]); end
+            if 1 < j && Lattice.lattice[i, j-1] == 1; push!(searchlist, [i, j-1]); end
+            if i < row && Lattice.lattice[i+1, j] == 1; push!(searchlist, [i+1, j]); end
+        end
+    end
+    
+    return searchlist
+end
 
+function checkallsite(Lattice::honeycomb)
+    _N = Lattice.N
+    checklist = Array{Int64,1}[]
+    i = 1
+    for j in 1:_N
+        checklist = [checklist; checksite(i, j, Lattice)]
+    end
+    
+    while checklist != []
+        tmppos = pop!(checklist)
+        checklist = [checklist; checksite(tmppos[1], tmppos[2], Lattice)]
+    end
+end
 
+############################################################
+# kagome lattice nearest neighbor
+############################################################
+function checksite(i::Int, j::Int, Lattice::kagome)
+    (row, column) = size(Lattice.lattice)
+    searchlist = Array{Array{Int64, 1}, 1}()
+    
+    if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
+        Lattice.lattice[i,j] = 2
+        Lattice.visit[i,j] = 1
+        
+        if iseven(i+j) # if i and j are both zeros, always lattice[i,j] = 0
+            if j < column && Lattice.lattice[i, j+1] == 1; push!(searchlist, [i, j+1]); end
+            if 1 < j && Lattice.lattice[i, j-1] == 1; push!(searchlist, [i, j-1]); end
+            if i < row && Lattice.lattice[i+1, j] == 1; push!(searchlist, [i+1, j]); end
+            if 1 < i && Lattice.lattice[i-1, j] == 1; push!(searchlist, [i-1, j]); end            
+        elseif iseven(i) && isodd(j)
+            if i < row && Lattice.lattice[i+1, j] == 1; push!(searchlist, [i+1, j]); end
+            if 1 < i && Lattice.lattice[i-1, j] == 1; push!(searchlist, [i-1, j]); end  
+            if 1 < i && j < column && Lattice.lattice[i-1, j+1] == 1; push!(searchlist, [i-1, j+1]); end
+            if i < row && 1 < j && Lattice.lattice[i+1, j-1] == 1; push!(searchlist, [i+1, j-1]); end
+        else
+            if j < column && Lattice.lattice[i, j+1] == 1; push!(searchlist, [i, j+1]); end
+            if 1 < j && Lattice.lattice[i, j-1] == 1; push!(searchlist, [i, j-1]); end
+            if 1 < i && j < column && Lattice.lattice[i-1, j+1] == 1; push!(searchlist, [i-1, j+1]); end
+            if i < row && 1 < j && Lattice.lattice[i+1, j-1] == 1; push!(searchlist, [i+1, j-1]); end
+        end
+    end
+    
+    return searchlist
+end
+
+function checkallsite(Lattice::kagome)
+    _N = Lattice.N
+    checklist = Array{Int64,1}[]
+    i = 1
+    for j in 1:_N
+        checklist = [checklist; checksite(i, j, Lattice)]
+    end
+    
+    while checklist != []
+        tmppos = pop!(checklist)
+        checklist = [checklist; checksite(tmppos[1], tmppos[2], Lattice)]
+    end
+end
 
 #######################################
 ##

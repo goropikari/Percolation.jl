@@ -7,7 +7,7 @@ function percolationgif(Lattice::SquareLattice; output_dir="./", color="seismic_
     end
     
     
-    PercolationPlot(Lattice, 0, 0, output_tempolary_png, color, colorbar)
+    percolationplot(Lattice, 0, 0, output_tempolary_png, color, colorbar)
     PyPlot.clf()
     previous_lattice = ones(Int, row, column)
     
@@ -17,7 +17,7 @@ function percolationgif(Lattice::SquareLattice; output_dir="./", color="seismic_
         previous_lattice = Lattice.lattice[:,:]
         Lattice.lattice = checkallsitegif(Lattice)
         if 2 ∈ Lattice.lattice[row, :]; hit = 1; else; hit = 0; end
-        PercolationPlot(Lattice, hit, indx, output_tempolary_png, color, colorbar)
+        percolationplot(Lattice, hit, indx, output_tempolary_png, color, colorbar)
         PyPlot.clf()
         indx += 1
     end
