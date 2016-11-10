@@ -66,6 +66,7 @@
     ######################################
     # recursive function
     ######################################
+    # nearest neighbor
     function checksite(i::Int, j::Int, Lattice::squarennrec)
         (row,  column) = size(Lattice.lattice)
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
@@ -79,6 +80,30 @@
     end
 
     function checkallsite(Lattice::squarennrec)
+        i = 1
+        for j in 1:Lattice.N
+            checksite(i, j, Lattice)
+        end
+    end
+    
+    # next nearest neighbor
+    function checksite(i::Int, j::Int, Lattice::squarennnrec)
+        (row,  column) = size(Lattice.lattice)
+        if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
+            Lattice.lattice[i,j] = 2
+            Lattice.visit[i,j] = 1
+            if j < column; checksite(i, j+1, Lattice); end
+            if 1 < j; checksite(i, j-1, Lattice); end
+            if i < row; checksite(i+1, j, Lattice); end
+            if 1 < i; checksite(i-1, j, Lattice); end
+            if 1 < i && 1 < j; checksite(i-1, j-1, Lattice); end
+            if 1 < i && j < column; checksite(i-1, j+1, Lattice); end
+            if i < row && 1 < j; checksite(i+1, j-1, Lattice); end
+            if i < row && j < column; checksite(i+1, j+1, Lattice); end
+        end
+    end
+
+    function checkallsite(Lattice::squarennnrec)
         i = 1
         for j in 1:Lattice.N
             checksite(i, j, Lattice)
