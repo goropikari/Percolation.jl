@@ -1,6 +1,8 @@
 # Percolation
 
-Following type of lattice site percolation simulation.
+This package is for simulating percolation theory. You can computer cluster size and check if percolating or not.
+
+Support for following type of lattice site percolation.
 
  - Square lattice
   - nearest neighbor
@@ -14,6 +16,10 @@ Following type of lattice site percolation simulation.
  - Kagome lattice
   - nearest neighbor
 
+
+
+
 To learn how to use this package, see example/percolation.ipynb.
+<img src="https://github.com/tkMeitner/Percolation.jl/blob/master/example/anime.gif" align="middle"  />
 
 <img src="https://github.com/tkMeitner/Percolation.jl/blob/master/example/cluster.png" align="middle"  />
