@@ -78,3 +78,28 @@ function checkallsitegif(Lattice::TwoDLattice)
     
     return Lattice.lattice
 end
+
+
+
+# for GIF animation
+function percolationplot(Lattice::SquareLattice, hit::Int, ind::Int, output_dir::String, color::String, colorbar::Bool)
+	x = Int[]; y = Int[]
+
+    ymizu, xmizu = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
+    x = vcat(x,xmizu); y = vcat(y,ymizu)
+
+	yl, xl = findn(flipdim(Lattice.lattice, 1))
+	x = vcat(x,xl); y = vcat(y,yl)
+    PyPlot.ioff()
+	PyPlot.plt[:hist2d](x, y, bins=[Lattice.N, Lattice.N] );
+	if colorbar; PyPlot.colorbar(); end
+	PyPlot.set_cmap(color)
+	PyPlot.axis("equal")
+	PyPlot.axis("off")
+	if hit > 0; PyPlot.title(latexstring("Percolation !, \$p\$ = $(Lattice.p)")); end
+	if hit == 0; PyPlot.title(latexstring("Not Percolation, \$p\$ = $(Lattice.p)")); end
+
+    # save figure
+    if ! ispath(output_dir); mkdir(output_dir); end
+	PyPlot.savefig(@sprintf("%s/%05d.png", output_dir, ind))
+end
