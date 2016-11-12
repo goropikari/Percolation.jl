@@ -4,7 +4,7 @@
 #
 ###############################################
 function MakeLattice(_N::Int, probability::Float64)
-    lattice = ( rand(Float64, _N, _N) .< probability ) * Int16(1)
+    lattice = ( rand(Float64, _N, _N) .< probability ) * 1
     return lattice
 end
 
