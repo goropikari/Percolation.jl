@@ -277,7 +277,7 @@ end
         _N, dim = Lattice.N, Lattice.dim
         checklist = Array{Int64, 1}()
         
-        for i in 1:_N^(dim-1)
+        for i in 1:_N^(dim-1) # 上下が繋がっているか確認するだけなので上面だけ見れば良い。
             checksite(i, Lattice, checklist)
         end
 
