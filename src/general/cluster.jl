@@ -5,22 +5,48 @@ cluster(Lattice::Lattice)
 return percolation or not and each clustersize
 
 """
-function cluster(Lattice::TwoDLattice)
+#function cluster(Lattice::TwoDLattice)
+#    checkallcluster(Lattice)
+#    maxlabelnum = maximum(Lattice.visit)
+#    clustersize = zeros(Int, maxlabelnum)
+#    for i in 1:maxlabelnum
+#        clustersize[i] = sum(Lattice.visit .== i)
+#    end
+    
+#    # check percolation or not
+#    if sum(Lattice.visit[1,:] ∩ Lattice.visit[ size(Lattice.lattice)[1], :] ) != 0
+#        perco = 1
+#    else
+#        perco = 0
+#    end
+    
+#    return perco, clustersize
+#end
+
+function cluster(Lattice::TwoDlattice)
     checkallcluster(Lattice)
     maxlabelnum = maximum(Lattice.visit)
     clustersize = zeros(Int, maxlabelnum)
     for i in 1:maxlabelnum
         clustersize[i] = sum(Lattice.visit .== i)
     end
-    
+
     # check percolation or not
     if sum(Lattice.visit[1,:] ∩ Lattice.visit[ size(Lattice.lattice)[1], :] ) != 0
         perco = 1
     else
         perco = 0
     end
+
+    Lattice.PercolationOrNot = perco
+    if clustersize != Vector{Int}()
+        Lattice.clustersize = clustersize
+        Lattice.clustersizefreq = [(collect(span(Lattice.clustersize))[i], counts(Lattice.clustersize)[i]) for i in 1:length(counts(Lattice.clustersize)) if counts(Lattice.clustersize)[i] != 0]
+        Lattice.clusternumber = [(Lattice.clustersizefreq[i][1], Lattice.clustersizefreq[i][2] / Lattice.N^2) for i in 1:length(Lattice.clustersizefreq)]
+        Lattice.average_clustersize = sum([(x -> x[1]^2 * x[2])(Lattice.clusternumber[i]) for i in 1:length(Lattice.clusternumber)]) / Lattice.p
+    end
     
-    return perco, clustersize
+    return
 end
 
 function cluster(Lattice::HighDimLattice)
@@ -286,7 +312,7 @@ end
         _N, dim = Lattice.N, Lattice.dim
         labelnum = 1
         
-        for ind in 1:_N^(dim-1)
+        for ind in 1:_N^dim
             if Lattice.lattice[ind] == 1 && Lattice.visit[ind] == 0
                 searchlist = checkcluster(ind, labelnum, Lattice)
                 Lattice.visit[ind] = labelnum
