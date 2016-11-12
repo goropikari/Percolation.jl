@@ -15,25 +15,14 @@ abstract HighDimLattice <: Lattice
         p::Float64
         lattice::Matrix{Int}
         visit::Matrix{Int}
-        clustersize::Vector{Int} # the number of sites belonging to i th cluster.
-        clusternumber::Vector{Tuple{Int, Int}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p))
-        average_clustersize::Int
-        strength::Int # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
-        PercolationOrNot::Int
         
         function squarenn(N, p)
             lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
-            clustersize = Vector{Int}()
-            clusternumber = Vector{Tuple{Int, Int}}()
-            average_clustersize = 0
-            strength = 0
-            PercolationOrNot = 0
-            
-            new(N, p, lattice, visit, clustersize, clusternumber, average_clustersize, strength, PercolationOrNot)
+            new(N, p, lattice, visit)
         end
     end
-
+    
     type squarennrec <: SquareLattice
         N::Int
         p::Float64
