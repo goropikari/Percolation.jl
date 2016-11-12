@@ -154,8 +154,8 @@ abstract HighDimLattice <: Lattice
         N::Int
         dim::Int
         p::Float64
-        lattice::Matrix{Int}
-        visit::Matrix{Int}
+        lattice::Array{Int}
+        visit::Array{Int}
         NearestNeighborList::Array{Array,1}
         
         function simplenn(N, dim, p)
