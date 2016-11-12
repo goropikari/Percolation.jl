@@ -11,7 +11,7 @@ export simplenn
 export percolation, percolationplot, percolationgif, cluster, clusterplot
     
     import PyPlot
-    using LaTeXStrings
+    using LaTeXStrings, StatsBase
 
     include("general/latticetype.jl")
     include("general/checksite.jl")
