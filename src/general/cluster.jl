@@ -23,7 +23,7 @@ return percolation or not and each clustersize
 #    return perco, clustersize
 #end
 
-function cluster(Lattice::TwoDlattice)
+function cluster(Lattice::TwoDLattice)
     checkallcluster(Lattice)
     maxlabelnum = maximum(Lattice.visit)
     clustersize = zeros(Int, maxlabelnum)
