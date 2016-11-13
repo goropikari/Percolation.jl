@@ -8,7 +8,7 @@ abstract HighDimLattice <: Lattice
 
 
 ###############################################
-# For 2D square and triangular lattice 
+# For 2D square and triangular lattice
 ###############################################
 function MakeLattice(_N::Int, probability::Float64)
     lattice = ( rand(Float64, _N, _N) .< probability ) * 1
@@ -71,6 +71,10 @@ end
         PercolationOrNot::Int
 
         function squarenn(N, p)
+            if N > 10^3
+                error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
+            end
+
             lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
@@ -110,6 +114,10 @@ end
         PercolationOrNot::Int
 
         function squarennrec(N, p)
+            if N > 10^3
+                error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
+            end
+
             lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
@@ -150,6 +158,10 @@ end
         PercolationOrNot::Int
 
         function squarennn(N, p)
+            if N > 10^3
+                error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
+            end
+
             lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
@@ -191,6 +203,10 @@ end
         PercolationOrNot::Int
 
         function squarennnrec(N, p)
+            if N > 10^3
+                error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
+            end
+
             lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
@@ -233,6 +249,10 @@ end
         PercolationOrNot::Int
 
         function trinn(N, p)
+            if N > 10^3
+                error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
+            end
+
             lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
@@ -273,6 +293,10 @@ end
         PercolationOrNot::Int
 
         function trinnrec(N, p)
+            if N > 10^3
+                error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
+            end
+
             lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
@@ -316,6 +340,10 @@ end
         PercolationOrNot::Int
 
         function honeycomb(N, p)
+            if N > 10^3
+                error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
+            end
+
             lattice = MakeLattice(N, p)
             visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
@@ -365,6 +393,10 @@ end
         PercolationOrNot::Int
 
         function kagome(N, p)
+            if N > 10^3
+                error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
+            end
+
             lattice = MakeLattice(N, p); for i in 2:2:N, j in 2:2:N; lattice[j,i] = 0; end
             visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
