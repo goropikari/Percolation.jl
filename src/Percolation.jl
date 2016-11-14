@@ -15,7 +15,6 @@ export percolation, percolationplot, percolationgif, cluster, clusterplot
 
     include("general/latticetype.jl")
     include("general/checksite.jl")
-#    include("general/makelattice.jl")
     include("general/PercolationPlot.jl")
     include("general/percolation.jl")
     include("general/percolationgif.jl")
