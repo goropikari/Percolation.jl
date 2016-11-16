@@ -5,25 +5,9 @@ cluster(Lattice::Lattice)
 return percolation or not and each clustersize
 
 """
-#function cluster(Lattice::TwoDLattice)
-#    checkallcluster(Lattice)
-#    maxlabelnum = maximum(Lattice.visit)
-#    clustersize = zeros(Int, maxlabelnum)
-#    for i in 1:maxlabelnum
-#        clustersize[i] = sum(Lattice.visit .== i)
-#    end
-    
-#    # check percolation or not
-#    if sum(Lattice.visit[1,:] ∩ Lattice.visit[ size(Lattice.lattice)[1], :] ) != 0
-#        perco = 1
-#    else
-#        perco = 0
-#    end
-    
-#    return perco, clustersize
-#end
-
 function cluster(Lattice::TwoDLattice)
+    _N = size(Lattice.visit)[1]
+
     checkallcluster(Lattice)
     maxlabelnum = maximum(Lattice.visit)
     clustersize = zeros(Int, maxlabelnum)
@@ -32,7 +16,7 @@ function cluster(Lattice::TwoDLattice)
     end
 
     # check percolation or not
-    if sum(Lattice.visit[1,:] ∩ Lattice.visit[ size(Lattice.lattice)[1], :] ) != 0
+    if sum(Lattice.visit[1,:] ∩ Lattice.visit[_N, :] ∩ Lattice.visit[:, 1] ∩ Lattice.visit[:,_N]) != 0
         perco = 1
     else
         perco = 0
@@ -345,7 +329,7 @@ function clusterplot(Lattice::Lattice; figsave=false, filename="cluster.png")
         PyPlot.axis("off")
     end
     
-    if sum(Lattice.visit[1,:] ∩ Lattice.visit[ size(Lattice.lattice)[1], :] ) != 0
+    if Lattice.PercolationOrNot == 1
         PyPlot.title("Percolation !")
     else
         PyPlot.title("Not percolation ")

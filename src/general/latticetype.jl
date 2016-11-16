@@ -45,19 +45,6 @@ end
 # Square lattice
 ###########################
     # nearest neighbor
-#    type squarenn <: SquareLattice
-#        N::Int
-#        p::Float64
-#        lattice::Matrix{Int}
-#        visit::Matrix{Int}
-
-#        function squarenn(N, p)
-#            lattice = MakeLattice(N, p)
-#            visit = zeros(Int, N, N)
-#            new(N, p, lattice, visit)
-#        end
-#    end
-
     type squarenn <: SquareLattice
         N::Int # lattice linear size
         p::Float64 # occupied probability
@@ -88,18 +75,6 @@ end
         end
     end
 
-#    type squarennrec <: SquareLattice
-#        N::Int
-#        p::Float64
-#        lattice::Matrix{Int}
-#        visit::Matrix{Int}
-
-#        function squarennrec(N, p)
-#            lattice = MakeLattice(N, p)
-#            visit = zeros(Int, N, N)
-#            new(N, p, lattice, visit)
-#        end
-#    end
 
     type squarennrec <: SquareLattice
         N::Int # lattice linear size
@@ -131,20 +106,8 @@ end
         end
     end
 
+
     # next nearest neighbor
-#    type squarennn <: SquareLattice
-#        N::Int
-#        p::Float64
-#        lattice::Matrix{Int}
-#        visit::Matrix{Int}
-
-#        function squarennn(N, p)
-#            lattice = MakeLattice(N, p)
-#            visit = zeros(Int, N, N)
-#            new(N, p, lattice, visit)
-#        end
-#    end
-
     type squarennn <: SquareLattice
         N::Int # lattice linear size
         p::Float64 # occupied probability
@@ -174,21 +137,6 @@ end
             new(N, p, lattice, visit, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
         end
     end
-
-
-#    type squarennnrec <: SquareLattice
-#        N::Int
-#        p::Float64
-#        lattice::Matrix{Int}
-#        visit::Matrix{Int}
-
-#        function squarennnrec(N, p)
-#            lattice = MakeLattice(N, p)
-#            visit = zeros(Int, N, N)
-#            new(N, p, lattice, visit)
-#        end
-#    end
-
 
     type squarennnrec <: SquareLattice
         N::Int # lattice linear size
@@ -223,19 +171,6 @@ end
 ###########################
 # Triangular lattice
 ###########################
-#    type trinn <: TriangularLattice
-#        N::Int
-#        p::Float64
-#        lattice::Matrix{Int}
-#        visit::Matrix{Int}
-
-#        function trinn(N, p)
-#            lattice = MakeLattice(N, p)
-#            visit = zeros(Int, N, N)
-#            new(N, p, lattice, visit)
-#        end
-#    end
-
     type trinn <: TriangularLattice
         N::Int # lattice linear size
         p::Float64 # occupied probability
@@ -267,18 +202,6 @@ end
     end
 
 
-#    type trinnrec <: TriangularLattice
-#        N::Int
-#        p::Float64
-#        lattice::Matrix{Int}
-#        visit::Matrix{Int}
-
-#        function trinnrec(N, p)
-#            lattice = MakeLattice(N, p)
-#            visit = zeros(Int, N, N)
-#            new(N, p, lattice, visit)
-#        end
-#    end
 
     type trinnrec <: TriangularLattice
         N::Int # lattice linear size
@@ -314,19 +237,6 @@ end
 ###########################
 # Honeycomb lattice
 ###########################
-#    type honeycomb <: HoneycombLattice
-#        N::Int
-#        p::Float64
-#        lattice::Matrix{Int}
-#        visit::Matrix{Int}
-
-#        function honeycomb(N, p)
-#            lattice = MakeLattice(N, p)
-#            visit = zeros(Int, N, N)
-#            new(N, p, lattice, visit)
-#        end
-#    end
-
     type honeycomb <: HoneycombLattice
         N::Int # lattice linear size
         p::Float64 # occupied probability
@@ -361,25 +271,6 @@ end
 ###########################
 # Kagome lattice
 ###########################
-#    type kagome <: KagomeLattice
-#        N::Int
-#        p::Float64
-#        lattice::Matrix{Int}
-#        visit::Matrix{Int}
-
-#        function kagome(N, p)
-#            lattice = MakeLattice(N, p)
-
-#            for i in 2:2:N, j in 2:2:N
-#                lattice[j,i] = 0
-#            end
-
-#            visit = zeros(Int, N, N)
-#            new(N, p, lattice, visit)
-#        end
-#    end
-
-
     type kagome <: KagomeLattice
         N::Int # lattice linear size
         p::Float64 # occupied probability
