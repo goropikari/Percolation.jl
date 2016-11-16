@@ -1,0 +1,11 @@
+plist = collect(0:0.02:1)
+time = zeros(Int, length(plist))
+trial = 50
+len = length(plist)
+@time for i in 1:len, j in 1:trial
+	site = forest(100, plist[i])
+	time[i] += forestfire(site)
+end
+
+plot(plist, time/trial)
+show()
