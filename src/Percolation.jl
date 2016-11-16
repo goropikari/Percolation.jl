@@ -1,17 +1,18 @@
 module Percolation
 
 # type
-export squarenn, squarennrec, squarennn, squarennnrec
+export squarenn, squarennrec, squarennn, squarennnrec, forest
 export trinn, trinnrec
 export honeycomb
 export kagome
 export simplenn
 
 # function
-export percolation, percolationplot, percolationgif, cluster, clusterplot
+export percolation, percolationplot, percolationgif, cluster, clusterplot, forestfire, forestfiregif
     
     import PyPlot
-    using LaTeXStrings, StatsBase
+    using LaTeXStrings, StatsBase, PyCall
+    @pyimport matplotlib.patches as patch
 
     include("general/latticetype.jl")
     include("general/checksite.jl")
@@ -19,6 +20,8 @@ export percolation, percolationplot, percolationgif, cluster, clusterplot
     include("general/percolation.jl")
     include("general/percolationgif.jl")
     include("general/cluster.jl")
+    include("general/forestfire.jl")
+    
     
 
 end
