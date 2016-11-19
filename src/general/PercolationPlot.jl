@@ -13,7 +13,8 @@ If you want to use other colormaps, see  http://matplotlib.org/examples/color/co
 """
 function percolationplot(Lattice::SquareLattice; waterplot=true, color="seismic_r", colorbar=false)
 	# check percolation or not.
-    if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
+    #if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
+    hit = Lattice.PercolationOrNot
     
     x = Int[]; y = Int[]
 
@@ -44,7 +45,8 @@ end
 # triangle
 function percolationplot(Lattice::TriangularLattice; waterplot=true)
 	# check percolation or not.
-    if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
+    #if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
+    hit = Lattice.PercolationOrNot
     
     ywater, xwater = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
 	yblock, xblock = findn( flipdim( (Lattice.lattice .== 0) * 1 , 1) )
@@ -63,7 +65,8 @@ end
 # honeycomb
 function percolationplot(Lattice::HoneycombLattice; waterplot=true)
 	# check percolation or not.
-    if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
+    #if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
+    hit = Lattice.PercolationOrNot
     
     ywater, xwater = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
 	yblock, xblock = findn( flipdim( (Lattice.lattice .== 0) * 1 , 1) )
@@ -82,7 +85,8 @@ end
 # kagome
 function percolationplot(Lattice::KagomeLattice; waterplot=true)
 	# check percolation or not.
-    if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
+    #if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
+    hit = Lattice.PercolationOrNot
     
     for i in 2:2:Lattice.N, j in 2:2:Lattice.N
         Lattice.lattice[j,i] = -1
