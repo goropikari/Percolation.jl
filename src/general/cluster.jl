@@ -338,3 +338,37 @@ function clusterplot(Lattice::Lattice; figsave=false, filename="cluster.png")
     if figsave; PyPlot.savefig(filename); end
     
 end
+
+"colored by each cluster size"
+function clusterplotsize(Lattice::Lattice; figsave=false, filename="cluster.png")
+#    colorlist = ["black", "grey", "silver", "rosybrown", "firebrick", "r", "darksalmon", "sienna", "sandybrown", 
+#                 "tan", "moccasin", "gold", "darkkhaki", "olivedrab", "chartreuse", "darksage", "lightgreen", "green", 
+#                 "mediumseagreen", "mediumaquamarine", "mediumturquoise", "darkslategrey", "c", "cadetblue", "skyblue", 
+#                 "dodgerblue", "slategray", "darkblue", "slateblue", "blueviolet", "mediumorchid", "purple", "fuchsia", "hotpink", "pink"]
+#    colorlist = ["c", "darksage", "slategray", "olivedrab", "silver", "sandybrown", "grey", "moccasin", "darksalmon", "mediumaquamarine", "darkkhaki", "lightgreen", "darkslategrey", "rosybrown", "black", "mediumturquoise", "gold", "slateblue", "mediumorchid", "skyblue", "mediumseagreen", "hotpink", "cadetblue", "sienna", "chartreuse", "purple", "green", "fuchsia", "dodgerblue", "tan", "blueviolet", "pink", "darkblue", "firebrick", "r"]
+    colorlist = ["black", "red", "green", "yellow", "c", "purple", "fuchsia", "orangered", "teal", "grey", "yellowgreen", "violet"]
+    MaxClusterSize = maximum(Lattice.clustersize)
+    hit = 1
+    for i in 1:MaxClusterSize-1
+        if i ∈ Lattice.clustersize
+            y, x = ind2sub(Lattice.visit, findin(Lattice.visit, findin(Lattice.clustersize, i)))
+            PyPlot.plot(x,y, color=colorlist[hit], ".")
+            hit = hit % length(colorlist) + 1
+            PyPlot.axis("equal")
+            PyPlot.axis("off")
+        end
+    end
+    
+    # maximum cluster is colored by blue.
+    y, x = ind2sub(Lattice.visit, findin(Lattice.visit, findin(Lattice.clustersize, MaxClusterSize)))
+    PyPlot.plot(x,y, "b.")  
+    
+    if Lattice.PercolationOrNot == 1
+        PyPlot.title("Percolation !")
+    else
+        PyPlot.title("Not percolation ")
+    end   
+    
+    if figsave; PyPlot.savefig(filename); end
+    
+end

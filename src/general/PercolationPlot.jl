@@ -47,14 +47,11 @@ function percolationplot(Lattice::TriangularLattice; waterplot=true)
     if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
     
     ywater, xwater = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
-#	yempty, xempty = findn( flipdim( (Lattice.lattice .== 1) * 1 , 1) )
 	yblock, xblock = findn( flipdim( (Lattice.lattice .== 0) * 1 , 1) )
 	
 
     PyPlot.figure()
-#    if waterplot; PyPlot.plot(xwater, ywater, "b."); else; PyPlot.plot(xwater, ywater, "o", color="white"); end
     if waterplot; PyPlot.plot(xwater, ywater, "b."); end
-#    PyPlot.plot(xempty, yempty, ".", color="white")
     PyPlot.plot(xblock, yblock, ".", color="black")
 	PyPlot.axis("equal")
 #	PyPlot.axis("off")
@@ -69,14 +66,11 @@ function percolationplot(Lattice::HoneycombLattice; waterplot=true)
     if 2 ∈ Lattice.lattice[Lattice.N, :]; hit = 1; else; hit = 0; end
     
     ywater, xwater = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
-#	yempty, xempty = findn( flipdim( (Lattice.lattice .== 1) * 1 , 1) )
 	yblock, xblock = findn( flipdim( (Lattice.lattice .== 0) * 1 , 1) )
 	
 
     PyPlot.figure()
-#    if waterplot; PyPlot.plot(xwater, ywater, "b."); else; PyPlot.plot(xwater, ywater, ".", color="white"); end
     if waterplot; PyPlot.plot(xwater, ywater, "b."); end
-#    PyPlot.plot(xempty, yempty, ".", color="white")
     PyPlot.plot(xblock, yblock, ".", color="black")
 	PyPlot.axis("equal")
 #	PyPlot.axis("off")
@@ -95,14 +89,11 @@ function percolationplot(Lattice::KagomeLattice; waterplot=true)
     end
     
     ywater, xwater = findn( flipdim( (Lattice.lattice .== 2) * 1 , 1) )
-#	yempty, xempty = findn( flipdim( (Lattice.lattice .== 1) * 1 , 1) )
 	yblock, xblock = findn( flipdim( (Lattice.lattice .== 0) * 1 , 1) )
 	
 
     PyPlot.figure()
-#    if waterplot; PyPlot.plot(xwater, ywater, "b."); else; PyPlot.plot(xwater, ywater, "o", color="white"); end
     if waterplot; PyPlot.plot(xwater, ywater, "b."); end
-#    PyPlot.plot(xempty, yempty, ".", color="white")
     PyPlot.plot(xblock, yblock, ".", color="black")
 	PyPlot.axis("equal")
 #	PyPlot.axis("off")

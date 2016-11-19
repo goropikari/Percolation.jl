@@ -8,7 +8,10 @@ export kagome
 export simplenn
 
 # function
-export percolation, percolationplot, percolationgif, cluster, clusterplot, forestfire, forestfiregif
+export percolation, percolationplot, percolationgif
+export cluster, clusterplot, clusterplotsize
+export forestfire, forestfiregif
+export HK
     
     import PyPlot
     using LaTeXStrings, StatsBase, PyCall
@@ -21,7 +24,7 @@ export percolation, percolationplot, percolationgif, cluster, clusterplot, fores
     include("general/percolationgif.jl")
     include("general/cluster.jl")
     include("general/forestfire.jl")
-    
+    include("general/HoshenKopelmanAlgorithm.jl")
     
 
 end

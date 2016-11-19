@@ -2,7 +2,8 @@
 # Hoshen Kopelman Algorithm
 ###############################
 function unionHK(i, j, labels)
-    labels[findHK(maximum([i,j]), labels)] = findHK(minimum([i,j]), labels)
+#    labels[maximum([findHK(i, labels), findHK(j, labels)]) = minimum([findHK(i, labels), findHK(j, labels)])
+    labels[findHK(i, labels)] = findHK(j, labels)
 end
 
 function findHK(x, labels)
@@ -11,7 +12,6 @@ function findHK(x, labels)
         y = labels[y]
     end
 
-## このwhile文、不要じゃね？
     while (labels[x] != x) 
         z = labels[x]
         labels[x] = y
@@ -126,34 +126,3 @@ end
 #modHKA
 #rec
 #modHKA == rec
-
-## 2つめのwhileをコメントした場合
-#julia> HKA
-#7×7 Array{Int64,2}:
-# 0  0  0  1  1  0  2
-# 3  3  3  1  0  4  2
-# 0  0  1  0  5  2  2
-# 0  0  1  0  2  2  0
-# 6  0  0  0  2  2  2
-# 6  0  7  0  0  2  0
-# 6  6  6  6  6  2  2
-
-#julia> modHKA
-#7×7 Array{Int64,2}:
-# 0  0  0  1  1  0  2
-# 1  1  1  1  0  2  2
-# 0  0  1  0  2  2  2
-# 0  0  1  0  2  2  0
-# 2  0  0  0  2  2  2
-# 2  0  6  0  0  2  0
-# 2  2  2  2  2  2  2
-
-#julia> rec
-#7×7 Array{Int64,2}:
-# 0  0  0  1  1  0  2
-# 1  1  1  1  0  2  2
-# 0  0  1  0  2  2  2
-# 0  0  1  0  2  2  0
-# 2  0  0  0  2  2  2
-# 2  0  2  0  0  2  0
-# 2  2  2  2  2  2  2

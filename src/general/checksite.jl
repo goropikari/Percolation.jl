@@ -252,9 +252,7 @@ function checkallsite(Lattice::kagome)
 end
 
 #######################################
-##
 ## For simple lattice
-##
 #######################################
     function checksite(ind::Int, Lattice::simplenn, checklist::Array{Int64,1})
         present_place = ind2sub(Lattice.lattice, ind)

@@ -10,6 +10,10 @@ type forest
     lattice::Matrix{Int}
     
     function forest(N, p)
+        if N > 10^3
+            error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
+        end
+    
         lattice = ( rand(N, N) .< p ) * 1
         for i in 1:N
             if lattice[i] == 1
@@ -35,7 +39,7 @@ function forestfire(Lattice::forest)
     return lifetime
 end
 
-# Introduction to Percolation Theory revised 2nd ed, Stauffer, p.6
+## Introduction to Percolation Theory revised 2nd ed, Stauffer, p.6
 #plist = collect(0:0.02:1)
 #time = zeros(Int, length(plist))
 #trial = 50
@@ -59,7 +63,9 @@ function forestfiregif(Lattice::forest)
     forestplot(Lattice, lifetime)
     
     checkallsite(Lattice)
-    while previous_lattice != Lattice.lattice
+    lifetime += 1
+    forestplot(Lattice, lifetime)
+    while previous_lattice != Lattice.lattice && 2 ∉ Lattice.lattice[:,N]
         lifetime += 1
         forestplot(Lattice, lifetime)
         previous_lattice = Lattice.lattice[:,:]

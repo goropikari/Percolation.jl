@@ -5,7 +5,8 @@ function percolation(Lattice::TwoDLattice; fig=true, water=true, color="seismic_
     _N = Lattice.N
     checkallsite(Lattice)
 
-	if 2 ∈ Lattice.lattice[1, :] && 2 ∈ Lattice.lattice[_N, :] && 2 ∈ Lattice.lattice[:, 1] && 2 ∈ Lattice.lattice[:, _N]
+#	if 2 ∈ Lattice.lattice[1, :] && 2 ∈ Lattice.lattice[_N, :] && 2 ∈ Lattice.lattice[:, 1] && 2 ∈ Lattice.lattice[:, _N]
+	if 2 ∈ Lattice.lattice[_N, :] && 2 ∈ Lattice.lattice[:, 1] && 2 ∈ Lattice.lattice[:, _N]
         hit = 1; 
     else;
         hit = 0;
