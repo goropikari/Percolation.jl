@@ -1,9 +1,14 @@
-###############################
-# Hoshen Kopelman Algorithm
-###############################
+##########################################
+# Hoshen Kopelman Algorithm (Union find)
+##########################################
 function unionHK(i, j, labels)
-#    labels[maximum([findHK(i, labels), findHK(j, labels)]) = minimum([findHK(i, labels), findHK(j, labels)])
-    labels[findHK(i, labels)] = findHK(j, labels)
+    a1 = findHK(i, labels)
+    a2 = findHK(j, labels)
+    if a1 < a2
+        labels[a2] = a1
+    else
+        labels[a1] = a2
+    end
 end
 
 function findHK(x, labels)
@@ -90,30 +95,14 @@ end
 
 
 
-## sample
+# sample
 #N = 7
+#srand(1)
 #occupied = (rand(N, N) .< 0.6) * 1
-#occupied = [
-#       0  0  0  1  1  0  1
-#        1  1  1  1  0  1  1
-#        0  0  1  0  1  1  1
-#        0  0  1  0  1  1  0
-#        1  0  0  0  1  1  1
-#        1  0  1  0  0  1  0
-#        1  1  1  1  1  1  1]
 #HKA = occupied[:,:]; rec = occupied[:,:]
 #@time max, label = HK(HKA)
 #modHKA = HKA[:,:]
-#@time recursive(rec)
-#for i in 0:length(label)-1
-#   x = length(label)-i
-#   while (label[x] != x)
-#       x = label[x]
-#   end
-   
-#   label[length(label)-i] = x
-#end
-
+#@time Percolation.recursive(rec)
 #for i in 1:length(modHKA)
 #   if modHKA[i] != 0
 #       modHKA[i] = label[modHKA[i]]
@@ -126,3 +115,44 @@ end
 #modHKA
 #rec
 #modHKA == rec
+
+
+#julia> occupied
+#7×7 Array{Int64,2}:
+# 1  0  1  0  1  1  0
+# 1  1  1  0  1  1  1
+# 1  0  1  1  1  1  1
+# 1  1  1  0  1  1  0
+# 1  1  1  0  1  1  0
+# 1  1  0  1  0  1  1
+# 0  0  1  0  1  0  1
+
+#julia> HKA
+#7×7 Array{Int64,2}:
+# 1  0  2  0  3  3  0
+# 1  1  1  0  3  3  3
+# 1  0  1  1  1  1  1
+# 1  1  1  0  1  1  0
+# 1  1  1  0  1  1  0
+# 1  1  0  4  0  1  1
+# 0  0  5  0  6  0  1
+
+#julia> modHKA
+#7×7 Array{Int64,2}:
+# 1  0  1  0  1  1  0
+# 1  1  1  0  1  1  1
+# 1  0  1  1  1  1  1
+# 1  1  1  0  1  1  0
+# 1  1  1  0  1  1  0
+# 1  1  0  4  0  1  1
+# 0  0  5  0  6  0  1
+
+#julia> rec
+#7×7 Array{Int64,2}:
+# 1  0  1  0  1  1  0
+# 1  1  1  0  1  1  1
+# 1  0  1  1  1  1  1
+# 1  1  1  0  1  1  0
+# 1  1  1  0  1  1  0
+# 1  1  0  2  0  1  1
+# 0  0  3  0  4  0  1
