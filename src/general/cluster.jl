@@ -23,11 +23,11 @@ function cluster(Lattice::TwoDLattice)
     end
 
     Lattice.PercolationOrNot = perco
-    if clustersize != Vector{Int}()
+    if clustersize != Vector{Int}() # クラスターがひとつもなかった場合を除く
         Lattice.clustersize = clustersize
         Lattice.clustersizefreq = [(collect(span(Lattice.clustersize))[i], counts(Lattice.clustersize)[i]) for i in 1:length(counts(Lattice.clustersize)) if counts(Lattice.clustersize)[i] != 0]
         Lattice.clusternumber = [(Lattice.clustersizefreq[i][1], Lattice.clustersizefreq[i][2] / Lattice.N^2) for i in 1:length(Lattice.clustersizefreq)]
-        Lattice.average_clustersize = sum([(x -> x[1]^2 * x[2])(Lattice.clusternumber[i]) for i in 1:length(Lattice.clusternumber)]) / Lattice.p
+        Lattice.average_clustersize = sum([(x -> x[1]^2 * x[2])(Lattice.clusternumber[i]) for i in 1:length(Lattice.clusternumber)]) / mean(Lattice.lattice)
     end
     
     return
