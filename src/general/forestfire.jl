@@ -65,7 +65,7 @@ function forestfiregif(Lattice::forest)
     checkallsite(Lattice)
     lifetime += 1
     forestplot(Lattice, lifetime)
-    while previous_lattice != Lattice.lattice && 2 ∉ Lattice.lattice[:,N]
+    while previous_lattice != Lattice.lattice && 2 ∉ Lattice.lattice[:,Lattice.N]
         lifetime += 1
         forestplot(Lattice, lifetime)
         previous_lattice = Lattice.lattice[:,:]
@@ -108,23 +108,28 @@ end
 ##################
 # plot 関連
 ##################
-function forestplot(Lattice::forest, lifetime)
+function forestplot(Lattice::forest, lifetime; circle=false)
     yfire, xfire = findn( (Lattice.lattice .== 2) * 1 )
     ytree, xtree = findn( (Lattice.lattice .== 1) * 1 )
     yempty, xempty = findn( (Lattice.lattice .== 0) * 1 )
     
     PyPlot.ioff()
     #Grid(1, Lattice.N, 1, Lattice.N)
-    for i in 1:length(xfire)
-        circle(xfire[i], yfire[i], 0.25, "r")
+    if circle
+        for i in 1:length(xfire)
+            circle(xfire[i], yfire[i], 0.25, "r")
+        end
+        for i in 1:length(xtree)
+            circle(xtree[i], ytree[i], 0.25, "g")
+        end
+        for i in 1:length(xempty)
+            circle(xempty[i], yempty[i], 0.25, "k", FILL=false)
+        end
+    else
+        PyPlot.plot(xfire, yfire, "ro")
+        PyPlot.plot(xtree, ytree, "go")
+        PyPlot.plot(xempty, yempty, "k.") 
     end
-    for i in 1:length(xtree)
-        circle(xtree[i], ytree[i], 0.25, "g")
-    end
-    for i in 1:length(xempty)
-        circle(xempty[i], yempty[i], 0.25, "k", FILL=false)
-    end
-    
     
     PyPlot.title(@sprintf("%05d", lifetime))
     PyPlot.axis("equal")

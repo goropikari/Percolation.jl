@@ -26,8 +26,19 @@ function cluster(Lattice::TwoDLattice)
     if clustersize != Vector{Int}() # クラスターがひとつもなかった場合を除く
         Lattice.clustersize = clustersize
         Lattice.clustersizefreq = [(collect(span(Lattice.clustersize))[i], counts(Lattice.clustersize)[i]) for i in 1:length(counts(Lattice.clustersize)) if counts(Lattice.clustersize)[i] != 0]
+        
+        # cluster numberはpercolationしたがどうかで場合分けしたほうがいい
         Lattice.clusternumber = [(Lattice.clustersizefreq[i][1], Lattice.clustersizefreq[i][2] / Lattice.N^2) for i in 1:length(Lattice.clustersizefreq)]
         Lattice.average_clustersize = sum([(x -> x[1]^2 * x[2])(Lattice.clusternumber[i]) for i in 1:length(Lattice.clusternumber)]) / mean(Lattice.lattice)
+    end
+    
+    # calculate strength.
+    # def. The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to infinite cluster.
+    if perco == 0
+        Lattice.strength = 0.0
+        Lattice.clusternumber = [(Lattice.clustersizefreq[i][1], Lattice.clustersizefreq[i][2] / Lattice.N^2) for i in 1:length(Lattice.clustersizefreq)]
+    else
+        Lattice.strength = maximum(Lattice.clustersize) / _N^2
     end
     
     return
