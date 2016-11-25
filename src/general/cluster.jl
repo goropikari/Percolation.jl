@@ -105,24 +105,6 @@ end
         checkallcluster(Lattice.lattice, Lattice.visit, Lattice)
     end
 
-    #function checkallcluster(Lattice::squarenn)
-    #    (row, column) = Lattice.N, Lattice.N
-    #    labelnum = 1
-    #    for i in 1:row, j in 1:column
-    #        if Lattice.lattice[j,i] == 1 && Lattice.visit[j,i] == 0
-    #            searchlist = checkcluster(j,i, labelnum, Lattice)
-    #            Lattice.visit[j,i] = labelnum
-                
-    #            while searchlist != []
-    #                tmppos = pop!(searchlist)
-    #                searchlist =  [ searchlist; checkcluster(tmppos[1], tmppos[2], labelnum, Lattice) ]
-    #                Lattice.visit[tmppos...] = labelnum
-    #            end
-                
-    #            labelnum += 1
-    #        end
-    #    end
-    #end
 
 
 
@@ -140,6 +122,7 @@ end
         
         return searchlist
     end
+    
 
     # square lattice next nearest neighbor
     function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::squarennn)

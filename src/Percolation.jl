@@ -1,7 +1,7 @@
 module Percolation
 
 # type
-export squarenn, squarennrec, squarennn, squarennnrec, forest
+export squarenn, squarenn2, squarennrec, squarennn, squarennnrec, forest
 export trinn, trinnrec
 export honeycomb
 export kagome
@@ -25,6 +25,7 @@ export HK
     include("general/cluster.jl")
     include("general/forestfire.jl")
     include("general/HoshenKopelmanAlgorithm.jl")
+    include("general/squarenn2.jl")
     
 
 end
