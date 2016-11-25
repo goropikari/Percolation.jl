@@ -54,41 +54,31 @@ end
 
 
 
-function forestfiregif(Lattice::forest)
+function forestfiregif(Lattice::forest; fps=4, output_dir=".", filename="anime.gif")
+    output_tempolary_png=tempdir()*"/forestfire_"*randstring()
     close()
     lifetime = 0
     previous_lattice = Lattice.lattice[:,:]
     
     # plot initial configuration
-    forestplot(Lattice, lifetime)
+    forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
     
     checkallsite(Lattice)
     lifetime += 1
-    forestplot(Lattice, lifetime)
+    forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
     while previous_lattice != Lattice.lattice && 2 ∉ Lattice.lattice[:,Lattice.N]
         lifetime += 1
-        forestplot(Lattice, lifetime)
+        forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
         previous_lattice = Lattice.lattice[:,:]
         checkallsite(Lattice)
     end
     
+    run(`convert -delay $(100/fps) $(output_tempolary_png)/*.png $(output_dir)/$filename`)
+    rm(output_tempolary_png, force=true, recursive=true)
     return lifetime
 end
 
 
-
-
-
-
-#function checksitenn(i::Int, j::Int, lattice::Array{Int})
-#	(row,  column) = size(lattice)
-#	if j < column && lattice[i, j+1] == 1; lattice[i, j+1] = 2; end
-#	if 1 < j && lattice[i, j-1] == 1; lattice[i, j-1] = 2; end
-#	if i < row && lattice[i+1, j] == 1; lattice[i+1, j] = 2; end
-#	if 1 < i && lattice[i-1, j] == 1; lattice[i-1, j] = 2; end
-
-#	return lattice
-#end
 
 # square lattice nearest neighbor
 function checksite(i::Int, j::Int, Lattice::forest)
@@ -96,7 +86,7 @@ function checksite(i::Int, j::Int, Lattice::forest)
 end
 
 function checkallsite(Lattice::forest)
-    (row, column) = size(Lattice.lattice)
+    row, column = Lattice.N, Lattice.N
     for i in 1:row, j in 1:column
         if Lattice.lattice[j,i] == 2
             Lattice.lattice = checksite(j, i, Lattice)
@@ -108,12 +98,15 @@ end
 ##################
 # plot 関連
 ##################
-function forestplot(Lattice::forest, lifetime; circle=false)
-    yfire, xfire = findn( (Lattice.lattice .== 2) * 1 )
-    ytree, xtree = findn( (Lattice.lattice .== 1) * 1 )
-    yempty, xempty = findn( (Lattice.lattice .== 0) * 1 )
+function forestplot(Lattice::forest, lifetime; circle=false, output_dir=".")
+    if ! ispath(output_dir); mkdir(output_dir); end
+
+    yfire, xfire = findn(Lattice.lattice .== 2)
+    ytree, xtree = findn(Lattice.lattice .== 1)
+    yempty, xempty = findn(Lattice.lattice .== 0)
     
     PyPlot.ioff()
+    PyPlot.figure(figsize=(8,8))
     #Grid(1, Lattice.N, 1, Lattice.N)
     if circle
         for i in 1:length(xfire)
@@ -135,7 +128,7 @@ function forestplot(Lattice::forest, lifetime; circle=false)
     PyPlot.axis("equal")
     PyPlot.axis("off")
     PyPlot.axis([-1, Lattice.N+1, -1, Lattice.N+1])
-    PyPlot.savefig(@sprintf("%05d.png", lifetime))
+    PyPlot.savefig(output_dir * "/" * @sprintf("%05d.png", lifetime), bbox_inches="tight")
     PyPlot.clf()
 
 end

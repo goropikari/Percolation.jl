@@ -1,7 +1,7 @@
 " percolationgif(Lattice::SquareLattice; output_dir=\"./\", color=\"seismic_r\", colorbar=false, fps=4, filename=\"anime.gif\") "
 function percolationgif(Lattice::SquareLattice; output_dir="./", color="seismic_r", colorbar=false, fps=4, filename="anime.gif")
     output_tempolary_png=tempdir()*"/Percolation_"*randstring()
-    (row, column) = size(Lattice.lattice)
+    row, column = Lattice.N, Lattice.N
     for j in 1:column
         if Lattice.lattice[1, j] == 1; Lattice.lattice[1, j] = 2; end
     end
@@ -69,7 +69,7 @@ end
 #
 ######################################
 function checkallsitegif(Lattice::TwoDLattice)
-    (row, column) = size(Lattice.lattice)
+    row, column = Lattice.N, Lattice.N
     for i in 1:row, j in 1:column
         if Lattice.lattice[i,j] == 2
             Lattice.lattice = checksite(i, j, Lattice)

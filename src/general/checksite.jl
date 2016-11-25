@@ -7,7 +7,7 @@
 #########################
     # nearest neighbor
     function checksite(i::Int, j::Int, Lattice::squarenn, checklist::Array{Array{Int64,1},1})
-        (row,  column) = size(Lattice.lattice)
+        row, column = Lattice.N, Lattice.N
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
             Lattice.lattice[i,j] = 2
             Lattice.visit[i,j] = 1
@@ -34,7 +34,7 @@
 
     # next nearest neighbor
     function checksite(i::Int, j::Int, Lattice::squarennn, checklist::Array{Array{Int64,1},1})
-        (row,  column) = size(Lattice.lattice)
+        row, column = Lattice.N, Lattice.N
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
             Lattice.lattice[i,j] = 2
             Lattice.visit[i,j] = 1
@@ -68,7 +68,7 @@
     ######################################
     # nearest neighbor
     function checksite(i::Int, j::Int, Lattice::squarennrec)
-        (row,  column) = size(Lattice.lattice)
+        row, column = Lattice.N, Lattice.N
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
             Lattice.lattice[i,j] = 2
             Lattice.visit[i,j] = 1
@@ -88,7 +88,7 @@
     
     # next nearest neighbor
     function checksite(i::Int, j::Int, Lattice::squarennnrec)
-        (row,  column) = size(Lattice.lattice)
+        row, column = Lattice.N, Lattice.N
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
             Lattice.lattice[i,j] = 2
             Lattice.visit[i,j] = 1
@@ -115,7 +115,7 @@
 # For triangular lattice
 ##############################
     function checksite(i::Int, j::Int, Lattice::trinn, checklist::Array{Array{Int64,1},1})
-        (row,  column) = size(Lattice.lattice)
+        row, column = Lattice.N, Lattice.N
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
             Lattice.lattice[i,j] = 2
             Lattice.visit[i,j] = 1
@@ -146,7 +146,7 @@
     # recursive function
     ######################################    
     function checksite(i::Int, j::Int, Lattice::trinnrec)
-        (row,  column) = size(Lattice.lattice)
+        row, column = Lattice.N, Lattice.N
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
             Lattice.lattice[i,j] = 2
             Lattice.visit[i,j] = 1
@@ -170,7 +170,7 @@
 # honeycomb lattice nearest neighbor
 ############################################################
 function checksite(i::Int, j::Int, Lattice::honeycomb)
-    (row, column) = size(Lattice.lattice)
+    row, column = Lattice.N, Lattice.N
     searchlist = Array{Array{Int64, 1}, 1}()
     
     if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
@@ -209,7 +209,7 @@ end
 # kagome lattice nearest neighbor
 ############################################################
 function checksite(i::Int, j::Int, Lattice::kagome)
-    (row, column) = size(Lattice.lattice)
+    row, column = Lattice.N, Lattice.N
     searchlist = Array{Array{Int64, 1}, 1}()
     
     if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0

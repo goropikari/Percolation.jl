@@ -6,7 +6,7 @@ return percolation or not and each clustersize
 
 """
 function cluster(Lattice::TwoDLattice)
-    _N = size(Lattice.visit)[1]
+    _N = Lattice.N
 
     checkallcluster(Lattice)
     maxlabelnum = maximum(Lattice.visit)
@@ -67,7 +67,7 @@ end
 # For 2D lattice
 ###################
     function checkallcluster(lattice::Matrix{Int}, visit::Matrix{Int}, Lattice::TwoDLattice)
-        (row, column) = size(lattice)
+        row, column = Lattice.N, Lattice.N
         labelnum = 1
         for i in 1:row, j in 1:column
             if lattice[j,i] == 1 && visit[j,i] == 0
@@ -106,7 +106,7 @@ end
     end
 
     #function checkallcluster(Lattice::squarenn)
-    #    (row, column) = size(Lattice.lattice)
+    #    (row, column) = Lattice.N, Lattice.N
     #    labelnum = 1
     #    for i in 1:row, j in 1:column
     #        if Lattice.lattice[j,i] == 1 && Lattice.visit[j,i] == 0
@@ -128,7 +128,7 @@ end
 
     # square lattice nearest neighbor
     function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::squarenn)
-        (row, column) = size(Lattice.lattice)
+        (row, column) = Lattice.N, Lattice.N
         searchlist = Array{Array{Int64, 1}, 1}()
         
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
@@ -143,7 +143,7 @@ end
 
     # square lattice next nearest neighbor
     function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::squarennn)
-        (row, column) = size(Lattice.lattice)
+        (row, column) = Lattice.N, Lattice.N
         searchlist = Array{Array{Int64, 1}, 1}()
         
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
@@ -162,7 +162,7 @@ end
 
     # triangular lattice nearest neighbor
     function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::trinn)
-        (row, column) = size(Lattice.lattice)
+        (row, column) = Lattice.N, Lattice.N
         searchlist = Array{Array{Int64, 1}, 1}()
         
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
@@ -180,7 +180,7 @@ end
 
     # honeycomb lattice nearest neighbor
     function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::honeycomb)
-        (row, column) = size(Lattice.lattice)
+        (row, column) = Lattice.N, Lattice.N
         searchlist = Array{Array{Int64, 1}, 1}()
         
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
@@ -200,7 +200,7 @@ end
 
     # kagome lattice nearest neighbor
     function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::kagome)
-        (row, column) = size(Lattice.lattice)
+        (row, column) = Lattice.N, Lattice.N
         searchlist = Array{Array{Int64, 1}, 1}()
         
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
@@ -230,7 +230,7 @@ end
     # recursive function
     ########################################################################################
     function checkallcluster(Lattice::TwoDLattice)
-        (row, column) = size(Lattice.lattice)
+        (row, column) = Lattice.N, Lattice.N
         labelnum = 1
         for i in 1:row, j in 1:column
             if Lattice.lattice[j,i] == 1 && Lattice.visit[j,i] == 0
@@ -242,7 +242,7 @@ end
 
     # square lattice nearest neighbor
     function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::squarennrec)
-        (row,  column) = size(Lattice.lattice)
+        row, column = Lattice.N, Lattice.N
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
             Lattice.visit[i,j] = labelnum
             if j < column; checkcluster(i, j+1, labelnum, Lattice); end
@@ -254,7 +254,7 @@ end
 
     # square lattice next nearest neighbor
     function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::squarennnrec)
-        (row,  column) = size(Lattice.lattice)
+        row, column = Lattice.N, Lattice.N
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
             Lattice.visit[i,j] = labelnum
             if j < column; checkcluster(i, j+1, labelnum, Lattice); end
@@ -270,7 +270,7 @@ end
 
     # triangular lattice nearest neighbor
     function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::trinnrec)
-        (row,  column) = size(Lattice.lattice)
+        row, column = Lattice.N, Lattice.N
         if Lattice.lattice[i,j] == 1 && Lattice.visit[i,j] == 0
             Lattice.visit[i,j] = labelnum
             if j < column; checkcluster(i, j+1, labelnum, Lattice); end
@@ -360,6 +360,8 @@ function clusterplotsize(Lattice::Lattice; figsave=false, filename="cluster.png"
     colorlist = ["black", "red", "green", "yellow", "c", "purple", "fuchsia", "orangered", "teal", "grey", "yellowgreen", "violet"]
     MaxClusterSize = maximum(Lattice.clustersize)
     hit = 1
+    
+    figure(figsize=(8,8))
     for i in 1:MaxClusterSize-1
         if i ∈ Lattice.clustersize
             y, x = ind2sub(Lattice.visit, findin(Lattice.visit, findin(Lattice.clustersize, i)))
