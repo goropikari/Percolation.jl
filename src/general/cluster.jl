@@ -320,7 +320,12 @@ function clusterplot(Lattice::Lattice; figsave=false, filename="cluster.png")
     PyPlot.figure(figsize=(7,7))
     for i in 1:MaxClusterLabelNum
         y, x = ind2sub(Lattice.visit, findin(Lattice.visit, i))
-        PyPlot.plot(x,y, ".")
+        if Lattice.N < 100
+            PyPlot.plot(x,y, "o")
+        else
+            PyPlot.plot(x,y, ".")
+        end
+        
         PyPlot.axis("equal")
         PyPlot.axis("off")
     end

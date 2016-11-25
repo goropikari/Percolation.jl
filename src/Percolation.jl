@@ -22,9 +22,9 @@ export HK
     include("general/checksite.jl")
     include("general/PercolationPlot.jl")
     include("general/percolation.jl")
-    include("general/percolationgif.jl")
+#    include("general/percolationgif.jl") # percolation.jlと統合
     include("general/cluster.jl")
-    include("general/forestfire.jl") # 他に依存しない
+    include("general/forestfire.jl") # 他に依存しないように独立
     include("general/HoshenKopelmanAlgorithm.jl")
     include("general/squarenn2.jl")
     
