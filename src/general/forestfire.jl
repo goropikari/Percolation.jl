@@ -4,12 +4,12 @@
 #0: empty
 #1: green
 #2: fire
-type forest
+type Forest
     N::Int
     p::Float64
     lattice::Matrix{Int}
     
-    function forest(N, p)
+    function Forest(N, p)
         if N > 10^3
             error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
         end
@@ -25,7 +25,7 @@ type forest
     end
 end
 
-function forestfire(Lattice::forest)
+function forest(Lattice::Forest)
     lifetime = 0
     previous_lattice = Lattice.lattice[:,:]
     
@@ -46,7 +46,7 @@ end
 #len = length(plist)
 #@time for i in 1:len, j in 1:trial
 #	site = forest(100, plist[i])
-#	time[i] += forestfire(site)
+#	time[i] += forest(site)
 #end
 
 #plot(plist, time/trial)
@@ -54,42 +54,28 @@ end
 
 
 
-function forestfiregif(Lattice::forest; fps=4, output_dir=".", filename="anime.gif")
-    output_tempolary_png=tempdir()*"/forestfire_"*randstring()
-    close()
-    lifetime = 0
-    previous_lattice = Lattice.lattice[:,:]
-    
-    # plot initial configuration
-    forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
-    
-    checkallsite(Lattice)
-    lifetime += 1
-    forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
-    while previous_lattice != Lattice.lattice && 2 ∉ Lattice.lattice[:,Lattice.N]
-        lifetime += 1
-        forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
-        previous_lattice = Lattice.lattice[:,:]
-        checkallsite(Lattice)
-    end
-    
-    run(`convert -delay $(100/fps) $(output_tempolary_png)/*.png $(output_dir)/$filename`)
-    rm(output_tempolary_png, force=true, recursive=true)
-    return lifetime
-end
+
 
 
 
 # square lattice nearest neighbor
-function checksite(i::Int, j::Int, Lattice::forest)
-    checksitenn(i::Int, j::Int, Lattice.lattice::Array{Int})
+function checksite(i::Int, j::Int, Lattice::Forest)
+    checksitenn(i, j, Lattice)
 end
 
-function checkallsite(Lattice::forest)
+function checksitenn(i::Int, j::Int, Lattice::Forest)
+	(row,  column) = size(Lattice.lattice)
+	if j < column && Lattice.lattice[i, j+1] == 1; Lattice.lattice[i, j+1] = 2; end # Lattice.lattice[i, j+1] == 1 && j < m とすると動かないので注意
+	if 1 < j && Lattice.lattice[i, j-1] == 1; Lattice.lattice[i, j-1] = 2; end
+	if i < row && Lattice.lattice[i+1, j] == 1; Lattice.lattice[i+1, j] = 2; end
+	if 1 < i && Lattice.lattice[i-1, j] == 1; Lattice.lattice[i-1, j] = 2; end
+end
+
+function checkallsite(Lattice::Forest)
     row, column = Lattice.N, Lattice.N
     for i in 1:row, j in 1:column
         if Lattice.lattice[j,i] == 2
-            Lattice.lattice = checksite(j, i, Lattice)
+            checksite(j, i, Lattice)
         end
     end
 end
@@ -98,7 +84,7 @@ end
 ##################
 # plot 関連
 ##################
-function forestplot(Lattice::forest, lifetime; circle=false, output_dir=".")
+function forestplot(Lattice::Forest, lifetime::Int; circle=false, output_dir=".")
     if ! ispath(output_dir); mkdir(output_dir); end
 
     yfire, xfire = findn(Lattice.lattice .== 2)
@@ -106,7 +92,6 @@ function forestplot(Lattice::forest, lifetime; circle=false, output_dir=".")
     yempty, xempty = findn(Lattice.lattice .== 0)
     
     PyPlot.ioff()
-    PyPlot.figure(figsize=(8,8))
     #Grid(1, Lattice.N, 1, Lattice.N)
     if circle
         for i in 1:length(xfire)
@@ -131,6 +116,33 @@ function forestplot(Lattice::forest, lifetime; circle=false, output_dir=".")
     PyPlot.savefig(output_dir * "/" * @sprintf("%05d.png", lifetime), bbox_inches="tight")
     PyPlot.clf()
 
+end
+
+
+function forestgif(Lattice::Forest; fps=5, output_dir=".", filename="anime.gif")
+    output_tempolary_png=tempdir()*"/forest_"*randstring()
+    close()
+    lifetime = 0
+    previous_lattice = Lattice.lattice[:,:]
+    
+    # plot initial configuration
+    PyPlot.ioff()
+    PyPlot.figure(figsize=(8,8))
+    forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
+    
+    checkallsite(Lattice)
+    lifetime += 1
+    forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
+    while previous_lattice != Lattice.lattice && 2 ∉ Lattice.lattice[:,Lattice.N]
+        lifetime += 1
+        forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
+        previous_lattice = Lattice.lattice[:,:]
+        checkallsite(Lattice)
+    end
+    
+    run(`convert -delay $(100/fps) $(output_tempolary_png)/*.png $(output_dir)/$filename`)
+    rm(output_tempolary_png, force=true, recursive=true)
+    return lifetime
 end
 
 # 丸を書く
