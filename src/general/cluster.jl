@@ -333,6 +333,8 @@ end
 " clusterplot(Lattice::Lattice; figsave=false, filename=\"cluster.png\") "
 function clusterplot(Lattice::Lattice; figsave=false, filename="cluster.png")
     MaxClusterLabelNum = maximum(Lattice.visit)
+    
+    PyPlot.figure(figsize=(7,7))
     for i in 1:MaxClusterLabelNum
         y, x = ind2sub(Lattice.visit, findin(Lattice.visit, i))
         PyPlot.plot(x,y, ".")
@@ -361,7 +363,7 @@ function clusterplotsize(Lattice::Lattice; figsave=false, filename="cluster.png"
     MaxClusterSize = maximum(Lattice.clustersize)
     hit = 1
     
-    figure(figsize=(8,8))
+    PyPlot.figure(figsize=(7,7))
     for i in 1:MaxClusterSize-1
         if i ∈ Lattice.clustersize
             y, x = ind2sub(Lattice.visit, findin(Lattice.visit, findin(Lattice.clustersize, i)))
