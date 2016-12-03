@@ -11,7 +11,7 @@ abstract HighDimLattice <: Lattice
 # For 2D square and triangular lattice
 ###############################################
 function MakeLattice(_N::Int, probability::Float64)
-    lattice = ( rand(Float64, _N, _N) .< probability ) * 1
+    lattice = - ( rand(Float64, _N, _N) .< probability )
     return lattice
 end
 
@@ -33,7 +33,7 @@ function nearlist(dim)
 end
 
 function MakeSimpleLattice(N::Int, dim::Int, p::Float64)
-    lattice = ( rand([N for i in 1:dim]...) .< p ) * 1
+    lattice = - ( rand([N for i in 1:dim]...) .< p )
     NearestNeighborList = nearlist(dim)
     return lattice, NearestNeighborList
 end
@@ -49,7 +49,6 @@ end
         N::Int # lattice linear size
         p::Float64 # occupied probability
         lattice::Matrix{Int} # configuration occupied or empty
-        visit::Matrix{Int}
         clustersize::Vector{Int} # the number of sites belonging to i th cluster.
         clustersizefreq::Vector{Tuple{Int,Int}}
         clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
@@ -63,7 +62,6 @@ end
             end
 
             lattice = MakeLattice(N, p)
-            visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
             clustersizefreq = Vector{Tuple{Int,Int}}()
             clusternumber = Vector{Tuple{Int,Float64}}()
@@ -71,48 +69,15 @@ end
             strength = 0.0
             PercolationOrNot = 0
 
-            new(N, p, lattice, visit, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
+            new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
         end
     end
 
-
-    type squarennrec <: SquareLattice
-        N::Int # lattice linear size
-        p::Float64 # occupied probability
-        lattice::Matrix{Int} # configuration occupied or empty
-        visit::Matrix{Int}
-        clustersize::Vector{Int} # the number of sites belonging to i th cluster.
-        clustersizefreq::Vector{Tuple{Int,Int}}
-        clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
-        average_clustersize::Float64
-        strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
-        PercolationOrNot::Int
-
-        function squarennrec(N, p)
-            if N > 10^3
-                error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
-            end
-
-            lattice = MakeLattice(N, p)
-            visit = zeros(Int, N, N)
-            clustersize = Vector{Int}()
-            clustersizefreq = Vector{Tuple{Int,Int}}()
-            clusternumber = Vector{Tuple{Int,Float64}}()
-            average_clustersize = 0.0
-            strength = 0.0
-            PercolationOrNot = 0
-
-            new(N, p, lattice, visit, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
-        end
-    end
-
-
-    # next nearest neighbor
+    # nearest neighbor & next nearest neighbor
     type squarennn <: SquareLattice
         N::Int # lattice linear size
         p::Float64 # occupied probability
         lattice::Matrix{Int} # configuration occupied or empty
-        visit::Matrix{Int}
         clustersize::Vector{Int} # the number of sites belonging to i th cluster.
         clustersizefreq::Vector{Tuple{Int,Int}}
         clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
@@ -126,7 +91,6 @@ end
             end
 
             lattice = MakeLattice(N, p)
-            visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
             clustersizefreq = Vector{Tuple{Int,Int}}()
             clusternumber = Vector{Tuple{Int,Float64}}()
@@ -134,48 +98,18 @@ end
             strength = 0.0
             PercolationOrNot = 0
 
-            new(N, p, lattice, visit, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
+            new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
         end
     end
 
-    type squarennnrec <: SquareLattice
-        N::Int # lattice linear size
-        p::Float64 # occupied probability
-        lattice::Matrix{Int} # configuration occupied or empty
-        visit::Matrix{Int}
-        clustersize::Vector{Int} # the number of sites belonging to i th cluster.
-        clustersizefreq::Vector{Tuple{Int,Int}}
-        clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
-        average_clustersize::Float64
-        strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
-        PercolationOrNot::Int
-
-        function squarennnrec(N, p)
-            if N > 10^3
-                error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
-            end
-
-            lattice = MakeLattice(N, p)
-            visit = zeros(Int, N, N)
-            clustersize = Vector{Int}()
-            clustersizefreq = Vector{Tuple{Int,Int}}()
-            clusternumber = Vector{Tuple{Int,Float64}}()
-            average_clustersize = 0.0
-            strength = 0.0
-            PercolationOrNot = 0
-
-            new(N, p, lattice, visit, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
-        end
-    end
 
 ###########################
 # Triangular lattice
 ###########################
-    type trinn <: TriangularLattice
+    type tri <: TriangularLattice
         N::Int # lattice linear size
         p::Float64 # occupied probability
         lattice::Matrix{Int} # configuration occupied or empty
-        visit::Matrix{Int}
         clustersize::Vector{Int} # the number of sites belonging to i th cluster.
         clustersizefreq::Vector{Tuple{Int,Int}}
         clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
@@ -183,13 +117,12 @@ end
         strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
         PercolationOrNot::Int
 
-        function trinn(N, p)
+        function tri(N, p)
             if N > 10^3
                 error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
             end
 
             lattice = MakeLattice(N, p)
-            visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
             clustersizefreq = Vector{Tuple{Int,Int}}()
             clusternumber = Vector{Tuple{Int,Float64}}()
@@ -197,39 +130,7 @@ end
             strength = 0.0
             PercolationOrNot = 0
 
-            new(N, p, lattice, visit, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
-        end
-    end
-
-
-
-    type trinnrec <: TriangularLattice
-        N::Int # lattice linear size
-        p::Float64 # occupied probability
-        lattice::Matrix{Int} # configuration occupied or empty
-        visit::Matrix{Int}
-        clustersize::Vector{Int} # the number of sites belonging to i th cluster.
-        clustersizefreq::Vector{Tuple{Int,Int}}
-        clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
-        average_clustersize::Float64
-        strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
-        PercolationOrNot::Int
-
-        function trinnrec(N, p)
-            if N > 10^3
-                error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
-            end
-
-            lattice = MakeLattice(N, p)
-            visit = zeros(Int, N, N)
-            clustersize = Vector{Int}()
-            clustersizefreq = Vector{Tuple{Int,Int}}()
-            clusternumber = Vector{Tuple{Int,Float64}}()
-            average_clustersize = 0.0
-            strength = 0.0
-            PercolationOrNot = 0
-
-            new(N, p, lattice, visit, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
+            new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
         end
     end
 
@@ -241,7 +142,6 @@ end
         N::Int # lattice linear size
         p::Float64 # occupied probability
         lattice::Matrix{Int} # configuration occupied or empty
-        visit::Matrix{Int}
         clustersize::Vector{Int} # the number of sites belonging to i th cluster.
         clustersizefreq::Vector{Tuple{Int,Int}}
         clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
@@ -255,7 +155,6 @@ end
             end
 
             lattice = MakeLattice(N, p)
-            visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
             clustersizefreq = Vector{Tuple{Int,Int}}()
             clusternumber = Vector{Tuple{Int,Float64}}()
@@ -263,7 +162,7 @@ end
             strength = 0.0
             PercolationOrNot = 0
 
-            new(N, p, lattice, visit, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
+            new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
         end
     end
 
@@ -275,7 +174,6 @@ end
         N::Int # lattice linear size
         p::Float64 # occupied probability
         lattice::Matrix{Int} # configuration occupied or empty
-        visit::Matrix{Int}
         clustersize::Vector{Int} # the number of sites belonging to i th cluster.
         clustersizefreq::Vector{Tuple{Int,Int}}
         clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
@@ -289,7 +187,6 @@ end
             end
 
             lattice = MakeLattice(N, p); for i in 2:2:N, j in 2:2:N; lattice[j,i] = 0; end
-            visit = zeros(Int, N, N)
             clustersize = Vector{Int}()
             clustersizefreq = Vector{Tuple{Int,Int}}()
             clusternumber = Vector{Tuple{Int,Float64}}()
@@ -297,7 +194,7 @@ end
             strength = 0.0
             PercolationOrNot = 0
 
-            new(N, p, lattice, visit, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
+            new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
         end
     end
 
@@ -311,12 +208,10 @@ end
         dim::Int
         p::Float64
         lattice::Array{Int}
-        visit::Array{Int}
         NearestNeighborList::Array{Array,1}
 
         function simplenn(N, dim, p)
             lattice, NearestNeighborList = MakeSimpleLattice(N, dim, p)
-            visit = zeros(Int, [N for i in 1:dim]...)
-            new(N, dim, p, lattice, visit, NearestNeighborList)
+            new(N, dim, p, lattice, NearestNeighborList)
         end
     end

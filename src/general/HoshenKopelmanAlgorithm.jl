@@ -1,9 +1,9 @@
 ##########################################
 # Hoshen Kopelman Algorithm (Union find)
 ##########################################
-function unionHK(i, j, labels)
-    a1 = findHK(i, labels)
-    a2 = findHK(j, labels)
+function unionHK!(i, j, labels)
+    a1 = findHK!(i, labels)
+    a2 = findHK!(j, labels)
     if a1 < a2
         labels[a2] = a1
     else
@@ -11,7 +11,7 @@ function unionHK(i, j, labels)
     end
 end
 
-function findHK(x, labels)
+function findHK!(x, labels)
     y = x
     while (labels[y] != y)
         y = labels[y]
@@ -26,7 +26,7 @@ function findHK(x, labels)
     return y
 end
 
-function HK(occupied)
+function HK!(occupied)
     n_rows, n_columns = size(occupied)
     labels = collect(1:n_rows * n_columns)
     largest_label = 0
@@ -49,17 +49,25 @@ function HK(occupied)
                     largest_label += 1
                     occupied[i,j] = largest_label
                 elseif left != 0 && above == 0
-                    occupied[i,j] = findHK(left, labels)
+                    occupied[i,j] = findHK!(left, labels)
                 elseif left == 0 && above != 0
-                    occupied[i,j] = findHK(above, labels)
+                    occupied[i,j] = findHK!(above, labels)
                 else
-                    unionHK(left, above, labels)
-                    occupied[i,j] = findHK(minimum([left, above]), labels)
+                    unionHK!(left, above, labels)
+                    occupied[i,j] = findHK!(left, labels)
                 end
             end
         end
     end
-    return largest_label, labels
+    
+    # relabeling
+    for j in 1:n_columns, i in 1:n_rows
+        if occupied[i,j] != 0
+            occupied[i,j] = labels[occupied[i,j]]
+        end
+    end
+    
+    return labels
 end
 
 
