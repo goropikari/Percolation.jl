@@ -101,12 +101,12 @@ function forestplot(Lattice::Forest, lifetime::Int; circle=false, output_dir="."
             circle(xtree[i], ytree[i], 0.25, "g")
         end
         for i in 1:length(xempty)
-            circle(xempty[i], yempty[i], 0.25, "k", FILL=false)
+            circle(xempty[i], yempty[i], 0.25, "w", FILL=false)
         end
     else
         PyPlot.plot(xfire, yfire, "ro")
         PyPlot.plot(xtree, ytree, "go")
-        PyPlot.plot(xempty, yempty, "k.") 
+        PyPlot.plot(xempty, yempty, "w.") 
     end
     
     PyPlot.title(@sprintf("%05d", lifetime))
@@ -131,13 +131,18 @@ function forestgif(Lattice::Forest; fps=5, output_dir=".", filename="anime.gif")
     forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
     
     checkallsite(Lattice)
-    lifetime += 1
-    forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
+#    lifetime += 1
+#    forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
     while previous_lattice != Lattice.lattice && 2 ∉ Lattice.lattice[:,Lattice.N]
         lifetime += 1
         forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
         previous_lattice = Lattice.lattice[:,:]
         checkallsite(Lattice)
+    end
+    
+    if 2 in Lattice.lattice[:,Lattice.N]
+        lifetime += 1
+        forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
     end
     
     run(`convert -delay $(100/fps) $(output_tempolary_png)/*.png $(output_dir)/$filename`)
