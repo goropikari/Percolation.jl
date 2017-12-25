@@ -18,9 +18,9 @@ export HK!
     using LaTeXStrings, StatsBase, PyCall
     @pyimport matplotlib.patches as patch
 
-    include("general/latticetype.jl")
-    include("general/cluster.jl")
-    include("general/forestfire.jl")
-    include("general/HoshenKopelmanAlgorithm.jl")    
+    include("latticetype.jl")
+    include("cluster.jl")
+    include("forestfire.jl")
+    include("HoshenKopelmanAlgorithm.jl")    
 
 end
