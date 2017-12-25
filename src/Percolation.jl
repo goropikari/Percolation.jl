@@ -1,12 +1,12 @@
 module Percolation
 
 # type
-export squarenn, squarennn
+export Squarenn, Squarennn
 export Forest
-export tri
-export honeycomb
-export kagome
-export simplenn
+export Tri
+export Honeycomb
+export Kagome
+export Simplenn
 
 # function
 #export percolation, percolationplot, percolationgif
