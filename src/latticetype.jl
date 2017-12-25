@@ -56,7 +56,7 @@ type Squarenn <: SquareLattice
     strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
     PercolationOrNot::Int
 
-    function squarenn(N, p)
+    function Squarenn(N, p)
         if N > 10^3
             error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
         end
@@ -85,7 +85,7 @@ type Squarennn <: SquareLattice
     strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
     PercolationOrNot::Int
 
-    function squarennn(N, p)
+    function Squarennn(N, p)
         if N > 10^3
             error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
         end
@@ -117,7 +117,7 @@ type Tri <: TriangularLattice
     strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
     PercolationOrNot::Int
 
-    function tri(N, p)
+    function Tri(N, p)
         if N > 10^3
             error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
         end
@@ -149,7 +149,7 @@ type Honeycomb <: HoneycombLattice
     strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
     PercolationOrNot::Int
 
-    function honeycomb(N, p)
+    function Honeycomb(N, p)
         if N > 10^3
             error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
         end
@@ -181,7 +181,7 @@ type Kagome <: KagomeLattice
     strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
     PercolationOrNot::Int
 
-    function kagome(N, p)
+    function Kagome(N, p)
         if N > 10^3
             error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
         end
@@ -210,7 +210,7 @@ type Simplenn <: HighDimLattice
     lattice::Array{Int}
     NearestNeighborList::Array{Array,1}
 
-    function simplenn(N, dim, p)
+    function Simplenn(N, dim, p)
         lattice, NearestNeighborList = MakeSimpleLattice(N, dim, p)
         new(N, dim, p, lattice, NearestNeighborList)
     end
