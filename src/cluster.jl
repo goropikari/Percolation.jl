@@ -67,7 +67,7 @@ end
 # For 2D lattice
 ###################
 function checkallcluster(lattice::Matrix{Int}, Lattice::TwoDLattice)
-    row, column = Lattice.N, Lattice.N
+    row = column = Lattice.N
     labelnum = 0
     for i in 1:row, j in 1:column
         if lattice[j,i] == -1
@@ -214,42 +214,42 @@ end
 # For over 3 dimension
 ########################
 function checkcluster(ind::Int, labelnum::Int,Lattice::Simplenn)
-        present_place = ind2sub(Lattice.lattice, ind)
-        searchlist = Vector{Int}()
-        
-        if Lattice.lattice[present_place...] == -1
-            for i in 1:length(Lattice.NearestNeighborList)
-                tempposition = ([present_place...] + Lattice.NearestNeighborList[i])
-                if 0 ∉ tempposition && Lattice.N + 1 ∉ tempposition
-                    tmpind = sub2ind(Lattice.lattice, tempposition...)
-                    push!(searchlist, tmpind)
-                end
+    present_place = ind2sub(Lattice.lattice, ind)
+    searchlist = Vector{Int}()
+    
+    if Lattice.lattice[present_place...] == -1
+        for i in 1:length(Lattice.NearestNeighborList)
+            tempposition = ([present_place...] + Lattice.NearestNeighborList[i])
+            if 0 ∉ tempposition && Lattice.N + 1 ∉ tempposition
+                tmpind = sub2ind(Lattice.lattice, tempposition...)
+                push!(searchlist, tmpind)
             end
         end
-        
-        return searchlist
     end
+    
+    return searchlist
+end
 
-    function checkallcluster(Lattice::Simplenn)
-        _N, dim = Lattice.N, Lattice.dim
-        labelnum = 1
-        
-        for ind in 1:_N^dim
-            if Lattice.lattice[ind] == -1
-                searchlist = checkcluster(ind, labelnum, Lattice)
-                Lattice.lattice[ind] = labelnum
-                
-                while searchlist != []
-                    tmpind = pop!(searchlist)
-                    searchlist =  [ searchlist; checkcluster(tmpind, labelnum, Lattice) ]
-                    Lattice.lattice[tmpind] = labelnum
-                end
-                
-                labelnum += 1
+function checkallcluster(Lattice::Simplenn)
+    _N, dim = Lattice.N, Lattice.dim
+    labelnum = 1
+    
+    for ind in 1:_N^dim
+        if Lattice.lattice[ind] == -1
+            searchlist = checkcluster(ind, labelnum, Lattice)
+            Lattice.lattice[ind] = labelnum
+            
+            while searchlist != []
+                tmpind = pop!(searchlist)
+                searchlist =  [ searchlist; checkcluster(tmpind, labelnum, Lattice) ]
+                Lattice.lattice[tmpind] = labelnum
             end
+            
+            labelnum += 1
         end
-
     end
+
+end
 
 
 
