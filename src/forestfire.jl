@@ -29,10 +29,10 @@ function forest(Lattice::Forest)
     lifetime = 0
     previous_lattice = Lattice.lattice[:,:]
     
-    checkallsite(Lattice)
+    checkallsite!(Lattice)
     while previous_lattice != Lattice.lattice
         previous_lattice = Lattice.lattice[:,:]
-        checkallsite(Lattice)
+        checkallsite!(Lattice)
         lifetime += 1
     end
     
@@ -53,17 +53,12 @@ end
 #show()
 
 
-
-
-
-
-
 # square lattice nearest neighbor
-function checksite(i::Int, j::Int, Lattice::Forest)
-    checksitenn(i, j, Lattice)
+function checksite!(i::Int, j::Int, Lattice::Forest)
+   checksitenn!(i, j, Lattice)
 end
 
-function checksitenn(i::Int, j::Int, Lattice::Forest)
+function checksitenn!(i::Int, j::Int, Lattice::Forest)
 	(row,  column) = size(Lattice.lattice)
 	if j < column && Lattice.lattice[i, j+1] == 1; Lattice.lattice[i, j+1] = 2; end # Lattice.lattice[i, j+1] == 1 && j < m とすると動かないので注意
 	if 1 < j && Lattice.lattice[i, j-1] == 1; Lattice.lattice[i, j-1] = 2; end
@@ -71,11 +66,11 @@ function checksitenn(i::Int, j::Int, Lattice::Forest)
 	if 1 < i && Lattice.lattice[i-1, j] == 1; Lattice.lattice[i-1, j] = 2; end
 end
 
-function checkallsite(Lattice::Forest)
+function checkallsite!(Lattice::Forest)
     row, column = Lattice.N, Lattice.N
     for i in 1:row, j in 1:column
         if Lattice.lattice[j,i] == 2
-            checksite(j, i, Lattice)
+            checksite!(j, i, Lattice)
         end
     end
 end
@@ -130,14 +125,14 @@ function forestgif(Lattice::Forest; fps=5, output_dir=".", filename="anime.gif")
     PyPlot.figure(figsize=(8,8))
     forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
     
-    checkallsite(Lattice)
+    checkallsite!(Lattice)
 #    lifetime += 1
 #    forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
     while previous_lattice != Lattice.lattice && 2 ∉ Lattice.lattice[:,Lattice.N]
         lifetime += 1
         forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
         previous_lattice = Lattice.lattice[:,:]
-        checkallsite(Lattice)
+        checkallsite!(Lattice)
     end
     
     if 2 in Lattice.lattice[:,Lattice.N]
