@@ -5,16 +5,16 @@ This package is for simulating percolation theory. You can computer cluster size
 Support for following lattice site percolation.
 
 - Square lattice
- - nearest neighbor
- - next nearest neighbor
+  - nearest neighbor
+  - next nearest neighbor
 - Triangular lattice
- - nearest neighbor
+  - nearest neighbor
 - d dimensional simple lattice
- - nearest neighbor
+  - nearest neighbor
 - Honeycomb lattice
- - nearest neighbor
+  - nearest neighbor
 - Kagome lattice
- - nearest neighbor
+  - nearest neighbor
 
 
 
