@@ -54,7 +54,7 @@ type Squarenn <: SquareLattice
     clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
     average_clustersize::Float64
     strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
-    PercolationOrNot::Int
+    ispercolation::Bool
 
     function Squarenn(N, p)
         if N > 10^3
@@ -67,9 +67,9 @@ type Squarenn <: SquareLattice
         clusternumber = Vector{Tuple{Int,Float64}}()
         average_clustersize = 0.0
         strength = 0.0
-        PercolationOrNot = 0
+        ispercolation = false
 
-        new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
+        new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, ispercolation)
     end
 end
 
@@ -83,7 +83,7 @@ type Squarennn <: SquareLattice
     clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
     average_clustersize::Float64
     strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
-    PercolationOrNot::Int
+    ispercolation::Bool
 
     function Squarennn(N, p)
         if N > 10^3
@@ -96,9 +96,9 @@ type Squarennn <: SquareLattice
         clusternumber = Vector{Tuple{Int,Float64}}()
         average_clustersize = 0.0
         strength = 0.0
-        PercolationOrNot = 0
+        ispercolation = false
 
-        new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
+        new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, ispercolation)
     end
 end
 
@@ -115,7 +115,7 @@ type Tri <: TriangularLattice
     clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
     average_clustersize::Float64
     strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
-    PercolationOrNot::Int
+    ispercolation::Bool
 
     function Tri(N, p)
         if N > 10^3
@@ -128,9 +128,9 @@ type Tri <: TriangularLattice
         clusternumber = Vector{Tuple{Int,Float64}}()
         average_clustersize = 0.0
         strength = 0.0
-        PercolationOrNot = 0
+        ispercolation = false
 
-        new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
+        new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, ispercolation)
     end
 end
 
@@ -147,7 +147,7 @@ type Honeycomb <: HoneycombLattice
     clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
     average_clustersize::Float64
     strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
-    PercolationOrNot::Int
+    ispercolation::Bool
 
     function Honeycomb(N, p)
         if N > 10^3
@@ -160,9 +160,9 @@ type Honeycomb <: HoneycombLattice
         clusternumber = Vector{Tuple{Int,Float64}}()
         average_clustersize = 0.0
         strength = 0.0
-        PercolationOrNot = 0
+        ispercolation = false
 
-        new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
+        new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, ispercolation)
     end
 end
 
@@ -179,7 +179,7 @@ type Kagome <: KagomeLattice
     clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf
     average_clustersize::Float64
     strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.
-    PercolationOrNot::Int
+    ispercolation::Bool
 
     function Kagome(N, p)
         if N > 10^3
@@ -192,9 +192,9 @@ type Kagome <: KagomeLattice
         clusternumber = Vector{Tuple{Int,Float64}}()
         average_clustersize = 0.0
         strength = 0.0
-        PercolationOrNot = 0
+        ispercolation = false
 
-        new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, PercolationOrNot)
+        new(N, p, lattice, clustersize, clustersizefreq, clusternumber, average_clustersize, strength, ispercolation)
     end
 end
 
@@ -208,10 +208,14 @@ type Simplenn <: HighDimLattice
     dim::Int
     p::Float64
     lattice::Array{Int}
+    clustersize::Vector{Int}
     NearestNeighborList::Array{Array,1}
+    ispercolation::Bool
 
     function Simplenn(N, dim, p)
         lattice, NearestNeighborList = MakeSimpleLattice(N, dim, p)
-        new(N, dim, p, lattice, NearestNeighborList)
+        ispercolation = false
+        clustersize = Vector{Int}()
+        new(N, dim, p, lattice, clustersize, NearestNeighborList, ispercolation)
     end
 end
