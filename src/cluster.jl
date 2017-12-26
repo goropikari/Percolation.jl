@@ -261,30 +261,6 @@ end
 ####################################################################################################
 " clusterplot(site::Lattice; figsave=false, filename=\"cluster.png\") "
 function clusterplot(site::Lattice; figsave=false, filename="cluster.png")
-#     MaxClusterLabelNum = maximum(site.lattice)
-#    
-#     PyPlot.figure(figsize=(7,7))
-#     for i in 1:MaxClusterLabelNum
-# #        y, x = ind2sub(site.lattice, findin(site.lattice, i))
-#         y, x = findn(site.lattice .== i)
-#         if site.N < 100
-#             PyPlot.plot(x,y, "o")
-#         else
-#             PyPlot.plot(x,y, ".")
-#         end
-#     end
-#    
-#     PyPlot.axis("equal")
-#     PyPlot.axis("off")
-#    
-#     if site.ispercolation
-#         PyPlot.title("Percolation !")
-#     else
-#         PyPlot.title("Not percolation ")
-#     end   
-#    
-#     if figsave; PyPlot.savefig(filename); end
-
     maxlabelnum = maximum(site.lattice)
     tmplattice = copy(site.lattice)
     PyPlot.figure(figsize=(7,7))
@@ -294,7 +270,7 @@ function clusterplot(site::Lattice; figsave=false, filename="cluster.png")
         tmplattice[tmplattice .== i] = shufflelabel[i]
     end
     
-    PyPlot.imshow(tmplattice)
+    PyPlot.imshow(tmplattice, cmap="gist_ncar")
     PyPlot.axis("equal")
     PyPlot.axis("off")
     if site.ispercolation
