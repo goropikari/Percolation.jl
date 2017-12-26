@@ -2,19 +2,19 @@
 
 This package is for simulating percolation theory. You can computer cluster size and check if percolating or not.
 
-Support for following type of lattice site percolation.
+Support for following lattice site percolation.
 
- - Square lattice
-  - nearest neighbor
-  - next nearest neighbor
- - Triangular lattice
-  - nearest neighbor
- - d dimensional simple lattice
-  - nearest neighbor
- - Honeycomb lattice
-  - nearest neighbor
- - Kagome lattice
-  - nearest neighbor
+- Square lattice
+ - nearest neighbor
+ - next nearest neighbor
+- Triangular lattice
+ - nearest neighbor
+- d dimensional simple lattice
+ - nearest neighbor
+- Honeycomb lattice
+ - nearest neighbor
+- Kagome lattice
+ - nearest neighbor
 
 
 
