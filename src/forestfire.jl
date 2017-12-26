@@ -1,9 +1,11 @@
 #using PyPlot, PyCall
 #@pyimport matplotlib.patches as patch
 
-#0: empty
-#1: green
-#2: fire
+"""
+0: empty  
+1: green  
+2: fire
+"""
 type Forest
     N::Int
     p::Float64
@@ -25,14 +27,14 @@ type Forest
     end
 end
 
-function forest(Lattice::Forest)
+function forestfire!(site::Forest)
     lifetime = 0
-    previous_lattice = Lattice.lattice[:,:]
+    previous_lattice = site.lattice[:,:]
     
-    checkallsite!(Lattice)
-    while previous_lattice != Lattice.lattice
-        previous_lattice = Lattice.lattice[:,:]
-        checkallsite!(Lattice)
+    checkallsite!(site)
+    while previous_lattice != site.lattice
+        previous_lattice = site.lattice[:,:]
+        checkallsite!(site)
         lifetime += 1
     end
     
@@ -45,8 +47,8 @@ end
 #trial = 50
 #len = length(plist)
 #@time for i in 1:len, j in 1:trial
-#	site = forest(100, plist[i])
-#	time[i] += forest(site)
+#	site = forestfire!100, plist[i])
+#	time[i] += forestfire!site)
 #end
 
 #plot(plist, time/trial)
@@ -54,23 +56,23 @@ end
 
 
 # square lattice nearest neighbor
-function checksite!(i::Int, j::Int, Lattice::Forest)
-   checksitenn!(i, j, Lattice)
+function checksite!(i::Int, j::Int, site::Forest)
+   checksitenn!(i, j, site)
 end
 
-function checksitenn!(i::Int, j::Int, Lattice::Forest)
-	(row,  column) = size(Lattice.lattice)
-	if j < column && Lattice.lattice[i, j+1] == 1; Lattice.lattice[i, j+1] = 2; end # Lattice.lattice[i, j+1] == 1 && j < m とすると動かないので注意
-	if 1 < j && Lattice.lattice[i, j-1] == 1; Lattice.lattice[i, j-1] = 2; end
-	if i < row && Lattice.lattice[i+1, j] == 1; Lattice.lattice[i+1, j] = 2; end
-	if 1 < i && Lattice.lattice[i-1, j] == 1; Lattice.lattice[i-1, j] = 2; end
+function checksitenn!(i::Int, j::Int, site::Forest)
+	(row,  column) = size(site.lattice)
+	if j < column && site.lattice[i, j+1] == 1; site.lattice[i, j+1] = 2; end # site.lattice[i, j+1] == 1 && j < m とすると動かないので注意
+	if 1 < j && site.lattice[i, j-1] == 1; site.lattice[i, j-1] = 2; end
+	if i < row && site.lattice[i+1, j] == 1; site.lattice[i+1, j] = 2; end
+	if 1 < i && site.lattice[i-1, j] == 1; site.lattice[i-1, j] = 2; end
 end
 
-function checkallsite!(Lattice::Forest)
-    row, column = Lattice.N, Lattice.N
+function checkallsite!(site::Forest)
+    row, column = site.N, site.N
     for i in 1:row, j in 1:column
-        if Lattice.lattice[j,i] == 2
-            checksite!(j, i, Lattice)
+        if site.lattice[j,i] == 2
+            checksite!(j, i, site)
         end
     end
 end
@@ -79,15 +81,19 @@ end
 ##################
 # plot 関連
 ##################
-function forestplot(Lattice::Forest, lifetime::Int; circle=false, output_dir=".")
+function forestplot(site::Forest, lifetime::Int; circle=false, output_dir=".")
     if ! ispath(output_dir); mkdir(output_dir); end
 
-    yfire, xfire = findn(Lattice.lattice .== 2)
-    ytree, xtree = findn(Lattice.lattice .== 1)
-    yempty, xempty = findn(Lattice.lattice .== 0)
+    yfire, xfire = findn(site.lattice .== 2)
+    ytree, xtree = findn(site.lattice .== 1)
+    yempty, xempty = findn(site.lattice .== 0)
     
-    PyPlot.ioff()
-    #Grid(1, Lattice.N, 1, Lattice.N)
+    if lifetime != -1
+        PyPlot.ioff()
+    else
+        PyPlot.ion()
+    end
+    #Grid(1, site.N, 1, site.N)
     if circle
         for i in 1:length(xfire)
             circle(xfire[i], yfire[i], 0.25, "r")
@@ -104,43 +110,49 @@ function forestplot(Lattice::Forest, lifetime::Int; circle=false, output_dir="."
         PyPlot.plot(xempty, yempty, "w.") 
     end
     
-    PyPlot.title(@sprintf("%05d", lifetime))
     PyPlot.axis("equal")
     PyPlot.axis("off")
-    PyPlot.axis([-1, Lattice.N+1, -1, Lattice.N+1])
-    PyPlot.savefig(output_dir * "/" * @sprintf("%05d.png", lifetime), bbox_inches="tight")
-    PyPlot.clf()
+    PyPlot.axis([-1, site.N+1, -1, site.N+1])
+    if lifetime != -1
+        PyPlot.title(@sprintf("%05d", lifetime))
+        PyPlot.savefig(output_dir * "/" * @sprintf("%05d.png", lifetime), bbox_inches="tight")
+        PyPlot.clf()
+    end
 
 end
 
+function forestplot(site::Forest)
+    forestplot(site, -1)
+end
 
-function forestgif(Lattice::Forest; fps=5, output_dir=".", filename="anime.gif")
+
+function forestgif!(site::Forest; fps=5, output_dir=".", filename="anime.gif")
     output_tempolary_png=tempdir()*"/forest_"*randstring()
     close()
     lifetime = 0
-    previous_lattice = Lattice.lattice[:,:]
+    previous_lattice = site.lattice[:,:]
     
     # plot initial configuration
     PyPlot.ioff()
     PyPlot.figure(figsize=(8,8))
-    forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
+    forestplot(site, lifetime, output_dir=output_tempolary_png)
     
-    checkallsite!(Lattice)
+    checkallsite!(site)
 #    lifetime += 1
-#    forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
-    while previous_lattice != Lattice.lattice && 2 ∉ Lattice.lattice[:,Lattice.N]
+#    forestplot(site, lifetime, output_dir=output_tempolary_png)
+    while previous_lattice != site.lattice && 2 ∉ site.lattice[:,site.N]
         lifetime += 1
-        forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
-        previous_lattice = Lattice.lattice[:,:]
-        checkallsite!(Lattice)
+        forestplot(site, lifetime, output_dir=output_tempolary_png)
+        previous_lattice = site.lattice[:,:]
+        checkallsite!(site)
     end
     
-    if 2 in Lattice.lattice[:,Lattice.N]
+    if 2 in site.lattice[:,site.N]
         lifetime += 1
-        forestplot(Lattice, lifetime, output_dir=output_tempolary_png)
+        forestplot(site, lifetime, output_dir=output_tempolary_png)
     end
     
-    run(`convert -delay $(100/fps) $(output_tempolary_png)/*.png $(output_dir)/$filename`)
+    run(`convert -delay $(100/fps) $(output_tempolary_png)/"*".png $(output_dir)/$filename`)
     rm(output_tempolary_png, force=true, recursive=true)
     return lifetime
 end
