@@ -20,6 +20,6 @@ Support for following type of lattice site percolation.
 
 
 To learn how to use this package, see example/percolation.ipynb.
-<img src="example/anime.gif" align="middle"  />
+<img src="example/forestfire.gif" align="middle"  />
 
 <img src="example/cluster.png" align="middle"  />
