@@ -1,83 +1,85 @@
 # clustering and check each cluster size.
 """
-cluster(Lattice::Lattice)
+cluster!(site::Lattice)
 
 return percolation or not and each clustersize
 
 """
-function cluster(Lattice::TwoDLattice)
-    _N = Lattice.N
+function cluster!(site::TwoDLattice)
+    _N = site.N
 
-    checkallcluster(Lattice)
-    maxlabelnum = maximum(Lattice.lattice)
+    checkallcluster!(site)
+    maxlabelnum = maximum(site.lattice)
     clustersize = zeros(Int, maxlabelnum)
     for i in 1:maxlabelnum
-        clustersize[i] = sum(Lattice.lattice .== i)
+        clustersize[i] = sum(site.lattice .== i)
     end
 
     # check percolation or not
-    if sum(Lattice.lattice[1,:] ∩ Lattice.lattice[_N, :] ∩ Lattice.lattice[:, 1] ∩ Lattice.lattice[:,_N]) != 0
-        perco = 1
+    if sum(site.lattice[1,:] ∩ site.lattice[_N, :] ∩ site.lattice[:, 1] ∩ site.lattice[:,_N]) != 0
+        site.ispercolation = true
     else
-        perco = 0
+        site.ispercolation = false
     end
 
-    Lattice.PercolationOrNot = perco
+    site.ispercolation
     if clustersize != Vector{Int}() # クラスターがひとつもなかった場合を除く
-        Lattice.clustersize = clustersize
-        Lattice.clustersizefreq = [(collect(span(Lattice.clustersize))[i], counts(Lattice.clustersize)[i]) for i in 1:length(counts(Lattice.clustersize)) if counts(Lattice.clustersize)[i] != 0]
+        site.clustersize = clustersize
+        site.clustersizefreq = [(collect(span(site.clustersize))[i], counts(site.clustersize)[i]) for i in 1:length(counts(site.clustersize)) if counts(site.clustersize)[i] != 0]
 
         # cluster numberはpercolationしたがどうかで場合分けしたほうがいい
-        Lattice.clusternumber = [(Lattice.clustersizefreq[i][1], Lattice.clustersizefreq[i][2] / Lattice.N^2) for i in 1:length(Lattice.clustersizefreq)]
-        Lattice.average_clustersize = sum([(x -> x[1]^2 * x[2])(Lattice.clusternumber[i]) for i in 1:length(Lattice.clusternumber)]) / mean(Lattice.lattice)
+        site.clusternumber = [(site.clustersizefreq[i][1], site.clustersizefreq[i][2] / site.N^2) for i in 1:length(site.clustersizefreq)]
+        site.average_clustersize = sum([(x -> x[1]^2 * x[2])(site.clusternumber[i]) for i in 1:length(site.clusternumber)]) / mean(site.lattice)
     end
 
     # calculate strength.
     # def. The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to infinite cluster.
-    if perco == 0
-        Lattice.strength = 0.0
-        Lattice.clusternumber = [(Lattice.clustersizefreq[i][1], Lattice.clustersizefreq[i][2] / Lattice.N^2) for i in 1:length(Lattice.clustersizefreq)]
+    if site.ispercolation
+        site.strength = 0.0
+        site.clusternumber = [(site.clustersizefreq[i][1], site.clustersizefreq[i][2] / site.N^2) for i in 1:length(site.clustersizefreq)]
     else
-        Lattice.strength = maximum(Lattice.clustersize) / _N^2
+        site.strength = maximum(site.clustersize) / _N^2
     end
 
     return
 end
 
-function cluster(Lattice::HighDimLattice)
-    _N, dim = Lattice.N, Lattice.dim
-    checkallcluster(Lattice)
-    maxlabelnum = maximum(Lattice.lattice)
+function cluster!(site::HighDimLattice)
+    _N, dim = site.N, site.dim
+    checkallcluster!(site)
+    maxlabelnum = maximum(site.lattice)
     clustersize = zeros(Int, maxlabelnum)
     for i in 1:maxlabelnum
-        clustersize[i] = sum(Lattice.lattice .== i)
+        clustersize[i] = sum(site.lattice .== i)
     end
 
     # check percolation or not
-    if sum( Lattice.lattice[1:_N^(dim-1)] ∩ Lattice.lattice[_N^(dim-1)*(_N-1)+1:end] ) != 0
-        perco = 1
+    if sum( site.lattice[1:_N^(dim-1)] ∩ site.lattice[_N^(dim-1)*(_N-1)+1:end] ) != 0
+        site.ispercolation = true
     else
-        perco = 0
+        site.ispercolation = false
     end
 
-    return perco, clustersize
+    site.clustersize = clustersize
+    
+    return
 end
 
 ###################
 # For 2D lattice
 ###################
-function checkallcluster(lattice::Matrix{Int}, Lattice::TwoDLattice)
-    row = column = Lattice.N
+function checkallcluster!(lattice::Matrix{Int}, site::TwoDLattice)
+    row = column = site.N
     labelnum = 0
     for i in 1:row, j in 1:column
         if lattice[j,i] == -1
             labelnum += 1
-            searchlist = checkcluster(j,i, labelnum, Lattice)
+            searchlist = checkcluster!(j,i, labelnum, site)
             lattice[j,i] = labelnum
 
             while searchlist != []
                 tmppos = pop!(searchlist)
-                searchlist =  [ searchlist; checkcluster(tmppos[1], tmppos[2], labelnum, Lattice) ]
+                searchlist =  [ searchlist; checkcluster!(tmppos[1], tmppos[2], labelnum, site) ]
                 lattice[tmppos...] = labelnum
             end
 
@@ -86,39 +88,39 @@ function checkallcluster(lattice::Matrix{Int}, Lattice::TwoDLattice)
     end
 end
 
-function checkallcluster(Lattice::Squarenn)
-    checkallcluster(Lattice.lattice, Lattice)
+function checkallcluster!(site::Squarenn)
+    checkallcluster!(site.lattice, site)
 end
 
-function checkallcluster(Lattice::Squarennn)
-    checkallcluster(Lattice.lattice, Lattice)
+function checkallcluster!(site::Squarennn)
+    checkallcluster!(site.lattice, site)
 end
 
-function checkallcluster(Lattice::Tri)
-    checkallcluster(Lattice.lattice, Lattice)
+function checkallcluster!(site::Tri)
+    checkallcluster!(site.lattice, site)
 end
 
-function checkallcluster(Lattice::Honeycomb)
-    checkallcluster(Lattice.lattice, Lattice)
+function checkallcluster!(site::Honeycomb)
+    checkallcluster!(site.lattice, site)
 end
 
-function checkallcluster(Lattice::Kagome)
-    checkallcluster(Lattice.lattice, Lattice)
+function checkallcluster!(site::Kagome)
+    checkallcluster!(site.lattice, site)
 end
 
 
 
 
 # square lattice nearest neighbor
-function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::Squarenn)
-    (row, column) = Lattice.N, Lattice.N
+function checkcluster!(i::Int, j::Int, labelnum::Int, site::Squarenn)
+    (row, column) = site.N, site.N
     searchlist = Array{Array{Int64, 1}, 1}()
 
-    if Lattice.lattice[i,j] == -1
-        if j < column && Lattice.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
-        if 1 < j && Lattice.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
-        if i < row && Lattice.lattice[i+1, j] == -1; push!(searchlist, [i+1, j]); end
-        if 1 < i && Lattice.lattice[i-1, j] == -1; push!(searchlist, [i-1, j]); end
+    if site.lattice[i,j] == -1
+        if j < column && site.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
+        if 1 < j && site.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
+        if i < row && site.lattice[i+1, j] == -1; push!(searchlist, [i+1, j]); end
+        if 1 < i && site.lattice[i-1, j] == -1; push!(searchlist, [i-1, j]); end
     end
 
     return searchlist
@@ -126,36 +128,36 @@ end
 
 
 # square lattice next nearest neighbor
-function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::Squarennn)
-    (row, column) = Lattice.N, Lattice.N
+function checkcluster!(i::Int, j::Int, labelnum::Int, site::Squarennn)
+    (row, column) = site.N, site.N
     searchlist = Array{Array{Int64, 1}, 1}()
 
-    if Lattice.lattice[i,j] == -1
-        if j < column && Lattice.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
-        if 1 < j && Lattice.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
-        if i < row && Lattice.lattice[i+1, j] == -1; push!(searchlist, [i+1, j]); end
-        if 1 < i && Lattice.lattice[i-1, j] == -1; push!(searchlist, [i-1, j]); end
-        if 1 < i && 1 < j && Lattice.lattice[i-1, j-1] == -1; push!(searchlist, [i-1, j-1]); end
-        if 1 < i && j < column && Lattice.lattice[i-1, j+1] == -1; push!(searchlist, [i-1, j+1]); end
-        if i < row && 1 < j && Lattice.lattice[i+1, j-1] == -1; push!(searchlist, [i+1, j-1]); end
-        if i < row && j < column && Lattice.lattice[i+1, j+1] == -1; push!(searchlist, [i+1, j+1]); end
+    if site.lattice[i,j] == -1
+        if j < column && site.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
+        if 1 < j && site.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
+        if i < row && site.lattice[i+1, j] == -1; push!(searchlist, [i+1, j]); end
+        if 1 < i && site.lattice[i-1, j] == -1; push!(searchlist, [i-1, j]); end
+        if 1 < i && 1 < j && site.lattice[i-1, j-1] == -1; push!(searchlist, [i-1, j-1]); end
+        if 1 < i && j < column && site.lattice[i-1, j+1] == -1; push!(searchlist, [i-1, j+1]); end
+        if i < row && 1 < j && site.lattice[i+1, j-1] == -1; push!(searchlist, [i+1, j-1]); end
+        if i < row && j < column && site.lattice[i+1, j+1] == -1; push!(searchlist, [i+1, j+1]); end
     end
 
     return searchlist
 end
 
 # triangular lattice nearest neighbor
-function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::Tri)
-    (row, column) = Lattice.N, Lattice.N
+function checkcluster!(i::Int, j::Int, labelnum::Int, site::Tri)
+    (row, column) = site.N, site.N
     searchlist = Array{Array{Int64, 1}, 1}()
 
-    if Lattice.lattice[i,j] == -1
-        if j < column && Lattice.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
-        if 1 < j && Lattice.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
-        if i < row && Lattice.lattice[i+1, j] == -1; push!(searchlist, [i+1, j]); end
-        if 1 < i && Lattice.lattice[i-1, j] == -1; push!(searchlist, [i-1, j]); end
-        if 1 < i && j < column && Lattice.lattice[i-1, j+1] == -1; push!(searchlist, [i-1, j+1]); end
-        if i < row && 1 < j && Lattice.lattice[i+1, j-1] == -1; push!(searchlist, [i+1, j-1]); end
+    if site.lattice[i,j] == -1
+        if j < column && site.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
+        if 1 < j && site.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
+        if i < row && site.lattice[i+1, j] == -1; push!(searchlist, [i+1, j]); end
+        if 1 < i && site.lattice[i-1, j] == -1; push!(searchlist, [i-1, j]); end
+        if 1 < i && j < column && site.lattice[i-1, j+1] == -1; push!(searchlist, [i-1, j+1]); end
+        if i < row && 1 < j && site.lattice[i+1, j-1] == -1; push!(searchlist, [i+1, j-1]); end
     end
 
     return searchlist
@@ -163,19 +165,19 @@ end
 
 
 # honeycomb lattice nearest neighbor
-function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::Honeycomb)
-    (row, column) = Lattice.N, Lattice.N
+function checkcluster!(i::Int, j::Int, labelnum::Int, site::Honeycomb)
+    (row, column) = site.N, site.N
     searchlist = Array{Array{Int64, 1}, 1}()
 
-    if Lattice.lattice[i,j] == -1
+    if site.lattice[i,j] == -1
         if iseven(i+j)
-            if j < column && Lattice.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
-            if 1 < j && Lattice.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
-            if 1 < i && Lattice.lattice[i-1, j] == -1; push!(searchlist, [i-1, j]); end
+            if j < column && site.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
+            if 1 < j && site.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
+            if 1 < i && site.lattice[i-1, j] == -1; push!(searchlist, [i-1, j]); end
         else
-            if j < column && Lattice.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
-            if 1 < j && Lattice.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
-            if i < row && Lattice.lattice[i+1, j] == -1; push!(searchlist, [i+1, j]); end
+            if j < column && site.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
+            if 1 < j && site.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
+            if i < row && site.lattice[i+1, j] == -1; push!(searchlist, [i+1, j]); end
         end
     end
 
@@ -183,26 +185,26 @@ function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::Honeycomb)
 end
 
 # kagome lattice nearest neighbor
-function checkcluster(i::Int, j::Int, labelnum::Int, Lattice::Kagome)
-    (row, column) = Lattice.N, Lattice.N
+function checkcluster!(i::Int, j::Int, labelnum::Int, site::Kagome)
+    (row, column) = site.N, site.N
     searchlist = Array{Array{Int64, 1}, 1}()
 
-    if Lattice.lattice[i,j] == -1
+    if site.lattice[i,j] == -1
         if iseven(i+j) # if i and j are both zeros, always lattice[i,j] = 0
-            if j < column && Lattice.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
-            if 1 < j && Lattice.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
-            if i < row && Lattice.lattice[i+1, j] == -1; push!(searchlist, [i+1, j]); end
-            if 1 < i && Lattice.lattice[i-1, j] == -1; push!(searchlist, [i-1, j]); end            
+            if j < column && site.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
+            if 1 < j && site.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
+            if i < row && site.lattice[i+1, j] == -1; push!(searchlist, [i+1, j]); end
+            if 1 < i && site.lattice[i-1, j] == -1; push!(searchlist, [i-1, j]); end            
         elseif iseven(i) && isodd(j)
-            if i < row && Lattice.lattice[i+1, j] == -1; push!(searchlist, [i+1, j]); end
-            if 1 < i && Lattice.lattice[i-1, j] == -1; push!(searchlist, [i-1, j]); end  
-            if 1 < i && j < column && Lattice.lattice[i-1, j+1] == -1; push!(searchlist, [i-1, j+1]); end
-            if i < row && 1 < j && Lattice.lattice[i+1, j-1] == -1; push!(searchlist, [i+1, j-1]); end
+            if i < row && site.lattice[i+1, j] == -1; push!(searchlist, [i+1, j]); end
+            if 1 < i && site.lattice[i-1, j] == -1; push!(searchlist, [i-1, j]); end  
+            if 1 < i && j < column && site.lattice[i-1, j+1] == -1; push!(searchlist, [i-1, j+1]); end
+            if i < row && 1 < j && site.lattice[i+1, j-1] == -1; push!(searchlist, [i+1, j-1]); end
         else
-            if j < column && Lattice.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
-            if 1 < j && Lattice.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
-            if 1 < i && j < column && Lattice.lattice[i-1, j+1] == -1; push!(searchlist, [i-1, j+1]); end
-            if i < row && 1 < j && Lattice.lattice[i+1, j-1] == -1; push!(searchlist, [i+1, j-1]); end
+            if j < column && site.lattice[i, j+1] == -1; push!(searchlist, [i, j+1]); end
+            if 1 < j && site.lattice[i, j-1] == -1; push!(searchlist, [i, j-1]); end
+            if 1 < i && j < column && site.lattice[i-1, j+1] == -1; push!(searchlist, [i-1, j+1]); end
+            if i < row && 1 < j && site.lattice[i+1, j-1] == -1; push!(searchlist, [i+1, j-1]); end
         end
     end
 
@@ -213,15 +215,15 @@ end
 ########################
 # For over 3 dimension
 ########################
-function checkcluster(ind::Int, labelnum::Int,Lattice::Simplenn)
-    present_place = ind2sub(Lattice.lattice, ind)
+function checkcluster!(ind::Int, labelnum::Int,site::Simplenn)
+    present_place = ind2sub(site.lattice, ind)
     searchlist = Vector{Int}()
     
-    if Lattice.lattice[present_place...] == -1
-        for i in 1:length(Lattice.NearestNeighborList)
-            tempposition = ([present_place...] + Lattice.NearestNeighborList[i])
-            if 0 ∉ tempposition && Lattice.N + 1 ∉ tempposition
-                tmpind = sub2ind(Lattice.lattice, tempposition...)
+    if site.lattice[present_place...] == -1
+        for i in 1:length(site.NearestNeighborList)
+            tempposition = ([present_place...] + site.NearestNeighborList[i])
+            if 0 ∉ tempposition && site.N + 1 ∉ tempposition
+                tmpind = sub2ind(site.lattice, tempposition...)
                 push!(searchlist, tmpind)
             end
         end
@@ -230,19 +232,19 @@ function checkcluster(ind::Int, labelnum::Int,Lattice::Simplenn)
     return searchlist
 end
 
-function checkallcluster(Lattice::Simplenn)
-    _N, dim = Lattice.N, Lattice.dim
+function checkallcluster!(site::Simplenn)
+    _N, dim = site.N, site.dim
     labelnum = 1
     
     for ind in 1:_N^dim
-        if Lattice.lattice[ind] == -1
-            searchlist = checkcluster(ind, labelnum, Lattice)
-            Lattice.lattice[ind] = labelnum
+        if site.lattice[ind] == -1
+            searchlist = checkcluster!(ind, labelnum, site)
+            site.lattice[ind] = labelnum
             
             while searchlist != []
                 tmpind = pop!(searchlist)
-                searchlist =  [ searchlist; checkcluster(tmpind, labelnum, Lattice) ]
-                Lattice.lattice[tmpind] = labelnum
+                searchlist =  [ searchlist; checkcluster!(tmpind, labelnum, site) ]
+                site.lattice[tmpind] = labelnum
             end
             
             labelnum += 1
@@ -257,49 +259,68 @@ end
 ####################################################################################################
 # cluster figure
 ####################################################################################################
-" clusterplot(Lattice::Lattice; figsave=false, filename=\"cluster.png\") "
-function clusterplot(Lattice::Lattice; figsave=false, filename="cluster.png")
-    MaxClusterLabelNum = maximum(Lattice.lattice)
-    
+" clusterplot(site::Lattice; figsave=false, filename=\"cluster.png\") "
+function clusterplot(site::Lattice; figsave=false, filename="cluster.png")
+#     MaxClusterLabelNum = maximum(site.lattice)
+#    
+#     PyPlot.figure(figsize=(7,7))
+#     for i in 1:MaxClusterLabelNum
+# #        y, x = ind2sub(site.lattice, findin(site.lattice, i))
+#         y, x = findn(site.lattice .== i)
+#         if site.N < 100
+#             PyPlot.plot(x,y, "o")
+#         else
+#             PyPlot.plot(x,y, ".")
+#         end
+#     end
+#    
+#     PyPlot.axis("equal")
+#     PyPlot.axis("off")
+#    
+#     if site.ispercolation
+#         PyPlot.title("Percolation !")
+#     else
+#         PyPlot.title("Not percolation ")
+#     end   
+#    
+#     if figsave; PyPlot.savefig(filename); end
+
+    maxlabelnum = maximum(site.lattice)
+    tmplattice = copy(site.lattice)
     PyPlot.figure(figsize=(7,7))
-    for i in 1:MaxClusterLabelNum
-#        y, x = ind2sub(Lattice.lattice, findin(Lattice.lattice, i))
-        y, x = findn(Lattice.lattice .== i)
-        if Lattice.N < 100
-            PyPlot.plot(x,y, "o")
-        else
-            PyPlot.plot(x,y, ".")
-        end
+    tmplattice *= -1
+    shufflelabel = Dict(i=>j for (i,j) in zip(-maxlabelnum:-1, shuffle(1:maxlabelnum)))
+    for i in -maxlabelnum:-1
+        tmplattice[tmplattice .== i] = shufflelabel[i]
     end
     
+    PyPlot.imshow(tmplattice)
     PyPlot.axis("equal")
     PyPlot.axis("off")
-    
-    if Lattice.PercolationOrNot == 1
-        PyPlot.title("Percolation !")
+    if site.ispercolation
+        PyPlot.title("Percolation!")
     else
-        PyPlot.title("Not percolation ")
+        PyPlot.title("Not percolation")
     end   
-    
+
     if figsave; PyPlot.savefig(filename); end
-    
 end
 
 "colored by each cluster size"
-function clusterplotsize(Lattice::Lattice; figsave=false, filename="cluster.png")
+function clusterplotsize(site::Lattice; figsave=false, filename="cluster.png")
 #    colorlist = ["black", "grey", "silver", "rosybrown", "firebrick", "r", "darksalmon", "sienna", "sandybrown", 
 #                 "tan", "moccasin", "gold", "darkkhaki", "olivedrab", "chartreuse", "darksage", "lightgreen", "green", 
 #                 "mediumseagreen", "mediumaquamarine", "mediumturquoise", "darkslategrey", "c", "cadetblue", "skyblue", 
 #                 "dodgerblue", "slategray", "darkblue", "slateblue", "blueviolet", "mediumorchid", "purple", "fuchsia", "hotpink", "pink"]
 #    colorlist = ["c", "darksage", "slategray", "olivedrab", "silver", "sandybrown", "grey", "moccasin", "darksalmon", "mediumaquamarine", "darkkhaki", "lightgreen", "darkslategrey", "rosybrown", "black", "mediumturquoise", "gold", "slateblue", "mediumorchid", "skyblue", "mediumseagreen", "hotpink", "cadetblue", "sienna", "chartreuse", "purple", "green", "fuchsia", "dodgerblue", "tan", "blueviolet", "pink", "darkblue", "firebrick", "r"]
     colorlist = ["black", "red", "green", "yellow", "c", "purple", "fuchsia", "orangered", "teal", "grey", "yellowgreen", "violet"]
-    MaxClusterSize = maximum(Lattice.clustersize)
+    MaxClusterSize = maximum(site.clustersize)
     hit = 1
     
     PyPlot.figure(figsize=(7,7))
     for i in 1:MaxClusterSize-1
-        if i ∈ Lattice.clustersize
-            y, x = ind2sub(Lattice.lattice, findin(Lattice.lattice, findin(Lattice.clustersize, i)))
+        if i ∈ site.clustersize
+            y, x = ind2sub(site.lattice, findin(site.lattice, findin(site.clustersize, i)))
             PyPlot.plot(x,y, color=colorlist[hit], ".")
             hit = hit % length(colorlist) + 1
 
@@ -310,10 +331,10 @@ function clusterplotsize(Lattice::Lattice; figsave=false, filename="cluster.png"
     PyPlot.axis("off")
     
     # maximum cluster is colored by blue.
-    y, x = ind2sub(Lattice.lattice, findin(Lattice.lattice, findin(Lattice.clustersize, MaxClusterSize)))
+    y, x = ind2sub(site.lattice, findin(site.lattice, findin(site.clustersize, MaxClusterSize)))
     PyPlot.plot(x,y, "b.")  
     
-    if Lattice.PercolationOrNot == 1
+    if site.ispercolation
         PyPlot.title("Percolation !")
     else
         PyPlot.title("Not percolation ")
