@@ -19,7 +19,7 @@ Support for following lattice site percolation.
 
 
 
-To learn how to use this package, see example/percolation.ipynb.
+In order to learn how to use this package, see [example/percolation.ipynb](http://nbviewer.jupyter.org/github/goropikari/Percolation.jl/blob/master/example/percolation.ipynb).
 <img src="example/forestfire.gif" align="middle"  />
 
 <img src="example/cluster.png" align="middle"  />
