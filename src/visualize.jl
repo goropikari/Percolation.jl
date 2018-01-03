@@ -26,7 +26,7 @@ function heatmap!(sq::Square)
         end
     end
 
-    heatmap(site, colorbar=false)
+    heatmap(site, colorbar=false, aspect_ratio=:equal)
 end
 
 function plot_percolation_prob(latticetype::String, linsize::Int, ps, pinc, pf, nsample)
