@@ -1,5 +1,7 @@
 julia 0.6
 PyPlot
-PyCall
 StatsBase
 ImageMagick
+Images
+ImageView
+Gtk
