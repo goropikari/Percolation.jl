@@ -1,7 +1,4 @@
 julia 0.6
-PyPlot
-StatsBase
-ImageMagick
+GR
 Images
-ImageView
 Gtk
