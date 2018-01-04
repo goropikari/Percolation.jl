@@ -1,10 +1,3 @@
-using Plots
-import Plots: heatmap, heatmap!
-# pyplot()
-gr()
-
-export heatmap!, plot_percolation_prob
-
 "display labeled square lattice "
 function heatmap!(sq::Square)
     if !sq.lattice_properties.islabeled
