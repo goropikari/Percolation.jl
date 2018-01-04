@@ -1,11 +1,11 @@
 "display labeled square lattice "
-function heatmap!(sq::Square)
-    if !sq.lattice_properties.islabeled
-        label_components!(sq)
+function heatmap!(latt::TwoDLattice)
+    if !latt.lattice_properties.islabeled
+        label_components!(latt)
     end
 
-    labeled_site = sq.lattice_properties.labeled_lattice_sites
-    linsize = sq.lattice_config.linear_size
+    labeled_site = latt.lattice_properties.labeled_lattice_sites
+    linsize = latt.lattice_config.linear_size
     maxlabel = maximum(labeled_site)
     colorchange = Dict(i=>j for (i,j) in zip(1:maxlabel, shuffle(1:maxlabel)))
 
