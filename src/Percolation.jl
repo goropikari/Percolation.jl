@@ -1,14 +1,19 @@
 module Percolation
 
-using StatsBase, LaTeXStrings
-import Images: label_components, label_components!, load
+using Gtk, Gtk.ShortNames, Plots; gr()
+import Plots: heatmap, heatmap!
+import Images: label_components, label_components!
 
-export Square, Triangular, Honeycomb
+
+export Square, Triangular, Honeycomb, Forest
 export label_components!, ispercolation!
-
+export forestfire!, plot_lifetime
+export heatmap!, plot_percolation_prob
+export gui
 
 include("latticetype.jl")
 include("connected.jl")
+include("forestfire.jl")
 include("visualize.jl")
 include("ui.jl")
 
