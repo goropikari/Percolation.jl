@@ -3,7 +3,7 @@ abstract type TwoDLattice <: Lattice end
 
 """
 lattice_type::String # square, triangular, honeycomb, kagome\n
-linear_size::Int16 # linear size of lattice  \n
+linear_size::Int # linear size of lattice  \n
 p::Float64 # concentration  \n
 neighbor::String  # nn:nearest nearest or nnn:next nearest neighbor  \n
 \n
@@ -14,14 +14,14 @@ average_clustersize::Float64\n
 strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.\n
 ispercolation::Bool\n
 \n
-lattice_sites::Matrix{Int}\n
+lattice_sites::Matrix{Int8}\n
 labeled_lattice_sites::Matrix{Int}
 """
 struct LatticeConfig
-    linear_size::Int16
+    linear_size::Int
     p::Float64
     neighbortype::String
-    lattice_sites::Matrix{Int}
+    lattice_sites::Matrix{Int8}
 end
 
 mutable struct LatticeProperties
@@ -65,4 +65,4 @@ for lattice_type in lattice_types
     end)
 end
 
-makelattice(linear_size, p) = (rand(linear_size, linear_size) .< p) * 1
+makelattice(linear_size, p) = (rand(linear_size, linear_size) .< p) * Int8(1)

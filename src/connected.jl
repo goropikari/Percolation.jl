@@ -16,7 +16,7 @@ function label_components!(trilattice::Triangular)
     row, col = size(site)
     labelnum = 0
     labeled_site = - Int.(site)
-    searchlist = Vector{Vector{Int64}}()
+    searchlist = Vector{Vector{Int}}()
 
     function checkneighbor!(i,j)
         if labeled_site[i,j] == -1
@@ -60,7 +60,7 @@ function label_components!(hclattice::Honeycomb)
     row, col = size(site)
     labelnum = 0
     labeled_site = - Int.(site)
-    searchlist = Vector{Vector{Int64}}()
+    searchlist = Vector{Vector{Int}}()
 
     function checkneighbor!(i,j)
         if labeled_site[i,j] == -1
