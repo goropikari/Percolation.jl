@@ -9,10 +9,12 @@ neighbor::String  # nn:nearest nearest or nnn:next nearest neighbor  \n
 \n
 clustersize::Vector{Int} # the number of sites belonging to i th cluster.\n
 clustersizefreq::Vector{Tuple{Int,Int}}\n
-clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site. (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf\n
+clusternumber::Vector{Tuple{Int,Float64}} # The cluster number n_s(p) denotes the number of s-clusters per lattice site.
+                                          # (s, n_s(p)), http://www.mit.edu/~levitov/8.334/notes/percol_notes.pdf\n
 average_clustersize::Float64\n
 strength::Float64 # The strength of the infinite cluster P(p) is the probability that an arbitrary site belongs to the infinite cluster.\n
 ispercolation::Bool\n
+ncluster::Int # The number of clusters
 \n
 lattice_sites::Matrix{Int8}\n
 labeled_lattice_sites::Matrix{Int}
@@ -25,13 +27,22 @@ struct LatticeConfig
 end
 
 mutable struct LatticeProperties
+    percoclustersize::Int
+    percoclusterlabel::Int
     clustersize::Vector{Int}
-    clustersizefreq::Vector{Tuple{Int,Int}}
-    clusternumber::Vector{Tuple{Int,Float64}}
+    clustersizefreq::Dict{Int, Int}
+    clusternumber::Dict{Int,Float64}
     average_clustersize::Float64
     strength::Float64
     islabeled::Bool
     ispercolation::Bool
+    ispercolationcheck::Bool
+    isclustersizecheck::Bool
+    isclustersizefreqcheck::Bool
+    isclusternumbercheck::Bool
+    isaverage_clustersizecheck::Bool
+    isstrengthcheck::Bool
+    nclusters::Int
 
     labeled_lattice_sites::Matrix{Int}
 end
@@ -50,14 +61,23 @@ for lattice_type in lattice_types
                                   neighbortype,
                                   makelattice(linear_size, p)
                                  ),
-                    LatticeProperties(Vector{Int}(),
-                                      Vector{Tuple{Int,Int}}(),
-                                      Vector{Tuple{Int,Float64}}(),
-                                      0.0,
-                                      0.0,
-                                      false,
-                                      false,
-                                      Matrix{Int}(linear_size, linear_size)
+                    LatticeProperties(0,                                    # percoclustersize
+                                      0,                                    # percoclusterlabel
+                                      Vector{Int}(),                        # clustersize
+                                      Dict{Int, Int}(),                     # clustersizefreq
+                                      Dict{Int,Float64}(),                  # clusternumber
+                                      0.0,                                  # average_clustersize
+                                      0.0,                                  # strength
+                                      false,                                # islabeled
+                                      false,                                # ispercolation
+                                      false,                                # ispercolationcheck
+                                      false,                                # isclustersize
+                                      false,                                # isclustersizefreq
+                                      false,                                # isclusternumber
+                                      false,                                # isaverage_clustersize
+                                      false,                                # isstrength
+                                      0,                                    # nclusters
+                                      Matrix{Int}(linear_size, linear_size) # labeled_lattice_sites
                                      )
                    )
             end

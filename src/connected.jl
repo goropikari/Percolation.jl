@@ -1,11 +1,12 @@
 function label_components!(sqlattice::Square)
     if sqlattice.lattice_config.neighbortype == "nn"
         sqlattice.lattice_properties.labeled_lattice_sites = label_components(sqlattice.lattice_config.lattice_sites)
-        sqlattice.lattice_properties.islabeled = true
     else # next nearest neighbor
         sqlattice.lattice_properties.labeled_lattice_sites = label_components(sqlattice.lattice_config.lattice_sites, trues(3,3))
-        sqlattice.lattice_properties.islabeled = true
     end
+
+    sqlattice.lattice_properties.islabeled = true
+    sqlattice.lattice_properties.nclusters = maximum(sqlattice.lattice_properties.labeled_lattice_sites)
 
     return nothing
 end
@@ -48,6 +49,7 @@ function label_components!(trilattice::Triangular)
         end
     end
 
+    trilattice.lattice_properties.nclusters = labelnum
     trilattice.lattice_properties.islabeled = true
     trilattice.lattice_properties.labeled_lattice_sites = labeled_site
 
@@ -91,6 +93,7 @@ function label_components!(hclattice::Honeycomb)
         end
     end
 
+    hclattice.lattice_properties.nclusters = labelnum
     hclattice.lattice_properties.islabeled = true
     hclattice.lattice_properties.labeled_lattice_sites = labeled_site
 
