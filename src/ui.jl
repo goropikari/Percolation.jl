@@ -14,6 +14,16 @@ function gui()
     mkdir(outputdir)
     filename = ""
 
+    function getparameters()
+        linsize = parse(getproperty(ui["linent"], :text, String))
+        nsample = parse(getproperty(ui["nsament"], :text, String))
+        ps = parse(getproperty(ui["psent"], :text, String))
+        pinc = parse(getproperty(ui["pincent"], :text, String))
+        pf = parse(getproperty(ui["pfent"], :text, String))
+
+        return linsize, nsample, ps, pinc, pf
+    end
+
     function heatmap_button()
         linsize = parse(getproperty(ui["linent"], :text, String))
         p = parse(getproperty(ui["probent"], :text, String))
@@ -42,11 +52,7 @@ function gui()
     function plot_percolation_prob_button()
         latticetypes = Dict(0=>"square", 1=>"triangular", 2=>"honeycomb")
         latticetype = latticetypes[getproperty(ui["latticetype_cb"], "active", Int)]
-        linsize = parse(getproperty(ui["linent"], :text, String))
-        ps = parse(getproperty(ui["psent"], :text, String))
-        pinc = parse(getproperty(ui["pincent"], :text, String))
-        pf = parse(getproperty(ui["pfent"], :text, String))
-        nsample = parse(getproperty(ui["nsament"], :text, String))
+        linsize, nsample, ps, pinc, pf = getparameters()
 
         plot_percolation_prob(latticetype, linsize, ps, pinc, pf, nsample)
         filename = joinpath(outputdir, "percoprob.png")
@@ -59,11 +65,7 @@ function gui()
     end
 
     function plot_lifetime_button()
-        linsize = parse(getproperty(ui["linent"], :text, String))
-        ps = parse(getproperty(ui["psent"], :text, String))
-        pinc = parse(getproperty(ui["pincent"], :text, String))
-        pf = parse(getproperty(ui["pfent"], :text, String))
-        nsample = parse(getproperty(ui["nsament"], :text, String))
+        linsize, nsample, ps, pinc, pf = getparameters()
 
         plot_lifetime(linsize, ps, pinc, pf, nsample)
         filename =  joinpath(outputdir, "lifetime.png")
@@ -83,7 +85,6 @@ function gui()
 
         setproperty!(ui["imagebox"], :file, filename)
         println("Genarate GIF animation")
-
     end
 
     function savefig_button()
@@ -97,8 +98,6 @@ function gui()
     signal_connect(x -> heatmap_button(), ui["visualize_button"], "clicked")
     signal_connect(x -> phase_transition_button(), ui["phase_transition_button"], "clicked")
     signal_connect(x -> forestfire_gif_button(), ui["forestfire_gif_button"], "clicked")
-
-
     signal_connect(ui["latticetype_cb"], "changed") do widget, others...
         idx = getproperty(ui["latticetype_cb"], "active", Int)
         if idx in [0, 1, 2]
@@ -107,7 +106,6 @@ function gui()
             setproperty!(ui["phase_transition_button"], :label, "Plot Lifetime")
         end
     end
-
 
     return nothing
 end
