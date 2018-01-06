@@ -1,7 +1,7 @@
 function gui()
-    ui = Builder(filename=Pkg.dir() * "/Percolation/src/ui.glade")
+    ui = Builder(filename=joinpath(@__DIR__, "ui.glade"))
     showall(ui["win"])
-    setproperty!(ui["imagebox"], :file, Pkg.dir() * "/Percolation/src/Julia_prog_language_logo.svg")
+    setproperty!(ui["imagebox"], :file, joinpath(Pkg.dir("Percolation"), "src", "Julia_prog_language_logo.svg"))
     setproperty!(ui["latticetype_cb"], "active", 0)
     setproperty!(ui["nsament"], :text, 10)
     setproperty!(ui["linent"], :text, 50)
@@ -10,8 +10,7 @@ function gui()
     setproperty!(ui["pfent"], :text, 1)
     setproperty!(ui["probent"], :text, 0.5)
 
-
-    outputdir = tempdir() * "/percolation_" * randstring()
+    outputdir = joinpath(tempdir(), "percolation_" * randstring())
     mkdir(outputdir)
     filename = ""
 
@@ -20,7 +19,7 @@ function gui()
         p = parse(getproperty(ui["probent"], :text, String))
         l = Square(linsize, p)
         heatmap!(l)
-        filename = outputdir * "/cluster.png"
+        filename = joinpath(outputdir, "cluster.png")
         savefig(filename)
 
         setproperty!(ui["imagebox"], :file, filename)
@@ -50,7 +49,7 @@ function gui()
         nsample = parse(getproperty(ui["nsament"], :text, String))
 
         plot_percolation_prob(latticetype, linsize, ps, pinc, pf, nsample)
-        filename = outputdir * "/percoprob.png"
+        filename = joinpath(outputdir, "percoprob.png")
         savefig(filename)
 
         setproperty!(ui["imagebox"], :file, filename)
@@ -67,18 +66,11 @@ function gui()
         nsample = parse(getproperty(ui["nsament"], :text, String))
 
         plot_lifetime(linsize, ps, pinc, pf, nsample)
-        filename =  outputdir * "/lifetime.png"
+        filename =  joinpath(outputdir, "lifetime.png")
         savefig(filename)
 
         setproperty!(ui["imagebox"], :file, filename)
         println("Plot Lifetime of forest")
-        return nothing
-    end
-
-    function savefig_button()
-        dstname = save_dialog("Save figure")
-        cp(filename, dstname, remove_destination=true)
-
         return nothing
     end
 
@@ -92,6 +84,13 @@ function gui()
         setproperty!(ui["imagebox"], :file, filename)
         println("Genarate GIF animation")
 
+    end
+
+    function savefig_button()
+        dstname = save_dialog("Save figure")
+        cp(filename, dstname, remove_destination=true)
+
+        return nothing
     end
 
     signal_connect(x -> savefig_button(), ui["savefig_button"], "clicked")
