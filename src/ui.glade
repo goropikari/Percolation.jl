@@ -60,6 +60,7 @@
                   <object class="GtkComboBoxText" id="latticetype_cb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_bottom">5</property>
                     <items>
                       <item translatable="yes">Square</item>
                       <item translatable="yes">Triangular</item>
@@ -102,6 +103,7 @@
                           <object class="GtkEntry" id="linent">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="width_chars">5</property>
                           </object>
                         </child>
                       </object>
@@ -135,6 +137,7 @@
                           <object class="GtkEntry" id="nsament">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="width_chars">5</property>
                           </object>
                         </child>
                       </object>
@@ -196,6 +199,7 @@
                                       <object class="GtkEntry" id="psent">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="width_chars">8</property>
                                       </object>
                                     </child>
                                   </object>
@@ -229,6 +233,7 @@
                                       <object class="GtkEntry" id="pincent">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="width_chars">8</property>
                                       </object>
                                     </child>
                                   </object>
@@ -262,6 +267,7 @@
                                       <object class="GtkEntry" id="pfent">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="width_chars">8</property>
                                       </object>
                                     </child>
                                   </object>
@@ -302,6 +308,7 @@
                                   <object class="GtkEntry" id="probent">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="width_chars">5</property>
                                   </object>
                                 </child>
                               </object>
