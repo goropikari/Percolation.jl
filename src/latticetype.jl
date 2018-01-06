@@ -37,68 +37,32 @@ mutable struct LatticeProperties
 end
 
 
-mutable struct Square <: TwoDLattice
-    lattice_config::LatticeConfig
-    lattice_properties::LatticeProperties
+lattice_types = [:Square, :Triangular, :Honeycomb]
+for lattice_type in lattice_types
+    eval(quote
+        mutable struct $lattice_type <: TwoDLattice
+            lattice_config::LatticeConfig
+            lattice_properties::LatticeProperties
 
-    Square(linear_size, p, neighbortype="nn") =
-        new(LatticeConfig(linear_size,
-                          p,
-                          neighbortype,
-                          makelattice(linear_size, p)
-                         ),
-            LatticeProperties(Vector{Int}(),
-                              Vector{Tuple{Int,Int}}(),
-                              Vector{Tuple{Int,Float64}}(),
-                              0.0,
-                              0.0,
-                              false,
-                              false,
-                              Matrix{Int}(linear_size, linear_size))
-           )
-end
-
-mutable struct Triangular <: TwoDLattice
-    lattice_config::LatticeConfig
-    lattice_properties::LatticeProperties
-
-    Triangular(linear_size, p, neighbortype="nn") =
-        new(LatticeConfig(linear_size,
-                          p,
-                          neighbortype,
-                          makelattice(linear_size, p)
-                         ),
-            LatticeProperties(Vector{Int}(),
-                              Vector{Tuple{Int,Int}}(),
-                              Vector{Tuple{Int,Float64}}(),
-                              0.0,
-                              0.0,
-                              false,
-                              false,
-                              Matrix{Int}(linear_size, linear_size))
-           )
-
-end
-
-mutable struct Honeycomb <: TwoDLattice
-    lattice_config::LatticeConfig
-    lattice_properties::LatticeProperties
-
-    Honeycomb(linear_size, p, neighbortype="nn") =
-         new(LatticeConfig(linear_size,
-                          p,
-                          neighbortype,
-                          makelattice(linear_size, p)
-                         ),
-            LatticeProperties(Vector{Int}(),
-                              Vector{Tuple{Int,Int}}(),
-                              Vector{Tuple{Int,Float64}}(),
-                              0.0,
-                              0.0,
-                              false,
-                              false,
-                              Matrix{Int}(linear_size, linear_size))
-           )
+            function $lattice_type(linear_size, p, neighbortype="nn")
+                new(LatticeConfig(linear_size,
+                                  p,
+                                  neighbortype,
+                                  makelattice(linear_size, p)
+                                 ),
+                    LatticeProperties(Vector{Int}(),
+                                      Vector{Tuple{Int,Int}}(),
+                                      Vector{Tuple{Int,Float64}}(),
+                                      0.0,
+                                      0.0,
+                                      false,
+                                      false,
+                                      Matrix{Int}(linear_size, linear_size)
+                                     )
+                   )
+            end
+        end
+    end)
 end
 
 makelattice(linear_size, p) = (rand(linear_size, linear_size) .< p) * 1
