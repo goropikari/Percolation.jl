@@ -1,3 +1,6 @@
+"""
+labeling lattice site
+"""
 function label_components!(sqlattice::Square)
     if sqlattice.lattice_config.neighbortype == "nn"
         sqlattice.lattice_properties.labeled_lattice_sites = label_components(sqlattice.lattice_config.lattice_sites)
@@ -10,7 +13,6 @@ function label_components!(sqlattice::Square)
 
     return nothing
 end
-
 
 function label_components!(trilattice::Triangular)
     site = trilattice.lattice_config.lattice_sites
@@ -55,7 +57,6 @@ function label_components!(trilattice::Triangular)
 
     return nothing
 end
-
 
 function label_components!(hclattice::Honeycomb)
     site = hclattice.lattice_config.lattice_sites
