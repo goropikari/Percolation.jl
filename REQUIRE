@@ -1,6 +1,6 @@
 julia 0.6
-Plots
-GR
-StatsBase
-Images
-Gtk
+Plots 0.14.2
+GR 0.25.0
+StatsBase 0.19.5
+Images 0.12.0
+Gtk 0.13.1
