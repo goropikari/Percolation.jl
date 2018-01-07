@@ -27,13 +27,20 @@ function gui()
     function heatmap_button()
         linsize = parse(getproperty(ui["linent"], :text, String))
         p = parse(getproperty(ui["probent"], :text, String))
-        l = Square(linsize, p)
+        latticetype = getproperty(ui["latticetype_cb"], "active", Int)
+        if latticetype == 0
+            l = Square(linsize, p)
+        elseif latticetype == 1
+            l = Triangular(linsize, p)
+        elseif latticetype == 2
+            l = Honeycomb(linsize, p)
+        end
         heatmap!(l)
         filename = joinpath(outputdir, "cluster.png")
         savefig(filename)
 
         setproperty!(ui["imagebox"], :file, filename)
-        println("Visualize")
+        println("Visualize $(typeof(l))")
 
         return nothing
     end
@@ -59,7 +66,7 @@ function gui()
         savefig(filename)
 
         setproperty!(ui["imagebox"], :file, filename)
-        println("Plot Percolation Probability")
+        println("Plot Percolation Probability of $(latticetype) lattice")
 
         return nothing
     end
