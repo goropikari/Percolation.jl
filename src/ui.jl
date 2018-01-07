@@ -4,7 +4,7 @@ function gui()
     setproperty!(ui["imagebox"], :file, joinpath(Pkg.dir("Percolation"), "src", "Julia_prog_language_logo.svg"))
     visible(ui["forestfire_gif_button"], false)
 
-    outputdir = joinpath(tempdir(), "percolation_" * randstring())
+    outputdir = joinpath(tempdir(), "JuliaPercolation")
     mkdir(outputdir)
     filename = ""
 
@@ -90,6 +90,15 @@ function gui()
 
     function savefig_button()
         dstname = save_dialog("Save figure")
+        if contains(filename, ".png")
+            if !contains(dstname, ".png")
+                dstname *= ".png"
+            end
+        elseif contains(filename, ".gif")
+            if !contains(dstname, ".gif")
+                dstname *= ".gif"
+            end
+        end
         cp(filename, dstname, remove_destination=true)
 
         return nothing
