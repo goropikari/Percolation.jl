@@ -2,13 +2,7 @@ function gui()
     ui = Builder(filename=joinpath(@__DIR__, "ui.glade"))
     showall(ui["win"])
     setproperty!(ui["imagebox"], :file, joinpath(Pkg.dir("Percolation"), "src", "Julia_prog_language_logo.svg"))
-    setproperty!(ui["latticetype_cb"], "active", 0)
-    setproperty!(ui["nsament"], :text, 10)
-    setproperty!(ui["linent"], :text, 50)
-    setproperty!(ui["psent"], :text, 0.1)
-    setproperty!(ui["pincent"], :text, 0.1)
-    setproperty!(ui["pfent"], :text, 1)
-    setproperty!(ui["probent"], :text, 0.5)
+    visible(ui["forestfire_gif_button"], false)
 
     outputdir = joinpath(tempdir(), "percolation_" * randstring())
     mkdir(outputdir)
@@ -109,9 +103,21 @@ function gui()
         idx = getproperty(ui["latticetype_cb"], "active", Int)
         if idx in [0, 1, 2]
             setproperty!(ui["phase_transition_button"], :label, "Plot percolation probability")
+            visible(ui["visualize_button"], true)
+            visible(ui["forestfire_gif_button"], false)
         elseif idx == 3
             setproperty!(ui["phase_transition_button"], :label, "Plot Lifetime")
+            visible(ui["visualize_button"], false)
+            visible(ui["forestfire_gif_button"], true)
         end
+    end
+
+    if !isinteractive()
+        c = Condition()
+        signal_connect(ui["win"], :destroy) do widget
+            notify(c)
+        end
+        wait(c)
     end
 
     return nothing
