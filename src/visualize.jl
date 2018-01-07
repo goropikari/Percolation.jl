@@ -19,7 +19,7 @@ function heatmap!(latt::TwoDLattice)
         end
     end
 
-    heatmap(site, colorbar=false, aspect_ratio=:equal)
+    heatmap(site, colorbar=false, aspect_ratio=:equal, c=:lighttest)
 end
 
 function plot_percolation_prob(latticetype::String, linsize::Int, ps, pinc, pf, nsample::Int)
