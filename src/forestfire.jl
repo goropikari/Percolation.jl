@@ -4,15 +4,15 @@
 2: fire
 """
 mutable struct Forest
-    N::Int
+    nrow::Int
+    ncol::Int
     p::Float64
     forest::Matrix{Int8}
 
-    function Forest(N, p)
+    function Forest(N::Int, p::Float64)
         if N > 10^3
             error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
         end
-
         forest = ( rand(N, N) .< 1-p ) * Int8(1)
         for i in 1:N
             if forest[i] == 0
@@ -20,11 +20,31 @@ mutable struct Forest
             end
         end
 
-        return new(N, p, forest)
+        return new(N, N, p, forest)
+    end
+
+    function Forest(nrow::Int, ncol::Int, p::Float64)
+        if nrow > 10^3 || ncol > 10^3
+            error("Too large site size. Reduce the number of sites under or equal 1000 of linear size.\n")
+        end
+        forest = ( rand(nrow, ncol) .< 1-p ) * Int8(1)
+        for i in 1:nrow
+            if forest[i] == 0
+                forest[i] = 2
+            end
+        end
+
+        return new(nrow, ncol, p, forest)
     end
 end
 
-function forestfire!(forest::Forest; gifanime::Bool=false, maxiter=1000)
+"""
+forestfire!(forest::Forest; gifanime::Bool=false, giffps::Int=10, maxiter=1000)
+
+simulation for forest fire\n
+return: lifetime, filename\n
+"""
+function forestfire!(forest::Forest; gifanime::Bool=false, giffps::Int=10, maxiter=1000)
     row, col = size(forest.forest)
     lifetime = 0
     previous_forest = forest.forest[:,:]
@@ -48,7 +68,7 @@ function forestfire!(forest::Forest; gifanime::Bool=false, maxiter=1000)
     end
 
     if gifanime
-        tmp = @gif for i in 1:maxiter
+        anim = @animate for i in 1:maxiter
             heatmap(forest.forest, c=:RdYlGn_r, colorbar=false, aspect_ratio=:equal)
             spreadfire!(forest)
             if previous_forest == forest.forest
@@ -57,8 +77,9 @@ function forestfire!(forest::Forest; gifanime::Bool=false, maxiter=1000)
             lifetime += 1
             previous_forest = copy(forest.forest)
         end
+        filename = "/tmp/juliaforestfiregif.gif"
+        gif(anim, filename, fps=giffps)
 
-        filename = tmp.filename
     else
         spreadfire!(forest)
         while previous_forest != forest.forest
@@ -83,6 +104,11 @@ function plot_lifetime(linsize, ps, pinc, pf, nsample)
 
         lifetime_list[i] = lifetime / nsample
     end
-    plot(prob, lifetime_list, xlabel="Occupation probability", ylabel="Lifetime", title="Lifetime of forest fire", legend=false, marker=:circle)
+    plot(prob, lifetime_list,
+         xlabel="Occupation probability",
+         ylabel="Lifetime",
+         title="Lifetime of forest fire",
+         legend=false,
+         marker=:circle)
 
 end
