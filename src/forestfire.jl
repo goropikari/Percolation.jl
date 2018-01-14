@@ -1,8 +1,10 @@
 export forestfire!, plot_lifetime
 
 """
-1: empty space
-0: green(alive tree)
+
+
+1: empty space,  
+0: green(alive tree),  
 2: fire
 """
 mutable struct Forest
@@ -94,6 +96,9 @@ function forestfire!(forest::Forest; gifanime::Bool=false, giffps::Int=10, maxit
     return lifetime, filename
 end
 
+"""
+plot life time of forest fire.
+"""
 function plot_lifetime(linsize, ps, pinc, pf, nsample)
     prob = ps:pinc:pf
     lifetime_list = zeros(length(prob))

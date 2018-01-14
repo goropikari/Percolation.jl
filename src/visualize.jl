@@ -24,6 +24,11 @@ function heatmap!(latt::TwoDLattice)
     heatmap(site, colorbar=false, aspect_ratio=:equal, c=:lighttest)
 end
 
+"""
+plot_percolation_prob(latticetype::String, linsize::Int, ps, pinc, pf, nsample::Int)
+
+plot percolation probability vs occupied probability.
+"""
 function plot_percolation_prob(latticetype::String, linsize::Int, ps, pinc, pf, nsample::Int)
     prob = ps:pinc:pf
     percoprob = zeros(length(prob))

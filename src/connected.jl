@@ -1,6 +1,8 @@
 export label_components!
 
 """
+label_components!(lattice::Lattice)
+
 labeling lattice site
 """
 function label_components!(sqlattice::Square)
