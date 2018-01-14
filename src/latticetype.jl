@@ -1,3 +1,5 @@
+export Square, Triangular, Honeycomb, Forest
+
 abstract type Lattice end
 abstract type TwoDLattice <: Lattice end
 

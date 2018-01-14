@@ -1,3 +1,5 @@
+export heatmap!, plot_percolation_prob, closeall
+
 "display labeled square lattice "
 function heatmap!(latt::TwoDLattice)
     if !latt.lattice_properties.islabeled

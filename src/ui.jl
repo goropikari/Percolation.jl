@@ -1,11 +1,13 @@
+export gui
+
 function gui()
     ui = Builder(filename=joinpath(@__DIR__, "ui.glade"))
     showall(ui["win"])
-    setproperty!(ui["imagebox"], :file, joinpath(Pkg.dir("Percolation"), "src", "Julia_prog_language_logo.svg"))
+    setproperty!(ui["imagebox"], :file, joinpath(@__DIR__, "Julia_prog_language_logo.svg"))
     visible(ui["forestfire_gif_button"], false)
 
     outputdir = joinpath(tempdir(), "JuliaPercolation")
-    mkdir(outputdir)
+    mkpath(outputdir)
     filename = ""
 
     function getparameters()

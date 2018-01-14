@@ -1,3 +1,5 @@
+export forestfire!, plot_lifetime
+
 """
 1: empty space
 0: green(alive tree)

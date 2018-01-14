@@ -1,3 +1,5 @@
+export label_components!
+
 """
 labeling lattice site
 """
