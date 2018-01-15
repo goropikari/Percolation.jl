@@ -1,6 +1,6 @@
 # Percolation
 
-This package is simulating tool for percolation theory.  
+This package is simulation tool for percolation theory.  
 You can plot percolation probability graph and cluster.
 You can also compute cluster properties.
 
