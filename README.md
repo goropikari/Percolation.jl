@@ -1,7 +1,8 @@
 # Percolation
 
-This package is for simulating percolation theory.  
-You can plot percolation probability graph and cluster and compute cluster properties.
+This package is simulating tool for percolation theory.  
+You can plot percolation probability graph and cluster.
+You can also compute cluster properties.
 
 Support for following lattice site percolation.
 
