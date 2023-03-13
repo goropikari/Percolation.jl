@@ -1,6 +1,6 @@
 name = "Percolation"
 uuid = "31b34cd4-33dc-40c1-8f72-ebe007ebca36"
-authors = ["Helmut Strey <Helmut.Strey@stonybrook.edu>"]
+authors = ["Goropikari <goropikari56@gmail.com>"]
 version = "0.1.0"
 
 [deps]
