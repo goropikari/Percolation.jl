@@ -1,6 +1,6 @@
 module Percolation
 
-using Gtk, Gtk.ShortNames, StatsBase, Plots
+using Gtk, Gtk.ShortNames, StatsBase, Plots, Random
 gr()
 import Plots: heatmap, heatmap!
 import Images: label_components, label_components!
