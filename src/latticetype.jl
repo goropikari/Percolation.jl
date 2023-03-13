@@ -79,7 +79,7 @@ for lattice_type in lattice_types
                                       false,                                # isaverage_clustersize
                                       false,                                # isstrength
                                       0,                                    # nclusters
-                                      Matrix{Int}(linear_size, linear_size) # labeled_lattice_sites
+                                      Array{Int64,2}(undef,linear_size, linear_size) # labeled_lattice_sites
                                      )
                    )
             end
